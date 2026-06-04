@@ -3,7 +3,7 @@ package com.example.javatea_client.models;
 
 import com.example.javatea_client.viewModels.LectureViewModel;
 
-public class Lecture extends LectureViewModel {
+public class Lecture  {
 
     private String name;
     private int grade;
@@ -12,10 +12,10 @@ public class Lecture extends LectureViewModel {
     private String day;
     private int period;
 
+    //コンストラクタ
     public Lecture() {}
 
-    public Lecture(String name, int grade, String semester,
-                   int frame, String day, int period) {
+    public Lecture(String name, int grade, String semester, int frame, String day, int period) {
         this.name = name;
         this.grade = grade;
         this.semester = semester;
