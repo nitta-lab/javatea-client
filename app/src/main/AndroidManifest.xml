@@ -15,6 +15,12 @@
             android:name=".views.RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".views.SignUpActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".views.TimetableActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
