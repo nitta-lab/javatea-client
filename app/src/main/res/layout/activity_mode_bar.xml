@@ -7,4 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".views.ModeBar">
 
+    <TextView
+        android:id="@+id/modebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="22dp"
+        android:text="ModeName"
+        android:gravity="center"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:background="@drawable/mode_bar_rounded"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
