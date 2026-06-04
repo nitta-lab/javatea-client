@@ -1,4 +1,6 @@
 package com.example.javatea_client.viewModels;
 
-public class CategoryViewModel {
+import androidx.lifecycle.ViewModel;
+
+public class CategoryViewModel extends ViewModel {
 }
