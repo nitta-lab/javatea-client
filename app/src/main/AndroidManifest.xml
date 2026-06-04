@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Javateaclient">
         <activity
+            android:name=".views.AddLectureActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.SetTimetableActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.RegisterActivity"
             android:exported="false" />
         <activity
