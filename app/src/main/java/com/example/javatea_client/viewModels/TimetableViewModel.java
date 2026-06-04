@@ -1,4 +1,6 @@
 package com.example.javatea_client.viewModels;
 
-public class TimetableViewModel {
+import androidx.lifecycle.ViewModel;
+
+public class TimetableViewModel extends ViewModel {
 }
