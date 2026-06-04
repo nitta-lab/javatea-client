@@ -6,5 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.TimetableActivity">
+    <include layout="@layout/navigation"/>
+    <GridLayout
+        android:id="@+id/grid"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:rowCount="5"
+        android:columnCount="7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
