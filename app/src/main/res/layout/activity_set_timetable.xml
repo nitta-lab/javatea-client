@@ -7,4 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".views.SetTimetableActivity">
 
+    <include layout="@layout/navigation"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
