@@ -22,5 +22,6 @@ public class AddLectureActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Navigation.setup(this);
     }
 }
