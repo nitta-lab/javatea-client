@@ -23,5 +23,6 @@ public class RegisterActivity extends AppCompatActivity {
             return insets;
         });
         Navigation.setup(this);
+        ModeBar.setup(this, "はじめに");
     }
 }
