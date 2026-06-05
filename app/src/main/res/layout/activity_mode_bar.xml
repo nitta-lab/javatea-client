@@ -8,7 +8,7 @@
     tools:context=".views.ModeBar">
 
     <TextView
-        android:id="@+id/modebar"
+        android:id="@+id/mode_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
