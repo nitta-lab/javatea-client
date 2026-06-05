@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".views.ModeBar">
 
     <TextView
@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="1dp"
-        android:text="ModeName"
+        android:layout_marginTop="16dp"
+        android:text="@string/mode_name"
         android:gravity="center"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintTop_toTopOf="parent"/>
+        <!-- app:layout_constraintVertical_bias="0.022" /> -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
