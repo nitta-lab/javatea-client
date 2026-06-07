@@ -17,14 +17,6 @@ public class Faculty {
         return faculty_name;
     }
 
-    public Department createDepartment(String department_name) {
-        if(departments.containsKey(department_name)) {
-            return null;
-        }
-        this.departments.put(department_name, new Department(department_name));
-        return departments.get(department_name);
-    }
-
     public Department getDepartment(String department_name) {
         if(!departments.containsKey(department_name)) {
             return null;
@@ -34,10 +26,6 @@ public class Faculty {
 
     public Set<String> getDepartments() {
         return departments.keySet();
-    }
-
-    public void addLecture(String lectureId, Lecture lecture) {
-        lecturesInFaculty.put(lectureId, lecture);
     }
 
     public Lecture getLecture(String lectureId) {

@@ -14,10 +14,6 @@ public class Department {
         return department_name;
     }
 
-    public void addLectures(String lectureId, Lecture lecture) {
-        lectureInDepartment.put(lectureId, lecture);
-    }
-
     public Lecture getLecture(String lectureId) {
         if(!lectureInDepartment.containsKey(lectureId)) {
             return null;
