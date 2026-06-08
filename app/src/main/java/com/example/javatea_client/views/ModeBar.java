@@ -9,7 +9,7 @@ import com.example.javatea_client.R;
 public class ModeBar {
 
     public static void setup(Activity activity, String text) {
-        TextView barText = activity.findViewById(R.id.modebar);
+        TextView barText = activity.findViewById(R.id.mode_bar);
         barText.setText(text);
         barText.setTypeface(null, Typeface.BOLD);
     }
