@@ -23,5 +23,6 @@ public class SetTimetableActivity extends AppCompatActivity {
             return insets;
         });
         Navigation.setup(this); //Navigationクラスを動かす
+        ModeBar.setup(this, "時間割設定"); //ModeBarを設定
     }
 }
