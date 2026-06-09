@@ -54,6 +54,35 @@ public class SignUpActivity1 extends AppCompatActivity {
         // 上部の文字
         ModeBar.setup(this, "新規登録");
 
+        // ユーザを監視して登録後、ログインを呼び出す
+//        userViewModel.getUser().observe(this, user -> {
+//            if(user != null) {
+//                tampopo.setUserId(userId);
+//                tampopo.setPassword(password);
+//                userViewModel.login(userId, password);
+//            }
+//        });
+
+        // エラーメッセージを監視してトースト表示
+//        userViewModel.getError().observe(this, errorMessage -> {
+//            if (errorMessage != null && !errorMessage.isEmpty()) {
+//                Toast.makeText(SignUpActivity1.this, errorMessage, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        // トークンを監視
+//        userViewModel.getToken().observe(this,token ->{
+//            if(token != null && !token.isEmpty()){
+//                tampopo.setToken(token);
+//                // 画面遷移
+//                Intent intent = new Intent(RegisterActivity.this, UserInfoActivity.class);
+//                startActivity(intent);
+//                finish();
+//            } else {
+//                Toast.makeText(RegisterActivity.this, "トークン取得に失敗しました", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
         // パスワードの表示非表示ボタンの処理
         eyeButton.setOnClickListener((new View.OnClickListener() {
             @Override
@@ -85,6 +114,12 @@ public class SignUpActivity1 extends AppCompatActivity {
                 // 空文字チェック
                 if (userId.isEmpty() || password.isEmpty() || nickname.isEmpty()) {
                     Toast.makeText(SignUpActivity1.this, "ID・パスワード・ニックネームを入力してください", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // パスワードチェック
+                if (password.length() < 8 || !password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*") || !containsNumber(password)) {
+                    Toast.makeText(SignUpActivity1.this, "パスワードは大文字、小文字、数字を含め、8文字以上にしてください", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -132,5 +167,16 @@ public class SignUpActivity1 extends AppCompatActivity {
 //                userViewModel.createUser(userId, nickname, password);
             }
         });
+    }
+
+    private boolean containsNumber(String str) {
+        if (str == null || str.isEmpty()) return false;
+
+        for (char c : str.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true; // 数字が含まれていればtrue
+            }
+        }
+        return false;
     }
 }
