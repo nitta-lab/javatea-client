@@ -16,10 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+
+import com.example.javatea_client.viewModels.TimetableViewModel;
 
 import com.example.javatea_client.R;
 
+import java.util.*;
+
 public class TimetableActivity extends AppCompatActivity {
+    private TimetableViewModel timetableViewModel;
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,32 +38,47 @@ public class TimetableActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        Navigation.setup(this);//Navigationクラスを呼び出す
-        TextView yearSelect = findViewById(R.id.pop_up_window);
-        yearSelect.setGravity(Gravity.CENTER);
-        yearSelect.setTextSize(16);
-        yearSelect.setBackgroundResource(R.drawable.cell_border);
-        //yearは持ってくるはず
-        String[] years = {
-                "2025",
-                "2026",
-                "＋年度を追加する"
-        };
-        yearSelect.setText(years[0] + " ▼");
+        //timetableViewModelの初期化
+        timetableViewModel = new TimetableViewModel();
+        //dpに変換
         float density = getResources().getDisplayMetrics().density;
-        yearSelect.setOnClickListener(v ->{
-            String currentYear = yearSelect.getText().toString().substring(0,yearSelect.getText().toString().length()-2);
-            yearSelect.setText(currentYear + " ▲");
+        //ModeBarのセットアップ
+        ModeBar.setup(this,"時間割");
+        //Navigationのセットアップ
+        Navigation.setup(this);
+        //選んだ年度を表示するTextView
+        TextView selectedYear = findViewById(R.id.pop_up_window);
+        selectedYear.setGravity(Gravity.CENTER);
+        int size = selectedYear.getHeight();
+        selectedYear.setTextSize(20);
+
+        selectedYear.setBackgroundResource(R.drawable.cell_border);
+        //yearは持ってくるはず
+        ArrayList<String> years = new ArrayList<>();
+        timetableViewModel.getYearsLiveData().observe(this, new Observer<List<Integer>>() {
+            @Override
+            public void onChanged(List<Integer> integers) {
+                for(int i=0;i<integers.size();i++){
+                    years.add(integers.get(i).toString());
+                }
+            }
+        });
+        years.add("＋年度を追加する");
+        selectedYear.setText(years.get(0) + " ▼");
+        selectedYear.setOnClickListener(v ->{
+            String currentYear = selectedYear.getText().toString().substring(0,selectedYear.getText().toString().length()-2);
+            selectedYear.setText(currentYear + " ▲");
             LinearLayout layout = new LinearLayout(this);
             layout.setOrientation(LinearLayout.VERTICAL);
             PopupWindow popup = new PopupWindow(layout,(int) (200*density),ViewGroup.LayoutParams.WRAP_CONTENT,true/*タップで閉じる*/);
             popup.setOnDismissListener(() -> {
-                yearSelect.setText(yearSelect.getText().toString().substring(0,yearSelect.getText().toString().length()-2) + " ▼");
+                selectedYear.setText(selectedYear.getText().toString().substring(0,selectedYear.getText().toString().length()-2) + " ▼");
             });
-            for(int i=0;i<years.length;i++){
+            for(int i=0;i<years.size();i++){
                 TextView textView = new TextView(this);
-                String year = years[i];
+                String year = years.get(i);
                 textView.setText(year);
+                textView.setTextSize(20);
                 textView.setGravity(Gravity.CENTER);
                 if(i % 2 == 0){
                     textView.setBackgroundColor(Color.rgb(220,220,220));
@@ -70,13 +92,13 @@ public class TimetableActivity extends AppCompatActivity {
                         Intent intent = new Intent(TimetableActivity.this,RegisterActivity.class);
                         startActivity(intent);
                     }else{
-                        yearSelect.setText(year + " ▼");
+                        selectedYear.setText(year + " ▼");
                     }
                     popup.dismiss();//popupを閉じる
                 });
                 layout.addView(textView);
             }
-            popup.showAsDropDown(v,yearSelect.getWidth() - popup.getWidth(),0);//view,幅,高さ
+            popup.showAsDropDown(v,selectedYear.getWidth() - popup.getWidth(),0);//view,幅,高さ
         });
 
         GridLayout gridLayout = findViewById(R.id.grid);
