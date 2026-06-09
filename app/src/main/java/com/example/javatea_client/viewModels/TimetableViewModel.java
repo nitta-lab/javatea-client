@@ -16,30 +16,22 @@ public class TimetableViewModel extends ViewModel {
     private final MutableLiveData<List<String>> lectureIdsLiveData =
             new MutableLiveData<>();
 
-    /**
-     * 年度一覧を取得
-     */
+    //年度一覧を取得
     public LiveData<List<Integer>> getYearsLiveData() {
         return yearsLiveData;
     }
 
-    /**
-     * 授業ID一覧を取得
-     */
+    //授業ID一覧を取得
     public LiveData<List<String>> getLectureIdsLiveData() {
         return lectureIdsLiveData;
     }
 
-    /**
-     * 年度一覧を設定
-     */
+    //年度一覧を設定
     public void setYears(List<Integer> years) {
         yearsLiveData.setValue(years);
     }
 
-    /**
-     * 授業ID一覧を設定
-     */
+    //授業ID一覧を設定
     public void setLectureIds(List<String> lectureIds) {
         lectureIdsLiveData.setValue(lectureIds);
     }
