@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">javatea-client</string>
+    <string name="mode_name">ModeName</string>
 </resources>
