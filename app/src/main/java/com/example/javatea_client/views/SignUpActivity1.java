@@ -1,9 +1,11 @@
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,7 @@ public class SignUpActivity1 extends AppCompatActivity {
 
     UserViewModel userViewModel;
     private String userId, password, nickname;
+    private boolean isVisiblePassword = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +39,40 @@ public class SignUpActivity1 extends AppCompatActivity {
         // viewModelの取得
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        // 入力欄の取得
+        // 入力欄・ボタンの取得
         EditText userIdEditText = findViewById(R.id.editTextUserId);
         EditText passwordEditText = findViewById(R.id.editTextPassword);
         EditText nicknameEditText = findViewById(R.id.editTextNickname);
         TextView userIdText = findViewById(R.id.textViewUserId);
         TextView passwordText = findViewById(R.id.textViewPassword);
         TextView nicknameText = findViewById(R.id.textViewNickname);
+        ImageButton eyeButton = findViewById(R.id.EyeButton);
         Button nextButton = findViewById(R.id.NextButton);
         Button backButton = findViewById(R.id.BackButton);
         Button registerButton = findViewById(R.id.RegisterButton);
+
+        // 上部の文字
+        ModeBar.setup(this, "新規登録");
+
+        // パスワードの表示非表示ボタンの処理
+        eyeButton.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isVisiblePassword) {
+                    /* パスワード非表示 */
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    eyeButton.setAlpha(1f);
+                    isVisiblePassword = false;
+                }else{
+                    /* パスワード表示 */
+                    passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    passwordText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    eyeButton.setAlpha(0.5f);
+                    isVisiblePassword = true;
+                }
+            }
+        }));
 
         // 次へボタンの処理
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +87,12 @@ public class SignUpActivity1 extends AppCompatActivity {
                     Toast.makeText(SignUpActivity1.this, "ID・パスワード・ニックネームを入力してください", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                // userIdの重複チェック
+//                if (userViewModel.getUser(userId) != null) {
+//                    Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
 
                 userIdText.setText(userId);
                 passwordText.setText(password);
@@ -96,7 +129,7 @@ public class SignUpActivity1 extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+//                userViewModel.createUser(userId, nickname, password);
             }
         });
     }
