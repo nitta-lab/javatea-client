@@ -1,13 +1,12 @@
 package com.example.javatea_client.resources;
 
-
 import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.viewModels.LectureViewModel;
 
 import retrofit2.Call;
 import retrofit2.http.*;
 
-public interface LectureResource extends LectureViewModel {
+public interface LectureResource {
 
     //授業作成
     @FormUrlEncoded

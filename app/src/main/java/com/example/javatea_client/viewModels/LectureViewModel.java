@@ -11,6 +11,9 @@ import com.example.javatea_client.resources.LectureResource;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class LectureViewModel extends ViewModel {
 
@@ -48,12 +51,9 @@ public class LectureViewModel extends ViewModel {
         return error;
     }
 
-    public void createLecture(String name, int grade, String semester,
-                              int frame, String day, int period) {
-        loading.setValue(true);
+    public void createLectures(String name, int grade, String semester, int frame, String day, int period) {
 
-        lectureResource.createLecture(name, grade, semester, frame, day, period)
-                .enqueue(new Callback<String>() {
+        lectureResource.createLecture(name, grade, semester, frame, day, period).enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         loading.setValue(false);
