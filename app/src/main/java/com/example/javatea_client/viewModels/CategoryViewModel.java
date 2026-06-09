@@ -1,10 +1,16 @@
 package com.example.javatea_client.viewModels;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,47 +56,105 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 
 public class CategoryViewModel extends ViewModel {
-    private final Retrofit retrofit;
     private final CategoryResource categoryResource;
-    private final MutableLiveData<String> University;
-    private final MutableLiveData<String> Faculty;
-    private final MutableLiveData<String> Department;
+
+    // 画面に表示するための大学データ(オブジェクト)を保持するためのLiveData
+    private final MutableLiveData<University> currentUniversity = new MutableLiveData<>();
+    // 新規作成時に発行された大学IDを保持するためのLiveData
+    private final MutableLiveData<String> createdUnivId = new MutableLiveData<>();
 
 
+    private final MutableLiveData<String> university = new MutableLiveData<>();
+    private final MutableLiveData<String> faculty = new MutableLiveData<>();
+    private final MutableLiveData<String> department = new MutableLiveData<>();
+
+    // ログ用のタグ
+    private static final String TAG = "CategoryViewModel";
+
+
+    // デプロイしてないから今はlocalhostで IntelliJ IDEA とこっち、どちらも起動させる
     public CategoryViewModel() {
-        this.retrofit = new Retrofit.Builder()
-                .baseUrl("")
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("localhost8080:/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
         this.categoryResource = retrofit.create(CategoryResource.class);
-        this.University = new MutableLiveData<>();
-        this.Faculty = new MutableLiveData<>();
-        this.Department = new MutableLiveData<>();
     }
 
-    public Retrofit getRetrofit() { return retrofit; }
+    // 外部には書き換え不可能なLiveDataとして公開する(だからMutableつかない？)
+    public LiveData<University> getCurrentUniversity() { return currentUniversity; }
+    public LiveData<String> getCreatedUnivId() { return createdUnivId; }
 
-    public MutableLiveData<String> getFaculty() { return Faculty; }
-    public MutableLiveData<String> getDepartment() { return Department; }
+
+    public LiveData<String> getFaculty() { return faculty; }
+    public LiveData<String> getDepartment() { return department; }
 
     public void postNewUnivId(String name, String kana){
-        Call<String> call = categoryResource.postNewUnivId(name, kana);
-
-        call.enqueue(new Callback<>() {
+        categoryResource.postNewUnivId(name, kana).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()){
-                    University.setValue(response.body());
-                    System.out.println(response.code());
+                if(response.isSuccessful() && response.body() != null){
+                    // こっちは内部からなのでMutableの方にセットする
+                    createdUnivId.setValue(response.body());
+                    Log.d(TAG, "通信成功：" + response.code());
                 } else {
-                    System.out.println(response.code());
+                    String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
+                    Log.w(TAG, errorCode);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                System.out.println("NetWorkError" + throwable);
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void getUnivInfo(String univId) {
+        categoryResource.getUnivInfo(univId).enqueue(new Callback<HashMap<String, String>>() {
+            @Override
+            public void onResponse(@NonNull Call<HashMap<String, String>> call, @NonNull Response<HashMap<String, String>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    HashMap<String, String> map = response.body();
+
+                    University university = new University(
+                            map.get("univ-id"),
+                            map.get("name"),
+                            map.get("kana")
+                    );
+
+                    currentUniversity.setValue(university);
+                    Log.d(TAG, "通信成功：" + response.code());
+                } else {
+                    String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
+                    Log.w(TAG, errorCode);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<HashMap<String, String>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void updateUnivName(String univId, String name) {
+        categoryResource.updateUnivName(univId, name).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.isSuccessful()) {
+                    Log.d(TAG, "大学名の変更成功");
+                    // ローカル側を変更
+                    getUnivInfo(univId);
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
     }
