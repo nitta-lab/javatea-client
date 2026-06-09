@@ -32,7 +32,7 @@ public interface CategoryResource {
      * 大学ID取得
      */
     @GET("categories/universities/{univ-id}")
-    Call<HashMap<String, String>> addYear(
+    Call<HashMap<String, String>> getUnivInfo(
             @Path("univ-id") String univId
     );
 
