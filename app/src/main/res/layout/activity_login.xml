@@ -6,10 +6,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.LoginActivity">
+    <include layout="@layout/activity_mode_bar"/>
+
+    <TextView
+        android:id="@+id/userid_label"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="168dp"
+        android:background="#F3EEF7"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:text="ユーザーID"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.281"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/userid_edit"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:autofillHints="userID"
+        android:inputType="text"
+        android:background="@drawable/input_box"
+        app:layout_constraintStart_toStartOf="@id/userid_label"
+        app:layout_constraintTop_toBottomOf="@id/userid_label"/>
+
+    <TextView
+        android:id="@+id/password_label"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="44dp"
+        android:background="#F3EEF7"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:text="パスワード"
+        android:textColor="#000000"
+        app:layout_constraintStart_toStartOf="@id/userid_label"
+        app:layout_constraintTop_toBottomOf="@id/userid_edit" />
+
+    <EditText
+        android:id="@+id/password_edit"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/input_box"
+        android:inputType="textPassword"
+        app:layout_constraintStart_toStartOf="@id/password_label"
+        app:layout_constraintTop_toBottomOf="@id/password_label"/>
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="131dp"
+        android:layout_width="151dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#FFE8E8"
         android:text="ログイン"
@@ -19,27 +67,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.682"
+        app:layout_constraintVertical_bias="0.68"
         app:rippleColor="@color/black" />
+
+    <TextView
+        android:id="@+id/signup_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="47dp"
+
+        android:layout_marginTop="73dp"
+        android:layout_marginBottom="124dp"
+        android:text="新規登録したい方はこちら→"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
     <Button
         android:id="@+id/signup_button"
-        android:layout_width="110dp"
+        android:layout_width="91dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="#EAFF8D28"
+        android:layout_marginEnd="56dp"
+        android:backgroundTint="#50FF8D28"
+        android:minWidth="0dip"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:text="新規登録"
         android:textColor="#000000"
         app:cornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        app:rippleColor="@color/black"
-        tools:layout_editor_absoluteX="257dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/signup_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/signup_textView"
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="新規登録したい方はこちら→"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="600dp" />
+        app:rippleColor="@color/black" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
