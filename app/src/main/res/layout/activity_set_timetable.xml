@@ -8,6 +8,7 @@
     tools:context=".views.SetTimetableActivity">
 
     <include layout="@layout/navigation"/>
+    <include layout="@layout/activity_mode_bar"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
