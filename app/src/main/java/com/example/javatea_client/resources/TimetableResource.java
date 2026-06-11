@@ -1,6 +1,8 @@
 package com.example.javatea_client.resources;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.http.DELETE;
@@ -15,7 +17,7 @@ public interface TimetableResource {
 
     //ユーザが時間割登録している年度一覧を取得
     @GET("users/{uid}/timetable")
-    Call<List<Integer>> getYears(
+    Call<TreeMap<Integer, HashSet<String>>> getTimetable(
             @Path("uid") String uid,
             @Query("token") String token
     );

@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.javatea_client.resources.TimetableResource;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,7 +22,7 @@ public class TimetableViewModel extends ViewModel {
     private final Retrofit retrofit;
     private final TimetableResource timetableResource;
     // 年度一覧
-    private final MutableLiveData<List<Integer>> years = new MutableLiveData<>();
+    private final MutableLiveData<TreeMap<Integer, HashSet<String>>> timetable = new MutableLiveData<>();
     // 授業ID一覧
     private final MutableLiveData<List<String>> lectureIds = new MutableLiveData<>();
     // エラー
@@ -38,8 +40,8 @@ public class TimetableViewModel extends ViewModel {
     }
 
     //年度一覧取得
-    public LiveData<List<Integer>> getYears() {
-        return years;
+    public LiveData<TreeMap<Integer, HashSet<String>>> getTimetable() {
+        return timetable;
     }
 
     //授業ID一覧取得
@@ -53,13 +55,13 @@ public class TimetableViewModel extends ViewModel {
     }
 
     //登録年度一覧取得
-    public void loadTimetableYears(String uid, String token) {
-        timetableResource.getYears(uid, token)
-                .enqueue(new Callback<List<Integer>>() {
+    public void loadTimetable(String uid, String token) {
+        timetableResource.getTimetable(uid, token)
+                .enqueue(new Callback<TreeMap<Integer, HashSet<String>>>() {
                     @Override
-                    public void onResponse(Call<List<Integer>> call, Response<List<Integer>> response) {
+                    public void onResponse(Call<TreeMap<Integer, HashSet<String>>> call, Response<TreeMap<Integer, HashSet<String>>> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            years.setValue(response.body());
+                            timetable.setValue(response.body());
                         } else {
                             if (response.code() == 401) {
                                 error.setValue("未認証です");
@@ -73,7 +75,7 @@ public class TimetableViewModel extends ViewModel {
                         }
                     }
                     @Override
-                    public void onFailure(Call<List<Integer>> call, Throwable t) {
+                    public void onFailure(Call<TreeMap<Integer, HashSet<String>>> call, Throwable t) {
                         error.setValue("通信エラー: " + t.getMessage());
                     }
                 });
