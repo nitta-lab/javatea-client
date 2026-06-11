@@ -71,6 +71,26 @@ public class SignUpActivity1 extends AppCompatActivity {
             }
         });
 
+        // ユーザID重複フラグを監視して、重複していなければ次へ。そうでなければトースト表示
+        userViewModel.isUidDuplication().observe(this, isUidDuplication -> {
+            if(!isUidDuplication) {
+                userIdText.setText(userId);
+                passwordText.setText(password);
+                nicknameText.setText(nickname);
+                userIdEditText.setVisibility(View.INVISIBLE);
+                passwordEditText.setVisibility(View.INVISIBLE);
+                nicknameEditText.setVisibility(View.INVISIBLE);
+                userIdText.setVisibility(View.VISIBLE);
+                passwordText.setVisibility(View.VISIBLE);
+                nicknameText.setVisibility(View.VISIBLE);
+                backButton.setVisibility(View.VISIBLE);
+                registerButton.setVisibility(View.VISIBLE);
+                nextButton.setVisibility(View.INVISIBLE);
+            }else{
+                Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // トークンを監視
         userViewModel.getToken().observe(this,token ->{
             if(token != null && !token.isEmpty()){
@@ -119,24 +139,8 @@ public class SignUpActivity1 extends AppCompatActivity {
                 return;
             }
 
-            // userIdの重複チェック
-//                if (!userViewModel.checkUser(userId)) {
-//                    Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-
-            userIdText.setText(userId);
-            passwordText.setText(password);
-            nicknameText.setText(nickname);
-            userIdEditText.setVisibility(View.INVISIBLE);
-            passwordEditText.setVisibility(View.INVISIBLE);
-            nicknameEditText.setVisibility(View.INVISIBLE);
-            userIdText.setVisibility(View.VISIBLE);
-            passwordText.setVisibility(View.VISIBLE);
-            nicknameText.setVisibility(View.VISIBLE);
-            backButton.setVisibility(View.VISIBLE);
-            registerButton.setVisibility(View.VISIBLE);
-            nextButton.setVisibility(View.INVISIBLE);
+            // userIdの重複チェック・それ以降はobserve
+            userViewModel.checkUser(userId);
         });
 
         // 修正ボタンの処理
