@@ -309,10 +309,10 @@ public class UserViewModel extends ViewModel {
 
             if (response.isSuccessful()) {
                 System.out.println(response.code());
-                return false;
+                return true;
             } else {
                 System.out.println(response.code());
-                return true;
+                return false;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
