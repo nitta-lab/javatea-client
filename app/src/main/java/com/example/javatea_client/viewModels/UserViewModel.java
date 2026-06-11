@@ -300,4 +300,23 @@ public class UserViewModel extends ViewModel {
             throw new RuntimeException(e);
         }
     }
+
+    //ユーザーの存在確認
+    public boolean checkUser(String uid) {
+        Call<User> call = userResource.getUser(uid);
+        try {
+            Response<User> response = call.execute();
+
+            if (response.isSuccessful()) {
+                System.out.println(response.code());
+                return false;
+            } else {
+                System.out.println(response.code());
+                return true;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

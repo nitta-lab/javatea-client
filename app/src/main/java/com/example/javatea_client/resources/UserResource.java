@@ -21,6 +21,11 @@ public interface UserResource {
             @Field("pw") String pw
     );
 
+    @GET("/users/{uid}")
+    Call<User> getUser(
+            @Path("uid") String uid
+    );
+
     //ログイン
     @FormUrlEncoded
     @POST("/users/{uid}/login")
