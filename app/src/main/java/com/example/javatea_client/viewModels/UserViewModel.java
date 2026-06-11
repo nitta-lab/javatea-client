@@ -230,7 +230,7 @@ public class UserViewModel extends ViewModel {
                         user.setValue(currentUser);
                     }
                 } else {
-                    error.setValue("学部の設定に失敗: " + response.code());
+                    error.setValue("学科の設定に失敗: " + response.code());
                 }
             }
 
@@ -275,7 +275,7 @@ public class UserViewModel extends ViewModel {
                         user.setValue(currentUser);
                     }
                 } else {
-                    error.setValue("学部の設定に失敗: " + response.code());
+                    error.setValue("学年の設定に失敗: " + response.code());
                 }
             }
 
@@ -325,5 +325,4 @@ public class UserViewModel extends ViewModel {
             }
         });
     }
-
 }
