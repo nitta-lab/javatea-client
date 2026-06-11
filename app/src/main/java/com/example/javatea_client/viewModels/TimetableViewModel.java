@@ -18,21 +18,19 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class TimetableViewModel extends ViewModel {
 
     private final Retrofit retrofit;
-    private static TimetableResource timetableResource;
+    private final TimetableResource timetableResource;
     // 年度一覧
-    private static final MutableLiveData<List<Integer>> years = new MutableLiveData<>();
+    private final MutableLiveData<List<Integer>> years = new MutableLiveData<>();
     // 授業ID一覧
-    private static final MutableLiveData<List<String>> lectureIds = new MutableLiveData<>();
-    // 読み込み中
-    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+    private final MutableLiveData<List<String>> lectureIds = new MutableLiveData<>();
     // エラー
-    private static final MutableLiveData<String> error = new MutableLiveData<>();
+    private final MutableLiveData<String> error = new MutableLiveData<>();
 
     //コンストラクタ
     public TimetableViewModel() {
         this.retrofit = new Retrofit.Builder()
                 //.baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea/")
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl("http://160.247.112.119:8080/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
@@ -49,24 +47,17 @@ public class TimetableViewModel extends ViewModel {
         return lectureIds;
     }
 
-    //ローディング状態取得
-    public LiveData<Boolean> isLoading() {
-        return loading;
-    }
-
     //エラー取得
-    public static LiveData<String> getError() {
+    public LiveData<String> getError() {
         return error;
     }
 
     //登録年度一覧取得
     public void loadTimetableYears(String uid, String token) {
-        loading.setValue(true);
-        timetableResource.getTimetableYears(uid, token)
+        timetableResource.getYears(uid, token)
                 .enqueue(new Callback<List<Integer>>() {
                     @Override
                     public void onResponse(Call<List<Integer>> call, Response<List<Integer>> response) {
-                        loading.setValue(false);
                         if (response.isSuccessful() && response.body() != null) {
                             years.setValue(response.body());
                         } else {
@@ -83,7 +74,6 @@ public class TimetableViewModel extends ViewModel {
                     }
                     @Override
                     public void onFailure(Call<List<Integer>> call, Throwable t) {
-                        loading.setValue(false);
                         error.setValue("通信エラー: " + t.getMessage());
                     }
                 });
@@ -91,13 +81,11 @@ public class TimetableViewModel extends ViewModel {
 
     //指定年度の授業一覧取得
     public void loadTimetableLectures(String uid, int year, String token) {
-        loading.setValue(true);
         timetableResource
-                .getTimetableLectures(uid, year, token)
+                .getLectures(uid, year, token)
                 .enqueue(new Callback<List<String>>() {
                     @Override
                     public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                        loading.setValue(false);
                         if (response.isSuccessful() && response.body() != null) {
                             lectureIds.setValue(response.body());
                         } else {
@@ -116,7 +104,6 @@ public class TimetableViewModel extends ViewModel {
                     }
                     @Override
                     public void onFailure(Call<List<String>> call, Throwable t) {
-                        loading.setValue(false);
                         error.setValue("通信エラー: " + t.getMessage());
                     }
                 });
@@ -124,13 +111,11 @@ public class TimetableViewModel extends ViewModel {
 
     // 年度追加
     public void addYear(String uid, int year, String token) {
-        loading.setValue(true);
         timetableResource
                 .addYear(uid, year, token)
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        loading.setValue(false);
                         if (response.isSuccessful()) {
                             // 正常終了
                         } else {
@@ -150,7 +135,6 @@ public class TimetableViewModel extends ViewModel {
                     }
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        loading.setValue(false);
                         error.setValue("通信エラー: " + t.getMessage());
                     }
                 });
@@ -158,13 +142,11 @@ public class TimetableViewModel extends ViewModel {
 
     // 授業追加
     public void addLecture(String uid, int year, String lectureId, String token) {
-        loading.setValue(true);
         timetableResource
                 .addLecture(uid, year, lectureId, token)
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        loading.setValue(false);
                         if (response.isSuccessful()) {
                             // 正常終了
                         } else {
@@ -184,21 +166,18 @@ public class TimetableViewModel extends ViewModel {
                     }
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        loading.setValue(false);
                         error.setValue("通信エラー: " + t.getMessage());
                     }
                 });
     }
 
     // 授業削除
-    public void deleteLecture(String uid, int year, String lectureId, String token) {
-        loading.setValue(true);
+    public void removeLecture(String uid, int year, String lectureId, String token) {
         timetableResource
-                .deleteLecture(uid, year, lectureId, token)
+                .removeLecture(uid, year, lectureId, token)
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-                        loading.setValue(false);
                         if (response.isSuccessful()) {
                             // 正常終了
                         } else {
@@ -215,7 +194,6 @@ public class TimetableViewModel extends ViewModel {
                     }
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-                        loading.setValue(false);
                         error.setValue("通信エラー: " + t.getMessage());
                     }
                 });

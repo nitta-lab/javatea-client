@@ -15,14 +15,14 @@ public interface TimetableResource {
 
     //ユーザが時間割登録している年度一覧を取得
     @GET("users/{uid}/timetable")
-    Call<List<Integer>> getTimetableYears(
+    Call<List<Integer>> getYears(
             @Path("uid") String uid,
             @Query("token") String token
     );
 
     //指定年度に登録されている授業一覧を取得
     @GET("users/{uid}/timetable/{year}")
-    Call<List<String>> getTimetableLectures(
+    Call<List<String>> getLectures(
             @Path("uid") String uid,
             @Path("year") int year,
             @Query("token") String token
@@ -49,7 +49,7 @@ public interface TimetableResource {
 
     //時間割から授業を削除
     @DELETE("users/{uid}/timetable/{year}/{lecture-id}")
-    Call<Void> deleteLecture(
+    Call<Void> removeLecture(
             @Path("uid") String uid,
             @Path("year") int year,
             @Path("lecture-id") String lectureId,
