@@ -23,5 +23,6 @@ public class AddLectureActivity extends AppCompatActivity {
             return insets;
         });
         Navigation.setup(this);
+        ModeBar.setup(this, "時間割設定");
     }
 }
