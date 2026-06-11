@@ -1,5 +1,6 @@
 package com.example.javatea_client.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -55,118 +56,104 @@ public class SignUpActivity1 extends AppCompatActivity {
         ModeBar.setup(this, "新規登録");
 
         // ユーザを監視して登録後、ログインを呼び出す
-//        userViewModel.getUser().observe(this, user -> {
-//            if(user != null) {
+        userViewModel.getUser().observe(this, user -> {
+            if(user != null) {
 //                tampopo.setUserId(userId);
 //                tampopo.setPassword(password);
-//                userViewModel.login(userId, password);
-//            }
-//        });
+                userViewModel.login(userId, password);
+            }
+        });
 
         // エラーメッセージを監視してトースト表示
-//        userViewModel.getError().observe(this, errorMessage -> {
-//            if (errorMessage != null && !errorMessage.isEmpty()) {
-//                Toast.makeText(SignUpActivity1.this, errorMessage, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        userViewModel.getError().observe(this, errorMessage -> {
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                Toast.makeText(SignUpActivity1.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // トークンを監視
-//        userViewModel.getToken().observe(this,token ->{
-//            if(token != null && !token.isEmpty()){
+        userViewModel.getToken().observe(this,token ->{
+            if(token != null && !token.isEmpty()){
 //                tampopo.setToken(token);
-//                // 画面遷移
-//                Intent intent = new Intent(RegisterActivity.this, UserInfoActivity.class);
-//                startActivity(intent);
-//                finish();
-//            } else {
-//                Toast.makeText(RegisterActivity.this, "トークン取得に失敗しました", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+                // 画面遷移
+                Intent intent = new Intent(SignUpActivity1.this, RegisterActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(SignUpActivity1.this, "トークン取得に失敗しました", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // パスワードの表示非表示ボタンの処理
-        eyeButton.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isVisiblePassword) {
-                    /* パスワード非表示 */
-                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    eyeButton.setAlpha(1f);
-                    isVisiblePassword = false;
-                }else{
-                    /* パスワード表示 */
-                    passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    passwordText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    eyeButton.setAlpha(0.5f);
-                    isVisiblePassword = true;
-                }
+        eyeButton.setOnClickListener(view -> {
+            if (isVisiblePassword) {
+                /* パスワード非表示 */
+                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                eyeButton.setAlpha(1f);
+                isVisiblePassword = false;
+            }else{
+                /* パスワード表示 */
+                passwordEditText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                passwordText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                eyeButton.setAlpha(0.5f);
+                isVisiblePassword = true;
             }
-        }));
+        });
 
         // 次へボタンの処理
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                userId = userIdEditText.getText().toString().trim();
-                password = passwordEditText.getText().toString().trim();
-                nickname = nicknameEditText.getText().toString().trim();
+        nextButton.setOnClickListener(view -> {
+            userId = userIdEditText.getText().toString().trim();
+            password = passwordEditText.getText().toString().trim();
+            nickname = nicknameEditText.getText().toString().trim();
 
-                // 空文字チェック
-                if (userId.isEmpty() || password.isEmpty() || nickname.isEmpty()) {
-                    Toast.makeText(SignUpActivity1.this, "ID・パスワード・ニックネームを入力してください", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // 空文字チェック
+            if (userId.isEmpty() || password.isEmpty() || nickname.isEmpty()) {
+                Toast.makeText(SignUpActivity1.this, "ID・パスワード・ニックネームを入力してください", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // パスワードチェック
-                if (password.length() < 8 || !password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*") || !containsNumber(password)) {
-                    Toast.makeText(SignUpActivity1.this, "パスワードは大文字、小文字、数字を含め、8文字以上にしてください", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            // パスワードチェック
+            if (password.length() < 8 || !password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*") || !containsNumber(password)) {
+                Toast.makeText(SignUpActivity1.this, "パスワードは大文字、小文字、数字を含め、8文字以上にしてください", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                // userIdの重複チェック
-//                if (userViewModel.getUser(userId) != null) {
+            // userIdの重複チェック
+//                if (!userViewModel.checkUser(userId)) {
 //                    Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
 //                    return;
 //                }
 
-                userIdText.setText(userId);
-                passwordText.setText(password);
-                nicknameText.setText(nickname);
-                userIdEditText.setVisibility(View.INVISIBLE);
-                passwordEditText.setVisibility(View.INVISIBLE);
-                nicknameEditText.setVisibility(View.INVISIBLE);
-                userIdText.setVisibility(View.VISIBLE);
-                passwordText.setVisibility(View.VISIBLE);
-                nicknameText.setVisibility(View.VISIBLE);
-                backButton.setVisibility(View.VISIBLE);
-                registerButton.setVisibility(View.VISIBLE);
-                nextButton.setVisibility(View.INVISIBLE);
-            }
+            userIdText.setText(userId);
+            passwordText.setText(password);
+            nicknameText.setText(nickname);
+            userIdEditText.setVisibility(View.INVISIBLE);
+            passwordEditText.setVisibility(View.INVISIBLE);
+            nicknameEditText.setVisibility(View.INVISIBLE);
+            userIdText.setVisibility(View.VISIBLE);
+            passwordText.setVisibility(View.VISIBLE);
+            nicknameText.setVisibility(View.VISIBLE);
+            backButton.setVisibility(View.VISIBLE);
+            registerButton.setVisibility(View.VISIBLE);
+            nextButton.setVisibility(View.INVISIBLE);
         });
 
         // 修正ボタンの処理
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userIdEditText.setVisibility(View.VISIBLE);
-                passwordEditText.setVisibility(View.VISIBLE);
-                nicknameEditText.setVisibility(View.VISIBLE);
-                userIdText.setVisibility(View.INVISIBLE);
-                passwordText.setVisibility(View.INVISIBLE);
-                nicknameText.setVisibility(View.INVISIBLE);
-                registerButton.setVisibility(View.INVISIBLE);
-                backButton.setVisibility(View.INVISIBLE);
-                nextButton.setVisibility(View.VISIBLE);
-            }
+        backButton.setOnClickListener(view -> {
+            userIdEditText.setVisibility(View.VISIBLE);
+            passwordEditText.setVisibility(View.VISIBLE);
+            nicknameEditText.setVisibility(View.VISIBLE);
+            userIdText.setVisibility(View.INVISIBLE);
+            passwordText.setVisibility(View.INVISIBLE);
+            nicknameText.setVisibility(View.INVISIBLE);
+            registerButton.setVisibility(View.INVISIBLE);
+            backButton.setVisibility(View.INVISIBLE);
+            nextButton.setVisibility(View.VISIBLE);
         });
 
         // 登録ボタンの処理
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                userViewModel.createUser(userId, nickname, password);
-            }
-        });
+        registerButton.setOnClickListener(view -> userViewModel.createUser(userId, nickname, password));
     }
 
     private boolean containsNumber(String str) {
