@@ -26,10 +26,11 @@ public class UserViewModel extends ViewModel {
     private final MutableLiveData<String> token = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private static final MutableLiveData<String> error = new MutableLiveData<>();
+    private static MutableLiveData<Boolean> isUidDuplication = new MutableLiveData<>();
 
-    public UserViewModel(){
+    public UserViewModel() {
         this.retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8080/")
+                .baseUrl("http://160.247.112.199:8080/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
@@ -52,8 +53,10 @@ public class UserViewModel extends ViewModel {
         return error;
     }
 
+    public LiveData<Boolean> isUidDuplication() {return isUidDuplication; }
+
     //ユーザー作成
-    public void createUser(String id, String name ,String password) {
+    public void createUser(String id, String name, String password) {
         loading.setValue(true);
         userResource.createUser(id, name, password).enqueue(new Callback<User>() {
             @Override
@@ -74,6 +77,7 @@ public class UserViewModel extends ViewModel {
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<User> c, Throwable t) {
                 loading.setValue(false);
@@ -85,9 +89,9 @@ public class UserViewModel extends ViewModel {
     //ログイン
     public void login(String uid, String pw) {
         loading.setValue(true);
-        userResource.login(uid, pw).enqueue(new Callback<String>(){
+        userResource.login(uid, pw).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> c,Response<String> res) {
+            public void onResponse(Call<String> c, Response<String> res) {
                 if (res.isSuccessful()) {
                     token.setValue(res.body());
                 } else {
@@ -301,22 +305,25 @@ public class UserViewModel extends ViewModel {
         }
     }
 
-    //ユーザーの存在確認
-    public boolean checkUser(String uid) {
-        Call<User> call = userResource.getUser(uid);
-        try {
-            Response<User> response = call.execute();
-
-            if (response.isSuccessful()) {
-                System.out.println(response.code());
-                return true;
-            } else {
-                System.out.println(response.code());
-                return false;
+    //ユーザーの重複確認
+    public void checkUser(String uid) {
+        userResource.getUser(uid).enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                loading.setValue(false);
+                if (response.isSuccessful()) {
+                    isUidDuplication.setValue(true);
+                } else {
+                    isUidDuplication.setValue(false);
+                }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                loading.setValue(false);
+                error.setValue("アカウント取得の通信エラー: " + t.getMessage());
+            }
+        });
     }
 
 }
