@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/description"
         android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:text="あなたの　　　　　　　　　　　　　　\n大学・学部・学科・学年を\n　　　　　　　　　　入力してください"
         android:textStyle="bold"
         android:gravity="center"
@@ -30,7 +30,7 @@
     <LinearLayout
         android:id="@+id/universityRow"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:background="#D9D9D9"
 
@@ -60,7 +60,7 @@
 
         <TextView
             android:id="@+id/universityPullDownText"
-            android:layout_width="40dp"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:text="▼"
             android:gravity="center"/>
@@ -69,7 +69,7 @@
     <LinearLayout
         android:id="@+id/facultyRow"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:background="#D9D9D9"
 
@@ -98,7 +98,8 @@
             android:gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="40dp"
+            android:id="@+id/facultyPullDownText"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:text="▼"
             android:gravity="center"/>
@@ -107,7 +108,7 @@
     <LinearLayout
         android:id="@+id/departmentRow"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:background="#D9D9D9"
 
@@ -136,7 +137,8 @@
             android:gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="40dp"
+            android:id="@+id/departmentPullDownText"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:text="▼"
             android:gravity="center"/>
@@ -145,7 +147,7 @@
     <LinearLayout
         android:id="@+id/gradeRow"
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:background="#D9D9D9"
 
@@ -174,7 +176,8 @@
             android:gravity="center_vertical"/>
 
         <TextView
-            android:layout_width="40dp"
+            android:id="@+id/gradePullDownText"
+            android:layout_width="70dp"
             android:layout_height="match_parent"
             android:text="▼"
             android:gravity="center"/>
@@ -188,6 +191,6 @@
         app:layout_constraintTop_toBottomOf="@id/gradeRow"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="24dp"/>
-    <include layout="@layout/navigation"/>
+<!--    <include layout="@layout/navigation"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
