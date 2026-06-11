@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class CategoryViewModel extends ViewModel {
     private final CategoryResource categoryResource;
 
     // 画面に表示するためのオブジェクトを保持するためのLiveData
+    private final MutableLiveData<Collection<University>> currentUniversities = new MutableLiveData<>();
     private final MutableLiveData<University> currentUniversity = new MutableLiveData<>();
     // 新規作成時に発行された大学IDを保持するためのLiveData
     private final MutableLiveData<String> createdUnivId = new MutableLiveData<>();
@@ -92,14 +94,13 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 外部には書き換え不可能なLiveDataとして公開する(だからMutableつかない？)
+    public LiveData<Collection<University>> getCurrentUniversities() { return currentUniversities; }
     public LiveData<University> getCurrentUniversity() {
         return currentUniversity;
     }
-
     public LiveData<String> getCreatedUnivId() {
         return createdUnivId;
     }
-
     public LiveData<List<String>> getUnivLectures() {
         return univLectures;
     }
@@ -107,11 +108,9 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<List<String>> getCurrentFaculty() {
         return currentFaculty;
     }
-
     public LiveData<String> getCreatedFacultyName() {
         return createdFacultyName;
     }
-
     public LiveData<List<String>> getFacLectures() {
         return facLectures;
     }
@@ -119,13 +118,31 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<List<String>> getCurrentDepartment() {
         return currentDepartment;
     }
-
     public LiveData<String> getCreatedDepartmentName() {
         return createdDepartmentName;
     }
-
     public LiveData<List<String>> getDepartLectures() {
         return departLectures;
+    }
+
+
+    public void getAllUnivId(String from, String to){
+        categoryResource.getAllUnivId(from, to).enqueue(new Callback<Collection<University>>() {
+            @Override
+            public void onResponse(@NonNull Call<Collection<University>> call, @NonNull Response<Collection<University>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentUniversities.setValue(response.body());
+                    Log.d(TAG, "大学一覧を取得成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Collection<University>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
     }
 
     public void postNewUnivId(String name, String kana) {
@@ -135,10 +152,9 @@ public class CategoryViewModel extends ViewModel {
                 if (response.isSuccessful() && response.body() != null) {
                     // こっちは内部からなのでMutableの方にセットする
                     createdUnivId.setValue(response.body());
-                    Log.d(TAG, "通信成功：" + response.code());
+                    Log.d(TAG, "大学IDの発行成功：" + response.code());
                 } else {
-                    String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
-                    Log.w(TAG, errorCode);
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
                 }
             }
 
@@ -163,7 +179,7 @@ public class CategoryViewModel extends ViewModel {
                     );
 
                     currentUniversity.setValue(university);
-                    Log.d(TAG, "大学IDの一覧取得成功：" + response.body().size() + "件");
+                    Log.d(TAG, "指定された大学IDの情報取得成功：" + response.body().size() + "件");
                 } else {
                     String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
                     Log.w(TAG, errorCode);
