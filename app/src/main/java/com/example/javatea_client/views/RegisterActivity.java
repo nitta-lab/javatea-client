@@ -1,5 +1,7 @@
 package com.example.javatea_client.views;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -7,6 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.EditText;
@@ -17,6 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.example.javatea_client.R;
 
 public class RegisterActivity extends AppCompatActivity {
+    private boolean flag = false;
     //〇行のボタン(これは必須)
     private void showKanaDialog() {
         String[] kanaGroups = {
@@ -368,6 +377,40 @@ public class RegisterActivity extends AppCompatActivity {
 
         gradePullDownText.setOnClickListener(v -> {
             showGradeDialog();
+        });
+
+        //修正ボタン
+        Button fixButton = findViewById(R.id.fixButton);
+        //修正ボタンを押したときの処理
+        fixButton.setOnClickListener(v -> {
+            fixButton.setVisibility(View.INVISIBLE);
+        });
+
+        fixButton.setVisibility(View.INVISIBLE);//ボタンを見えなくする
+
+        //確定ボタン
+        Button confirmButton = findViewById(R.id.confirmButton);
+        //確定ボタンを押したときの処理
+        confirmButton.setOnClickListener(v -> {
+            TextView description = findViewById(R.id.description);
+            //1度押したとき
+            if(!flag){
+                String text = "確定してもよろしいでしょうか？\n\n※後から変更できません。";
+                SpannableString spannable = new SpannableString(text);
+                spannable.setSpan(
+                        new ForegroundColorSpan(Color.RED),
+                        15, text.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                );
+                description.setText(spannable);
+                fixButton.setVisibility(View.VISIBLE);
+                flag = true;
+            //2度押したとき(画面遷移)
+            }else{
+                Intent intent = new Intent(RegisterActivity.this, TimetableActivity.class);
+                startActivity(intent);
+            }
+
         });
     }
 }

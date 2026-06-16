@@ -9,7 +9,6 @@
     <include
         android:id="@+id/modeBar"
         layout="@layout/activity_mode_bar"
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -183,6 +182,16 @@
             android:gravity="center"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/fixButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="修正する"
+        app:layout_constraintTop_toBottomOf="@id/gradeRow"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="24dp"/>
+
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="wrap_content"
@@ -191,6 +200,6 @@
         app:layout_constraintTop_toBottomOf="@id/gradeRow"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="24dp"/>
-<!--    <include layout="@layout/navigation"/>-->
+    <!--    <include layout="@layout/navigation"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
