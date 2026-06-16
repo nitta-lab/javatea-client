@@ -34,7 +34,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         Intent reIntent = getIntent();
         // TimetableActivityから、曜日と時間を取得
         String day = reIntent.getStringExtra("day");
-        int period = reIntent.getIntExtra("period");
+        int period = reIntent.getIntExtra("period", 1);
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
         ModeBar.setup(this, "時間割設定"); //ModeBarを設定
