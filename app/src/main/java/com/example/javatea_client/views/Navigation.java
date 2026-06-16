@@ -8,14 +8,13 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.javatea_client.R;
-
 public class Navigation {
     //Navigationのインスタンスを作る必要なく呼び出せるようにする
     public static void setup(AppCompatActivity activity){
         ImageButton timetableButton = (ImageButton) activity.findViewById(R.id.timetable_button);
         timetableButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(activity,TimetableActivity.class);
                 activity.startActivity(intent);
             }
         });
