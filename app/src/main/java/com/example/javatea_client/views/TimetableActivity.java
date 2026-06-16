@@ -28,6 +28,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.viewModels.TimetableViewModel;
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.UserViewModel;
@@ -67,9 +68,9 @@ public class TimetableActivity extends AppCompatActivity {
             }
         });
         //ユーザ情報の取得
-        //javaTea = (JavaTea)getApplication();
-        userId = null;//後々Applicationからもらってくる予定
-        token = null;
+        Javatea javaTea = (Javatea) getApplication();
+        userId = javaTea.getUserId();//後々Applicationからもらってくる予定
+        token = javaTea.getToken();
         //dpに変換するコード
         float density = getResources().getDisplayMetrics().density;
         //ModeBarのセットアップ
