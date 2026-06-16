@@ -7,4 +7,202 @@
     android:layout_height="match_parent"
     tools:context=".views.SetTimetableActivity">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/navigation" />
+    <include layout="@layout/activity_mode_bar"/>
+
+    <!--授業選択の背景-->
+    <View
+        android:id="@+id/view2"
+        android:layout_width="370dp"
+        android:layout_height="560dp"
+        android:background="#E5E5EA"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.362" />
+
+    <!--【登録されている授業】-->
+    <TextView
+        android:id="@+id/registered_text"
+        android:layout_width="192dp"
+        android:layout_height="25dp"
+        android:gravity="center"
+        android:text="【登録されている授業】"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2"
+        app:layout_constraintVertical_bias="0.041" />
+
+    <!--×ボタン-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/close_subject_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="✕"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintHorizontal_bias="0.965"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toTopOf="@+id/view2"
+        app:layout_constraintVertical_bias="0.027" />
+
+    <!--授業リスト（スクロール）-->
+    <ScrollView
+        android:id="@+id/scroll_subject_list"
+        android:layout_width="350dp"
+        android:layout_height="300dp"
+        android:background="@drawable/border_scroll"
+        android:padding="20dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/registered_text"
+        app:layout_constraintVertical_bias="0.117">
+
+        <LinearLayout
+            android:id="@+id/list_subject_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 授業アイテム（後で動的に追加するようにも含めて細かく調整)  -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E6E0E9"
+                android:padding="20dp"
+                android:text="プログラミング演習 I"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d9d7d9" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E6E0E9"
+                android:padding="20dp"
+                android:text="オブジェクト指向プログラミング"
+                android:textStyle="bold" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d9d7d9" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E6E0E9"
+                android:padding="20dp"
+                android:text="オブジェクト指向プログラミング"
+                android:textStyle="bold" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d9d7d9" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E6E0E9"
+                android:padding="20dp"
+                android:text="オブジェクト指向プログラミング"
+                android:textStyle="bold" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d9d7d9" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E6E0E9"
+                android:padding="20dp"
+                android:text="オブジェクト指向プログラミング"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#d9d7d9" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/explanation_text"
+        android:layout_width="234dp"
+        android:layout_height="42dp"
+        android:gravity="center"
+        android:text="登録されている授業が無い場合は、左下のプラスボタンから追加"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/scroll_subject_list"
+        app:layout_constraintVertical_bias="0.18" />
+
+    <!--追加ボタン-->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_subject_button"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:background="@drawable/btn_add_back_ground"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="＋"
+        android:textColor="#000000"
+        android:textSize="26sp"
+        android:textAllCaps="false"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintHorizontal_bias="0.161"
+        app:layout_constraintStart_toStartOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/explanation_text"
+        app:layout_constraintVertical_bias="0.484" />
+
+    <Button
+        android:id="@+id/cancel_subject_button"
+        android:layout_width="148dp"
+        android:layout_height="50dp"
+        android:text="設定しない"
+        app:layout_constraintBottom_toBottomOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="@+id/view2"
+        app:layout_constraintHorizontal_bias="0.664"
+        app:layout_constraintStart_toEndOf="@+id/add_subject_button"
+        app:layout_constraintTop_toBottomOf="@+id/explanation_text"
+        app:layout_constraintVertical_bias="0.492" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
