@@ -24,6 +24,8 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.javatea_client.R;
 
+import java.util.ArrayList;
+
 public class RegisterActivity extends AppCompatActivity {
     private boolean flag = false;
     //〇行のボタン(これは必須)
@@ -58,49 +60,42 @@ public class RegisterActivity extends AppCompatActivity {
     //大学一覧(大学名の部分はviewmodelsの方から持ってくることになるはず)
     private void showUniversityDialog(String kana) {
         //viewmodelsの方から持ってくる
-        String[] universities;
+        ArrayList<String> universities = new ArrayList<>();
 
         switch (kana) {
             case "あ行":
-                universities = new String[]{
-                    "愛媛大学",
-                    "青山学院大学",
-                    "会津大学",
-                    "+大学を追加する"
-                };
+                universities.add("愛媛大学");
+                universities.add("青山学院大学");
+                universities.add("会津大学");
+                universities.add("+大学を追加する");
                 break;
 
             case "か行":
-                universities = new String[]{
-                    "香川大学",
-                    "鹿児島大学",
-                    "関西大学",
-                    "+大学を追加する"
-                };
+                universities.add("香川大学");
+                universities.add("鹿児島大学");
+                universities.add("関西大学");
+                universities.add("+大学を追加する");
                 break;
 
             case "さ行":
-                universities = new String[]{
-                    "埼玉大学",
-                    "滋賀大学",
-                    "静岡大学",
-                    "+大学を追加する"
-                };
+                universities.add("埼玉大学");
+                universities.add("滋賀大学");
+                universities.add("静岡大学");
+                universities.add("+大学を追加する");
                 break;
 
             default:
-                universities = new String[]{
-                    "+大学を追加する"
-                };
+                universities.add("+大学を追加する");
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("大学を選択してください");
 
-        builder.setItems(universities, (dialog, which) -> {
+        String[] items = universities.toArray(new String[0]);
+        builder.setItems(items, (dialog, which) -> {
 
-            String selectedUniversity = universities[which];
+            String selectedUniversity = items[which];
 
             if (selectedUniversity.equals("+大学を追加する")){
                 showAddUniversityDialog();
@@ -163,6 +158,9 @@ public class RegisterActivity extends AppCompatActivity {
             //最終チェックはもう少し必要かも。
             //同じ大学名と読み仮名が登録されようとしていないか。(無視)
             //読み仮名がひらがなで入力されているか。
+
+            //ここで大学を追加するコードを書く
+
             Toast.makeText(this, "登録しました", Toast.LENGTH_SHORT).show();
 
             dialog.dismiss();
@@ -324,6 +322,34 @@ public class RegisterActivity extends AppCompatActivity {
         builder.show();
     }
 
+    //確定ボタンを押したときの処理
+    private void showConfirmScreen(){
+        TextView description = findViewById(R.id.description);
+        //1度押したとき
+        if(!flag){
+            String text = "確定してもよろしいでしょうか？\n\n※後から変更できません。";
+            SpannableString spannable = new SpannableString(text);
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), 15, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            description.setText(spannable);
+            Button fixButton = findViewById(R.id.fixButton);
+            fixButton.setVisibility(View.VISIBLE);
+            flag = true;
+        }else{ //2度押したとき(画面遷移)
+            Intent intent = new Intent(RegisterActivity.this, TimetableActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    //修正ボタンを押したときの処理
+    private void returnToInputScreen(){
+        Button fixButton = findViewById(R.id.fixButton);
+
+        fixButton.setVisibility(View.INVISIBLE);//ボタンを見えなくする
+
+        flag = false;
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -379,38 +405,19 @@ public class RegisterActivity extends AppCompatActivity {
             showGradeDialog();
         });
 
-        //修正ボタン
-        Button fixButton = findViewById(R.id.fixButton);
         //修正ボタンを押したときの処理
+        Button fixButton = findViewById(R.id.fixButton);
+        fixButton.setVisibility(View.INVISIBLE);//登録時は見えないようにしておく
+
         fixButton.setOnClickListener(v -> {
-            fixButton.setVisibility(View.INVISIBLE);
+            returnToInputScreen();
         });
 
-        fixButton.setVisibility(View.INVISIBLE);//ボタンを見えなくする
-
-        //確定ボタン
-        Button confirmButton = findViewById(R.id.confirmButton);
         //確定ボタンを押したときの処理
-        confirmButton.setOnClickListener(v -> {
-            TextView description = findViewById(R.id.description);
-            //1度押したとき
-            if(!flag){
-                String text = "確定してもよろしいでしょうか？\n\n※後から変更できません。";
-                SpannableString spannable = new SpannableString(text);
-                spannable.setSpan(
-                        new ForegroundColorSpan(Color.RED),
-                        15, text.length(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                );
-                description.setText(spannable);
-                fixButton.setVisibility(View.VISIBLE);
-                flag = true;
-            //2度押したとき(画面遷移)
-            }else{
-                Intent intent = new Intent(RegisterActivity.this, TimetableActivity.class);
-                startActivity(intent);
-            }
+        Button confirmButton = findViewById(R.id.confirmButton);
 
+        confirmButton.setOnClickListener(v -> {
+            showConfirmScreen();
         });
     }
 }
