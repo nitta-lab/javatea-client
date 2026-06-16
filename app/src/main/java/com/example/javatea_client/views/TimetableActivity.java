@@ -158,12 +158,6 @@ public class TimetableActivity extends AppCompatActivity {
 
         //時間割の部
         GridLayout timetable = createTimetableGridLayout();
-        timetableViewModel.getLectureIds().observe(this, new Observer<List<String>>() {
-            @Override
-            public void onChanged(List<String> strings) {
-
-            }
-        });
     }
 
     //選んだ年度を表示するTextViewを作成
