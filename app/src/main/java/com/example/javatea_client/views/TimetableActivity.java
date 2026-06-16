@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.Gravity;
@@ -34,11 +35,14 @@ import com.example.javatea_client.viewModels.UserViewModel;
 import java.util.*;
 
 public class TimetableActivity extends AppCompatActivity {
+    private String userId;
+    private String token;
     private TimetableViewModel timetableViewModel;
     //時間割が作られた年度一覧
     private ArrayList<String> years;
-    private HashMap<Integer,HashMap<String,HashMap<String,HashMap<Integer,String>>>> timetableLecturesMap;
+    private HashMap<Integer,HashMap<String,HashMap<String,HashMap<Integer,String>>>> timetableLecturesMap;//年度、前期後期
     private TextView selectedYearTextView;
+    private HashMap<String,HashMap<Integer,TextView>> currentTimetable;
     //JavaTea javatea;
     @SuppressLint("SetTextI18n")
     @Override
@@ -64,14 +68,15 @@ public class TimetableActivity extends AppCompatActivity {
         });
         //ユーザ情報の取得
         //javaTea = (JavaTea)getApplication();
-        String userId = null;//後々Applicationからもらってくる予定
-        String token = null;
+        userId = null;//後々Applicationからもらってくる予定
+        token = null;
         //dpに変換するコード
         float density = getResources().getDisplayMetrics().density;
         //ModeBarのセットアップ
         ModeBar.setup(this,"時間割");
         //Navigationのセットアップ
         Navigation.setup(this);
+        //年度の部
         //選んだ年度を表示するTextView
         selectedYearTextView = createSelectedYearTextView();
         LinearLayout layout = new LinearLayout(this);
@@ -86,12 +91,13 @@ public class TimetableActivity extends AppCompatActivity {
         years = new ArrayList<>();
         //時間割表の状態を保存するMap
         timetableLecturesMap = new HashMap<>();
-        //時間割が作られた年度の取得
-        //timetableViewModel.loadTimetableYears(userId,token);
+        //年度と時間割の取得
+        //timetableViewModel.loadTimetable(userId,token);
         //新しい年度が追加されたら更新
-        timetableViewModel.getYears().observe(this, new Observer<List<Integer>>() {
+        timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<String>>>() {
             @Override
-            public void onChanged(List<Integer> integers) {
+            public void onChanged(TreeMap<Integer, HashSet<String>> timetable) {
+                ArrayList<Integer> integers = new ArrayList<>(timetable.keySet());
                 Collections.sort(integers);
                 years.clear();
                 for(int i=0;i<integers.size();i++){
@@ -113,26 +119,8 @@ public class TimetableActivity extends AppCompatActivity {
                     String year = years.get(i);
                     yearTextView.setOnClickListener(view ->{
                         if(year.equals("＋年度を追加する")){
-                            AlertDialog.Builder builder = new AlertDialog.Builder(TimetableActivity.this);
-                            String[] selectYears = new String[40];
-                            for(int j=2006;j<2046;j++){
-                                selectYears[j-2006] = String.valueOf(j);
-                            }
-                            builder.setItems(selectYears, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    int year = Integer.parseInt(selectYears[which]);
-                                    //timetableViewModel.addYear(userId,year,token);
-                                    if(!timetableLecturesMap.containsKey(year)){
-                                        timetableLecturesMap.put(year,new HashMap<>());
-                                        timetableLecturesMap.get(year).put("前期",new HashMap<>());
-                                        timetableLecturesMap.get(year).put("後期",new HashMap<>());
-                                        setYearsFromTimetableLecturesMap();
-                                        selectedYearTextView.setText(year + "前期 ▼");
-                                    }
-                                    dialog.dismiss();
-                                }
-                            });
+                            AlertDialog.Builder builder = createAddYearAlertDialogBuilder();
+                            builder.show();
                         }else{
                             selectedYearTextView.setText(year + "前期 ▼");
                         }
@@ -146,29 +134,8 @@ public class TimetableActivity extends AppCompatActivity {
         selectedYearTextView.setOnClickListener(v ->{
             //一番初めは、一つも年度がないため追加してもらう。
             if("＋年度を追加する".contentEquals(selectedYearTextView.getText())){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                String[] selectYears = new String[40];
-                for(int i=2006;i<2046;i++){
-                    selectYears[i-2006] = String.valueOf(i);
-                }
-                builder.setItems(selectYears, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        int year = Integer.parseInt(selectYears[which]);
-                        //timetableViewModel.addYear(userId,year,token);
-                        if(!timetableLecturesMap.containsKey(year)){
-                            timetableLecturesMap.put(year,new HashMap<>());
-                            timetableLecturesMap.get(year).put("前期",new HashMap<>());
-                            timetableLecturesMap.get(year).put("後期",new HashMap<>());
-                            setYearsFromTimetableLecturesMap();
-                            selectedYearTextView.setText(year + "前期 ▼");
-                        }
-                        dialog.dismiss();
-                    }
-                });
+                AlertDialog.Builder builder = createAddYearAlertDialogBuilder();
                 builder.show();
-//                Intent intent = new Intent(TimetableActivity.this,RegisterActivity.class);
-//                startActivity(intent);
                 return;
             }
             layout.removeAllViews();
@@ -177,26 +144,7 @@ public class TimetableActivity extends AppCompatActivity {
                 String year = years.get(i);
                 yearTextView.setOnClickListener(view ->{
                     if(year.equals("＋年度を追加する")){
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                        String[] selectYears = new String[40];
-                        for(int j=2006;j<2046;j++){
-                            selectYears[j-2006] = String.valueOf(j);
-                        }
-                        builder.setItems(selectYears, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                int year = Integer.parseInt(selectYears[which]);
-                                //timetableViewModel.addYear(userId,year,token);
-                                if(!timetableLecturesMap.containsKey(year)){
-                                    timetableLecturesMap.put(year,new HashMap<>());
-                                    timetableLecturesMap.get(year).put("前期",new HashMap<>());
-                                    timetableLecturesMap.get(year).put("後期",new HashMap<>());
-                                    setYearsFromTimetableLecturesMap();
-                                    selectedYearTextView.setText(year + "前期 ▼");
-                                }
-                                dialog.dismiss();
-                            }
-                        });
+                        AlertDialog.Builder builder = createAddYearAlertDialogBuilder();
                         builder.show();
                     }else{
                         selectedYearTextView.setText(year + " ▼");
@@ -207,82 +155,17 @@ public class TimetableActivity extends AppCompatActivity {
             }
             popup.showAsDropDown(v, selectedYearTextView.getWidth() - popup.getWidth(),0);//view,幅,高さ
         });
-        GridLayout timetable = findViewById(R.id.grid);
-        for(int i=0;i<48;i++){
-            TextView textView = new TextView(this);
-            textView.setBackgroundResource(R.drawable.cell_border);
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;//幅は自動設定
-            params.height = 0;
-            int row = i/6;
-            int col = i%6;
-            if(row == 0){
-                switch (col){
-                    case 1:
-                        textView.setText("月");
-                        break;
-                    case 2:
-                        textView.setText("火");
-                        break;
-                    case 3:
-                        textView.setText("水");
-                        break;
-                    case 4:
-                        textView.setText("木");
-                        break;
-                    case 5:
-                        textView.setText("金");
-                        break;
-                }
-                textView.setGravity(Gravity.CENTER);
-            }else if(col == 0){
-                switch (row){
-                    case 1:
-                        textView.setText("1");
-                        break;
-                    case 2:
-                        textView.setText("2");
-                        break;
-                    case 3:
-                        textView.setText("3");
-                        break;
-                    case 4:
-                        textView.setText("4");
-                        break;
-                    case 5:
-                        textView.setText("5");
-                        break;
-                    case 6:
-                        textView.setText("6");
-                        break;
-                    case 7:
-                        textView.setText("7");
-                        break;
-                }
-                textView.setGravity(Gravity.CENTER);
-            }
-            textView.setTextSize(16);
-            params.rowSpec = GridLayout.spec(row,row == 0 ? 0.7f : 1f);//rowが0の時幅を小さくする
-            params.columnSpec = GridLayout.spec(col,col == 0 ? 0.7f : 1f);//colが0の時幅を小さくする
-            textView.setLayoutParams(params);
-//            textView.setTag(new Point(row,col));//将来的に授業のIDを保存出来たらうれしい
-//            textView.setOnClickListener(v -> {
-//                //Q&Aに飛ぶ予定
-//            });
-            //長押しなら編集
-            textView.setOnLongClickListener(v -> {
-                Intent intent = new Intent(TimetableActivity.this,SetTimetableActivity.class);
-                startActivity(intent);
-                return true;
-            });
-            timetable.addView(textView);
-        }
+
+        //時間割の部
+        GridLayout timetable = createTimetableGridLayout();
         timetableViewModel.getLectureIds().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
+
             }
         });
     }
+
     //選んだ年度を表示するTextViewを作成
     private TextView createSelectedYearTextView(){
         TextView selectedYearTextView = findViewById(R.id.pop_up_window);
@@ -292,7 +175,7 @@ public class TimetableActivity extends AppCompatActivity {
         selectedYearTextView.setText("＋年度を追加する");
         return selectedYearTextView;
     }
-
+    //years(表示される年度の候補のlist)を更新するメソッド
     private void setYearsFromTimetableLecturesMap(){
         years.clear();
         TreeSet<Integer> timetable = new TreeSet<>(timetableLecturesMap.keySet());
@@ -306,6 +189,7 @@ public class TimetableActivity extends AppCompatActivity {
         }
         years.add("＋年度を追加する");
     }
+    //年度の候補を表示するtextViewを作成する(偶数番目と奇数番目で色を変える)
     private TextView createYearTextView(int i){
         TextView yearTextView = new TextView(this);
         String year = years.get(i);
@@ -321,8 +205,34 @@ public class TimetableActivity extends AppCompatActivity {
         }
         return yearTextView;
     }
+    private AlertDialog.Builder createAddYearAlertDialogBuilder(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String[] selectYears = new String[40];
+        for(int i=2006;i<2046;i++){
+            selectYears[i-2006] = String.valueOf(i);
+        }
+        builder.setItems(selectYears, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int year = Integer.parseInt(selectYears[which]);
+                //timetableViewModel.addYear(userId,year,token);
+                if(!timetableLecturesMap.containsKey(year)){
+                    timetableLecturesMap.put(year,new HashMap<>());
+                    timetableLecturesMap.get(year).put("前期",new HashMap<>());
+                    timetableLecturesMap.get(year).put("後期",new HashMap<>());
+                    setYearsFromTimetableLecturesMap();
+                    selectedYearTextView.setText(year + "前期 ▼");
+                }
+                dialog.dismiss();
+            }
+        });
+        return builder;
+    }
+    //時間割表のUIを作成する
     private GridLayout createTimetableGridLayout(){
         GridLayout timetable = findViewById(R.id.grid);
+        String[] day = {"月","火","水","木","金"};
+        currentTimetable = new HashMap<>();
         for(int row=0;row<=7;row++){
             for(int col=0;col<=5;col++){
                 TextView textView = new TextView(this);
@@ -330,51 +240,38 @@ public class TimetableActivity extends AppCompatActivity {
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = 0;//幅は自動設定
                 params.height = 0;
-                if(row == 0){
-                    switch (col){
-                        case 1:
-                            textView.setText("月");
-                            break;
-                        case 2:
-                            textView.setText("火");
-                            break;
-                        case 3:
-                            textView.setText("水");
-                            break;
-                        case 4:
-                            textView.setText("木");
-                            break;
-                        case 5:
-                            textView.setText("金");
-                            break;
-                    }
-                    textView.setGravity(Gravity.CENTER);
+                if(row == 0&&col > 0){
+                    textView.setText(day[col-1]);
+                }else if(col == 0&&row > 0){
+                    textView.setText(String.valueOf(row));
                 }else if(col == 0){
-                    switch (row){
-                        case 1:
-                            textView.setText("1");
-                            break;
-                        case 2:
-                            textView.setText("2");
-                            break;
-                        case 3:
-                            textView.setText("3");
-                            break;
-                        case 4:
-                            textView.setText("4");
-                            break;
-                        case 5:
-                            textView.setText("5");
-                            break;
-                        case 6:
-                            textView.setText("6");
-                            break;
-                        case 7:
-                            textView.setText("7");
-                            break;
+                    if(((String)selectedYearTextView.getText()).contains("前期")){
+                        textView.setText("前期");
+                    }else{
+                        textView.setText("後期");
                     }
-                    textView.setGravity(Gravity.CENTER);
                 }
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(16);
+                params.rowSpec = GridLayout.spec(row,row == 0 ? 0.7f : 1f);//rowが0の時幅を小さくする
+                params.columnSpec = GridLayout.spec(col,col == 0 ? 0.7f : 1f);//colが0の時幅を小さくする
+                textView.setLayoutParams(params);
+                textView.setTag(new Point(row,col));
+                textView.setOnLongClickListener(v -> {
+                    Intent intent = new Intent(TimetableActivity.this,SetTimetableActivity.class);
+                    Point p = (Point) v.getTag();
+                    intent.putExtra("day",day[p.y-1]);
+                    intent.putExtra("period",p.x);
+                    startActivity(intent);
+                    return true;
+                });
+                if(col != 0&&row != 0){
+                    if(!currentTimetable.containsKey(day[col-1])){
+                        currentTimetable.put(day[col-1],new HashMap<>());
+                    }
+                    currentTimetable.get(day[col-1]).put(row,textView);
+                }
+                timetable.addView(textView);
             }
         }
         return timetable;
