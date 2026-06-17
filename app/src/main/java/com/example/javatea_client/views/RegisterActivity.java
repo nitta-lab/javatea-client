@@ -339,6 +339,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     //修正ボタンを押したときの処理
     private void returnToInputScreen(){
+        TextView description = findViewById(R.id.description);
+
+        description.setText("あなたの　　　　　　　　　　　　　　\n大学・学部・学科・学年を\n　　　　　　　　　　入力してください");
+
         setInputEnabled(true,"▼");
         Button fixButton = findViewById(R.id.fixButton);
 
