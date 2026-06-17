@@ -57,9 +57,8 @@ public class RegisterActivity extends AppCompatActivity {
         builder.show();
     }
 
-    //大学一覧(大学名の部分はviewmodelsの方から持ってくることになるはず)
+    //大学一覧
     private void showUniversityDialog(String kana) {
-        //viewmodelsの方から持ってくる
         ArrayList<String> universities = new ArrayList<>();
 
         switch (kana) {
@@ -167,9 +166,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    //学部一覧(学部名の部分はviewmodelsの方から持ってくることになる)
+    //学部一覧
     private void showFacultyDialog() {
-        //viewmodelsの方から持ってくる
         String[] faculties = {
             "工学部",
             "経済学部",
@@ -232,9 +230,8 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    //学科一覧(学科名の部分はviewmodelsの方から持ってくることになる)
+    //学科一覧
     private void showDepartmentDialog() {
-        //viewmodelsの方から持ってくる
         String[] departments = {
             "工学科",
             "経済学科",
@@ -324,6 +321,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     //確定ボタンを押したときの処理
     private void showConfirmScreen(){
+        setInputEnabled(false,"");
         TextView description = findViewById(R.id.description);
         //1度押したとき
         if(!flag){
@@ -342,11 +340,32 @@ public class RegisterActivity extends AppCompatActivity {
 
     //修正ボタンを押したときの処理
     private void returnToInputScreen(){
+        setInputEnabled(true,"▼");
         Button fixButton = findViewById(R.id.fixButton);
 
         fixButton.setVisibility(View.INVISIBLE);//ボタンを見えなくする
 
         flag = false;
+
+    }
+
+    //確定ボタンを押したときの登録画面のクリック無効化
+    private void setInputEnabled(boolean enabled,String text){
+        TextView universityPullDownText = findViewById(R.id.universityPullDownText);
+        findViewById(R.id.universityPullDownText).setEnabled(enabled);
+        universityPullDownText.setText(text);
+
+        TextView facultyPullDownText = findViewById(R.id.facultyPullDownText);
+        findViewById(R.id.facultyPullDownText).setEnabled(enabled);
+        facultyPullDownText.setText(text);
+
+        TextView departmentPullDownText = findViewById(R.id.departmentPullDownText);
+        findViewById(R.id.departmentPullDownText).setEnabled(enabled);
+        departmentPullDownText.setText(text);
+
+        TextView gradePullDownText = findViewById(R.id.gradePullDownText);
+        findViewById(R.id.gradePullDownText).setEnabled(enabled);
+        gradePullDownText.setText(text);
 
     }
 
@@ -389,9 +408,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         departmentPullDownText.setOnClickListener(v -> {
             TextView facultyText = findViewById(R.id.facultyText);
-            String selectedfaculty = facultyText.getText().toString();
+            String selectedFaculty = facultyText.getText().toString();
 
-            if (selectedfaculty.equals("選択してください")){
+            if (selectedFaculty.equals("選択してください")){
                 Toast.makeText(this, "先に学部を選択してください", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -417,6 +436,19 @@ public class RegisterActivity extends AppCompatActivity {
         Button confirmButton = findViewById(R.id.confirmButton);
 
         confirmButton.setOnClickListener(v -> {
+            TextView universityText = findViewById(R.id.universityText);
+            TextView facultyText = findViewById(R.id.facultyText);
+            TextView departmentText = findViewById(R.id.departmentText);
+            TextView gradeText = findViewById(R.id.gradeText);
+            String selectedUniversity = universityText.getText().toString();
+            String selectedFaculty = facultyText.getText().toString();
+            String selectedDepartment = departmentText.getText().toString();
+            String selectedGrade = gradeText.getText().toString();
+
+            if (selectedUniversity.equals("選択してください") || selectedFaculty.equals("選択してください") || selectedDepartment.equals("選択してください") || selectedGrade.equals("選択してください")){
+                Toast.makeText(this, "未選択の項目があります", Toast.LENGTH_SHORT).show();
+                return;
+            }
             showConfirmScreen();
         });
     }
