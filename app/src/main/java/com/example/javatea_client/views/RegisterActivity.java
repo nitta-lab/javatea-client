@@ -3,13 +3,6 @@ package com.example.javatea_client.views;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -20,11 +13,16 @@ import android.widget.Toast;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.javatea_client.R;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class RegisterActivity extends AppCompatActivity {
     private boolean flag = false;
