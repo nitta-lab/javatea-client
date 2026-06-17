@@ -179,7 +179,7 @@ public class CategoryViewModel extends ViewModel {
                     );
 
                     currentUniversity.setValue(university);
-                    Log.d(TAG, "指定された大学IDの情報取得成功：" + response.body().size() + "件");
+                    Log.d(TAG, "指定された大学IDの情報取得成功");
                 } else {
                     String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
                     Log.w(TAG, errorCode);
