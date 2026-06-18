@@ -1,12 +1,13 @@
 package com.example.javatea_client.viewModels;
 
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.resources.LectureResource;
+
+import java.util.Collection;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,23 +18,46 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class LectureViewModel extends ViewModel {
 
-    private final Retrofit retrofit;
+    // Lectureに関するAPIを呼び出すためのResource
     private final LectureResource lectureResource;
 
-    private final MutableLiveData<Lecture> lecture = new MutableLiveData<>();
-    private final MutableLiveData<String> lectureId = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
-    private final MutableLiveData<String> error = new MutableLiveData<>();
+    // 取得した授業1件を保存する
+    private final MutableLiveData<Lecture> lecture =
+            new MutableLiveData<>();
 
+    // 新規作成した授業IDを保存する
+    private final MutableLiveData<String> lectureId =
+            new MutableLiveData<>();
+
+    // 大学・学部・学科から取得した授業一覧を保存する
+    private final MutableLiveData<Collection<Lecture>> lectures =
+            new MutableLiveData<>();
+
+    // 通信中かどうかを保存する
+    private final MutableLiveData<Boolean> loading =
+            new MutableLiveData<>(false);
+
+    // エラーメッセージを保存する
+    private final MutableLiveData<String> error =
+            new MutableLiveData<>();
+
+
+    // コンストラクタ
     public LectureViewModel() {
-        this.retrofit = new Retrofit.Builder()
+
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
 
-        this.lectureResource = retrofit.create(LectureResource.class);
+        lectureResource = retrofit.create(LectureResource.class);
     }
+
+
+
+    // Viewから監視するためのgetter
+
 
     public LiveData<Lecture> getLecture() {
         return lecture;
@@ -41,6 +65,10 @@ public class LectureViewModel extends ViewModel {
 
     public LiveData<String> getLectureId() {
         return lectureId;
+    }
+
+    public LiveData<Collection<Lecture>> getLectures() {
+        return lectures;
     }
 
     public LiveData<Boolean> isLoading() {
@@ -51,49 +79,273 @@ public class LectureViewModel extends ViewModel {
         return error;
     }
 
-    public void createLectures(String name, int grade, String semester, int frame, String day, int period) {
 
-        lectureResource.createLecture(name, grade, semester, frame, day, period).enqueue(new Callback<String>() {
+
+    // 授業を新規作成する
+
+
+    public void createLecture(
+            String name,
+            int grade,
+            String semester,
+            int frame,
+            String day,
+            int period
+    ) {
+
+        loading.setValue(true);
+        error.setValue(null);
+
+        lectureResource.createLecture(
+                name,
+                grade,
+                semester,
+                frame,
+                day,
+                period
+        ).enqueue(new Callback<String>() {
+
+            @Override
+            public void onResponse(
+                    Call<String> call,
+                    Response<String> response
+            ) {
+
+                loading.setValue(false);
+
+                if (response.isSuccessful()
+                        && response.body() != null) {
+
+                    // バックエンドから返された授業IDを保存
+                    lectureId.setValue(response.body());
+
+                } else {
+                    error.setValue(
+                            "授業作成失敗: " + response.code()
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<String> call,
+                    Throwable t
+            ) {
+
+                loading.setValue(false);
+
+                error.setValue(
+                        "通信エラー: " + t.getMessage()
+                );
+            }
+        });
+    }
+
+
+
+    // 授業IDから授業1件を取得する
+
+
+    public void loadLecture(String lectureId) {
+
+        loading.setValue(true);
+        error.setValue(null);
+
+        lectureResource.getLecture(lectureId)
+                .enqueue(new Callback<Lecture>() {
+
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                    public void onResponse(
+                            Call<Lecture> call,
+                            Response<Lecture> response
+                    ) {
+
                         loading.setValue(false);
 
-                        if (response.isSuccessful()) {
-                            lectureId.setValue(response.body());
+                        if (response.isSuccessful()
+                                && response.body() != null) {
+
+                            lecture.setValue(response.body());
+
                         } else {
-                            error.setValue("授業作成失敗: " + response.code());
+                            error.setValue(
+                                    "授業取得失敗: "
+                                            + response.code()
+                            );
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
+                    public void onFailure(
+                            Call<Lecture> call,
+                            Throwable t
+                    ) {
+
                         loading.setValue(false);
-                        error.setValue("通信エラー: " + t.getMessage());
+
+                        error.setValue(
+                                "通信エラー: " + t.getMessage()
+                        );
                     }
                 });
     }
 
-    public void loadLecture(String id) {
-        loading.setValue(true);
 
-        lectureResource.getLecture(id)
-                .enqueue(new Callback<Lecture>() {
+
+    // 大学全般の授業一覧を取得する
+
+
+    public void loadUniversityLectures(String univId) {
+
+        loading.setValue(true);
+        error.setValue(null);
+
+        lectureResource.getUniversityLectureIds(univId)
+                .enqueue(new Callback<Collection<Lecture>>() {
+
                     @Override
-                    public void onResponse(Call<Lecture> call, Response<Lecture> response) {
+                    public void onResponse(
+                            Call<Collection<Lecture>> call,
+                            Response<Collection<Lecture>> response
+                    ) {
+
                         loading.setValue(false);
 
-                        if (response.isSuccessful() && response.body() != null) {
-                            lecture.setValue(response.body());
+                        if (response.isSuccessful()
+                                && response.body() != null) {
+
+                            lectures.setValue(response.body());
+
                         } else {
-                            error.setValue("授業取得失敗: " + response.code());
+                            error.setValue(
+                                    "大学全般の授業一覧取得失敗: "
+                                            + response.code()
+                            );
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<Lecture> call, Throwable t) {
+                    public void onFailure(
+                            Call<Collection<Lecture>> call,
+                            Throwable t
+                    ) {
+
                         loading.setValue(false);
-                        error.setValue("通信エラー: " + t.getMessage());
+
+                        error.setValue(
+                                "通信エラー: " + t.getMessage()
+                        );
                     }
                 });
+    }
+
+
+
+    // 学部全般の授業一覧を取得する
+
+
+    public void loadFacultyLectures(
+            String univId,
+            String facultyName
+    ) {
+
+        loading.setValue(true);
+        error.setValue(null);
+
+        lectureResource.getFacultyLectureIds(
+                univId,
+                facultyName
+        ).enqueue(new Callback<Collection<Lecture>>() {
+
+            @Override
+            public void onResponse(
+                    Call<Collection<Lecture>> call,
+                    Response<Collection<Lecture>> response
+            ) {
+
+                loading.setValue(false);
+
+                if (response.isSuccessful()
+                        && response.body() != null) {
+
+                    lectures.setValue(response.body());
+
+                } else {
+                    error.setValue(
+                            "学部全般の授業一覧取得失敗: "
+                                    + response.code()
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<Collection<Lecture>> call,
+                    Throwable t
+            ) {
+
+                loading.setValue(false);
+
+                error.setValue(
+                        "通信エラー: " + t.getMessage()
+                );
+            }
+        });
+    }
+
+
+
+    // 学科特有の授業一覧を取得する
+
+
+    public void loadDepartmentLectures(
+            String univId,
+            String facultyName,
+            String departmentName
+    ) {
+
+        loading.setValue(true);
+        error.setValue(null);
+
+        lectureResource.getDepartmentLectureIds(
+                univId,
+                facultyName,
+                departmentName
+        ).enqueue(new Callback<Collection<Lecture>>() {
+
+            @Override
+            public void onResponse(
+                    Call<Collection<Lecture>> call,
+                    Response<Collection<Lecture>> response
+            ) {
+
+                loading.setValue(false);
+
+                if (response.isSuccessful()
+                        && response.body() != null) {
+
+                    lectures.setValue(response.body());
+
+                } else {
+                    error.setValue(
+                            "学科の授業一覧取得失敗: "
+                                    + response.code()
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(
+                    Call<Collection<Lecture>> call,
+                    Throwable t
+            ) {
+
+                loading.setValue(false);
+
+                error.setValue(
+                        "通信エラー: " + t.getMessage()
+                );
+            }
+        });
     }
 }

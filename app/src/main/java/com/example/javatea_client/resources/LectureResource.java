@@ -1,7 +1,9 @@
 package com.example.javatea_client.resources;
 
 import com.example.javatea_client.models.Lecture;
-import com.example.javatea_client.viewModels.LectureViewModel;
+
+import java.util.Collection;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -114,5 +116,29 @@ public interface LectureResource {
     Call<Void> putLecturePeriod(
             @Path("lecture-id") String lectureId,
             @Field("period") int period
+    );
+
+
+
+    //-----------------
+    // 大学全般の授業ID一覧を取得
+    @GET("categories/universities/{univ-id}/lectures")
+    Call<Collection<Lecture>> getUniversityLectureIds(
+            @Path("univ-id") String univId
+    );
+
+    // 学部全般の授業ID一覧を取得
+    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/lectures")
+    Call<Collection<Lecture>> getFacultyLectureIds(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName
+    );
+
+    // 学科特有の授業ID一覧を取得
+    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
+    Call<Collection<Lecture>> getDepartmentLectureIds(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName,
+            @Path("department-name") String departmentName
     );
 }

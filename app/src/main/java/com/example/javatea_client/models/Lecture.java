@@ -1,7 +1,7 @@
 package com.example.javatea_client.models;
 
 
-import com.example.javatea_client.viewModels.LectureViewModel;
+
 
 public class Lecture  {
 
