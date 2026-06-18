@@ -54,6 +54,9 @@ public class SetTimetableActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                //科目追加画面に曜日と時間を渡す
+                intent.putExtra("day",day);
+                intent.putExtra("period",period);
                 startActivity(intent);
             }
         });
