@@ -16,7 +16,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
-import com.example.javatea_client.Javatea;
+//import com.example.javatea_client.Javatea;
 import com.example.javatea_client.viewModels.UserViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (!token.isEmpty()) {
-                    Javatea app = (Javatea) LoginActivity.this.getApplication();
+                    //Javatea app = (Javatea) LoginActivity.this.getApplication();
                     app.setToken(token);
 
                     Intent intent = new Intent(LoginActivity.this, TimetableActivity.class);
