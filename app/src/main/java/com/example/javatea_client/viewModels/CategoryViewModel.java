@@ -10,7 +10,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,6 +22,8 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /*
+    モデルズでおそらく使わないけどバックエンド側で処理があるのでそれ用のメモ
+    フロントエンド側のモデルズではこれらは使わないので書かない
     ＜大学の値か名前の変更あるもの＞
     name(大学の名前)の変更
     public void setName(String name){ this.name = name; }
@@ -56,17 +60,24 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
  */
 
 public class CategoryViewModel extends ViewModel {
+    // サーバー呼び出す用のリソース
     private final CategoryResource categoryResource;
 
-    // 画面に表示するための大学データ(オブジェクト)を保持するためのLiveData
+    // 画面に表示するためのオブジェクトを保持するためのLiveData
+    private final MutableLiveData<Collection<University>> currentUniversities = new MutableLiveData<>();
     private final MutableLiveData<University> currentUniversity = new MutableLiveData<>();
     // 新規作成時に発行された大学IDを保持するためのLiveData
     private final MutableLiveData<String> createdUnivId = new MutableLiveData<>();
+    // 画面に表示用のLiveData(lecture用)
+    private final MutableLiveData<List<String>> univLectures = new MutableLiveData<>();
 
+    private final MutableLiveData<List<String>> currentFaculty = new MutableLiveData<>();
+    private final MutableLiveData<String> createdFacultyName = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> facLectures = new MutableLiveData<>();
 
-    private final MutableLiveData<String> university = new MutableLiveData<>();
-    private final MutableLiveData<String> faculty = new MutableLiveData<>();
-    private final MutableLiveData<String> department = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> currentDepartment = new MutableLiveData<>();
+    private final MutableLiveData<String> createdDepartmentName = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> departLectures = new MutableLiveData<>();
 
     // ログ用のタグ
     private static final String TAG = "CategoryViewModel";
@@ -83,24 +94,67 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 外部には書き換え不可能なLiveDataとして公開する(だからMutableつかない？)
-    public LiveData<University> getCurrentUniversity() { return currentUniversity; }
-    public LiveData<String> getCreatedUnivId() { return createdUnivId; }
+    public LiveData<Collection<University>> getCurrentUniversities() { return currentUniversities; }
+    public LiveData<University> getCurrentUniversity() {
+        return currentUniversity;
+    }
+    public LiveData<String> getCreatedUnivId() {
+        return createdUnivId;
+    }
+    public LiveData<List<String>> getUnivLectures() {
+        return univLectures;
+    }
+
+    public LiveData<List<String>> getCurrentFaculty() {
+        return currentFaculty;
+    }
+    public LiveData<String> getCreatedFacultyName() {
+        return createdFacultyName;
+    }
+    public LiveData<List<String>> getFacLectures() {
+        return facLectures;
+    }
+
+    public LiveData<List<String>> getCurrentDepartment() {
+        return currentDepartment;
+    }
+    public LiveData<String> getCreatedDepartmentName() {
+        return createdDepartmentName;
+    }
+    public LiveData<List<String>> getDepartLectures() {
+        return departLectures;
+    }
 
 
-    public LiveData<String> getFaculty() { return faculty; }
-    public LiveData<String> getDepartment() { return department; }
+    public void getAllUnivId(String from, String to){
+        categoryResource.getAllUnivId(from, to).enqueue(new Callback<Collection<University>>() {
+            @Override
+            public void onResponse(@NonNull Call<Collection<University>> call, @NonNull Response<Collection<University>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentUniversities.setValue(response.body());
+                    Log.d(TAG, "大学一覧を取得成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
 
-    public void postNewUnivId(String name, String kana){
+            @Override
+            public void onFailure(@NonNull Call<Collection<University>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void postNewUnivId(String name, String kana) {
         categoryResource.postNewUnivId(name, kana).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     // こっちは内部からなのでMutableの方にセットする
                     createdUnivId.setValue(response.body());
-                    Log.d(TAG, "通信成功：" + response.code());
+                    Log.d(TAG, "大学IDの発行成功：" + response.code());
                 } else {
-                    String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
-                    Log.w(TAG, errorCode);
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
                 }
             }
 
@@ -115,7 +169,7 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.getUnivInfo(univId).enqueue(new Callback<HashMap<String, String>>() {
             @Override
             public void onResponse(@NonNull Call<HashMap<String, String>> call, @NonNull Response<HashMap<String, String>> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     HashMap<String, String> map = response.body();
 
                     University university = new University(
@@ -125,7 +179,7 @@ public class CategoryViewModel extends ViewModel {
                     );
 
                     currentUniversity.setValue(university);
-                    Log.d(TAG, "通信成功：" + response.code());
+                    Log.d(TAG, "指定された大学IDの情報取得成功");
                 } else {
                     String errorCode = "サーバーエラーが発生しました　　コード：" + response.code();
                     Log.w(TAG, errorCode);
@@ -143,10 +197,10 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.updateUnivName(univId, name).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                if(response.isSuccessful()) {
-                    Log.d(TAG, "大学名の変更成功");
+                if (response.isSuccessful()) {
                     // ローカル側を変更
                     getUnivInfo(univId);
+                    Log.d(TAG, "大学名の変更成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
                 }
@@ -159,6 +213,220 @@ public class CategoryViewModel extends ViewModel {
         });
     }
 
+    public void updateUnivKana(String univId, String kana) {
+        categoryResource.updateUnivKana(univId, kana).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    // ローカル側を変更
+                    getUnivInfo(univId);
+                    Log.d(TAG, "大学名のカナの変更成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void getUnivLectures(String univId) {
+        categoryResource.getUnivLectures(univId).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    univLectures.setValue(response.body());
+                    Log.d(TAG, "大学特有の授業一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void putUnivLectures(String univId, String lectId) {
+        categoryResource.putUnivLectures(univId, lectId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()) {
+                    getUnivLectures(univId);
+                    Log.d(TAG, "大学特有の科目追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void getFaculty(String univId) {
+        categoryResource.getFaculty(univId).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    currentFaculty.setValue(response.body());
+                    Log.d(TAG, "学部一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void addFaculty(String univId, String facultyName) {
+        categoryResource.addFaculty(univId, facultyName).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.isSuccessful()){
+                    getFaculty(univId);
+                    Log.d(TAG, "学部追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 学部特有
+    public void getLectures(String univId, String facultyName) {
+        categoryResource.getLectures(univId, facultyName).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    facLectures.setValue(response.body());
+                    Log.d(TAG, "学部特有の授業一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 学部特有
+    public void addLecture(String univId, String facultyName, String lectureId) {
+        categoryResource.addLecture(univId, facultyName, lectureId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.isSuccessful()){
+                    getLectures(univId, facultyName);
+                    Log.d(TAG, "学部特有の授業追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void getDepartments(String univId, String facultyName) {
+        categoryResource.getDepartments(univId, facultyName).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    currentDepartment.setValue(response.body());
+                    Log.d(TAG, "学科の一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void addDepartment(String univId, String facultyName, String departmentName) {
+        categoryResource.addDepartment(univId, facultyName, departmentName).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.isSuccessful()) {
+                    getDepartments(univId, facultyName);
+                    Log.d(TAG, "学科の追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 学科特有
+    public void getLectures(String univId, String facultyName, String departmentName) {
+        categoryResource.getLectures(univId, facultyName, departmentName).enqueue(new Callback<List<String>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    departLectures.setValue(response.body());
+                    Log.d(TAG, "学科特有の授業一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 学科特有
+    public void addLecture(String univId, String facultyName, String departmentName, String lectureId) {
+        categoryResource.addLecture(univId, facultyName, departmentName, lectureId).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if(response.isSuccessful()){
+                    getLectures(univId, facultyName, departmentName);
+                    Log.d(TAG, "学科特有の授業追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
 
 
 }
