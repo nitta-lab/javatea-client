@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 背景色 -->
+    <item>
+        <shape>
+            <solid android:color="#BDBDBD" />  <!-- ここで背景色を変更 -->
+            <corners android:radius="4dp" />   <!-- 角丸（不要なら削除） -->
+        </shape>
+    </item>
+
+    <!-- ▼矢印アイコン -->
+    <item
+        android:width="10dp"
+        android:height="10dp"
+        android:gravity="center_vertical|end"
+        android:right="8dp">
+        <bitmap
+            android:src="@android:drawable/arrow_down_float"
+            android:tint="#000000" />  <!-- 矢印の色 -->
+    </item>
+
+</layer-list>
