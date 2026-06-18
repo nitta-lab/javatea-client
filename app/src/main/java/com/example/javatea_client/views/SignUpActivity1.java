@@ -18,10 +18,13 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.viewModels.UserViewModel;
 
-public class SignUpActivity1 extends AppCompatActivity {
+import java.util.prefs.Preferences;
 
+public class SignUpActivity1 extends AppCompatActivity {
+    private Javatea javatea;
     UserViewModel userViewModel;
     private String userId, password, nickname;
     private boolean isVisiblePassword = false;
@@ -37,6 +40,8 @@ public class SignUpActivity1 extends AppCompatActivity {
             return insets;
         });
 
+        // javateaの取得
+        javatea = (Javatea) this.getApplication();
         // viewModelの取得
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
@@ -58,8 +63,9 @@ public class SignUpActivity1 extends AppCompatActivity {
         // ユーザを監視して登録後、ログインを呼び出す
         userViewModel.getUser().observe(this, user -> {
             if(user != null) {
-//                tampopo.setUserId(userId);
-//                tampopo.setPassword(password);
+                // javateaに保存
+                javatea.setUserId(userId);
+                javatea.setPassword(password);
                 userViewModel.login(userId, password);
             }
         });
@@ -94,7 +100,8 @@ public class SignUpActivity1 extends AppCompatActivity {
         // トークンを監視
         userViewModel.getToken().observe(this,token ->{
             if(token != null && !token.isEmpty()){
-//                tampopo.setToken(token);
+                // javateaに保存
+                javatea.setToken(token);
                 // 画面遷移
                 Intent intent = new Intent(SignUpActivity1.this, RegisterActivity.class);
                 startActivity(intent);

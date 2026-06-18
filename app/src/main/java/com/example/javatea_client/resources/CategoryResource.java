@@ -1,5 +1,8 @@
 package com.example.javatea_client.resources;
 
+import com.example.javatea_client.models.University;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,13 +13,17 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface CategoryResource {
     /**
      * 大学一覧の取得
      */
     @GET("categories/universities")
-    Call<List<String>> getAllUnivId();
+    Call<Collection<University>> getAllUnivId(
+            @Query("from") String from,
+            @Query("to") String to
+    );
 
     /**
      * 大学の新規作成
