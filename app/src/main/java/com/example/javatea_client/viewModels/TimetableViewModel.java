@@ -119,7 +119,7 @@ public class TimetableViewModel extends ViewModel {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            // 正常終了
+                            loadTimetable(uid, token);
                         } else {
                             if (response.code() == 401) {
                                 error.setValue("未認証です");
@@ -150,7 +150,7 @@ public class TimetableViewModel extends ViewModel {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
-                            // 正常終了
+                            loadTimetable(uid, token);
                         } else {
                             if (response.code() == 401) {
                                 error.setValue("未認証です");
