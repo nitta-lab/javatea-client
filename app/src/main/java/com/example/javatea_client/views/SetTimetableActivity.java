@@ -35,6 +35,10 @@ public class SetTimetableActivity extends AppCompatActivity {
         // TimetableActivityから、曜日と時間を取得
         String day = reIntent.getStringExtra("day");
         int period = reIntent.getIntExtra("period", 1);
+        int year = reIntent.getIntExtra("year", 1);
+        int lectureId = reIntent.getIntExtra("lectureId", 1);
+        String semester = reIntent.getStringExtra("semester");
+
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
         ModeBar.setup(this, "時間割設定"); //ModeBarを設定
@@ -57,6 +61,8 @@ public class SetTimetableActivity extends AppCompatActivity {
                 //科目追加画面に曜日と時間を渡す
                 intent.putExtra("day",day);
                 intent.putExtra("period",period);
+                intent.putExtra("year", year);
+                intent.putExtra("semester", semester);
                 startActivity(intent);
             }
         });
