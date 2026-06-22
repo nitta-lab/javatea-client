@@ -44,22 +44,26 @@ public class RegisterActivity extends AppCompatActivity {
 //    private final List<String> univNames = new ArrayList<>();
 
     private List<String> universities;
+    //private String selectedUniversityId = ""; //今選択されてる大学IDを保存する変数
+    //private String selectedFacultyName = ""; //今選択されてる学部IDを保存する変数
 
+    //private List<University> universityList = new ArrayList<>(); //大学一覧のList
+    //private List<String> facultyList = new ArrayList<>(); //学部一覧のList
 
     //〇行のボタン(これは必須)
     private void showKanaDialog() {
         String[] kanaGroups = {
-            //"選択してください",//これを選択したときは、別の処理を書きたい
-            "ア行",
-            "カ行",
-            "サ行",
-            "タ行",
-            "ナ行",
-            "ハ行",
-            "マ行",
-            "ヤ行",
-            "ラ行",
-            "ワ行"
+                //"選択してください",//これを選択したときは、別の処理を書きたい
+                "ア行",
+                "カ行",
+                "サ行",
+                "タ行",
+                "ナ行",
+                "ハ行",
+                "マ行",
+                "ヤ行",
+                "ラ行",
+                "ワ行"
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -155,7 +159,6 @@ public class RegisterActivity extends AppCompatActivity {
 //                universities.addAll(univNames);
 //                universities.add("+大学を追加する");
                 break;
-
         }
 
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -198,11 +201,11 @@ public class RegisterActivity extends AppCompatActivity {
         layout.addView(kanaEdit);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle("大学を追加")
-            .setView(layout)
-            .setPositiveButton("登録", null)
-            .setNegativeButton("キャンセル", null)
-            .create();
+                .setTitle("大学を追加")
+                .setView(layout)
+                .setPositiveButton("登録", null)
+                .setNegativeButton("キャンセル", null)
+                .create();
 
         dialog.show();
 
@@ -252,19 +255,28 @@ public class RegisterActivity extends AppCompatActivity {
     //学部一覧
     private void showFacultyDialog() {
         String[] faculties = {
-            "工学部",
-            "経済学部",
-            "教育学部",
-            "+学部を追加する"
+                "工学部",
+                "経済学部",
+                "教育学部",
+                "+学部を追加する"
         };
+//        ArrayList<String> faculties = new ArrayList<>(facultyList);
+//        faculties.add("+学部を追加する");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("学部を選択してください");
 
+//        String[] items = faculties.toArray(new String[0]);
         builder.setItems(faculties, (dialog, which) -> {
 
             String selectedFaculty = faculties[which];
+
+            // 学部が選択された時のイベント
+//            OnFacultySelected(String selectedFacultyName) {
+//                selectedFaculty = selectedFacultyName;
+//                categoryViewModel.getDepartments(currentSelectedUnivId,selectedFaculty);
+//            }
 
             if (selectedFaculty.equals("+学部を追加する")){
                 showAddFacultyDialog();
@@ -290,11 +302,11 @@ public class RegisterActivity extends AppCompatActivity {
         layout.addView(nameEdit);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle("学部を追加")
-            .setView(layout)
-            .setPositiveButton("登録", null)
-            .setNegativeButton("キャンセル", null)
-            .create();
+                .setTitle("学部を追加")
+                .setView(layout)
+                .setPositiveButton("登録", null)
+                .setNegativeButton("キャンセル", null)
+                .create();
 
         dialog.show();
 
@@ -307,7 +319,9 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(this, "登録しました", Toast.LENGTH_SHORT).show();
+            //学部追加
+//            categoryViewModel.addFaculty(selectedUniversityId,facultyName);
+            Toast.makeText(this, "学部を登録しました", Toast.LENGTH_SHORT).show();
 
             dialog.dismiss();
         });
@@ -316,11 +330,11 @@ public class RegisterActivity extends AppCompatActivity {
     //学科一覧
     private void showDepartmentDialog() {
         String[] departments = {
-            "工学科",
-            "経済学科",
-            "教育学科",
-            "学科なし",
-            "+学科を追加する"
+                "工学科",
+                "経済学科",
+                "教育学科",
+                "学科なし",
+                "+学科を追加する"
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -355,11 +369,11 @@ public class RegisterActivity extends AppCompatActivity {
         layout.addView(nameEdit);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-            .setTitle("学科を追加")
-            .setView(layout)
-            .setPositiveButton("登録", null)
-            .setNegativeButton("キャンセル", null)
-            .create();
+                .setTitle("学科を追加")
+                .setView(layout)
+                .setPositiveButton("登録", null)
+                .setNegativeButton("キャンセル", null)
+                .create();
 
         dialog.show();
 
@@ -381,10 +395,10 @@ public class RegisterActivity extends AppCompatActivity {
     //学年一覧
     private void showGradeDialog() {
         String[] grades = {
-            "1",
-            "2",
-            "3",
-            "4",
+                "1",
+                "2",
+                "3",
+                "4",
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -484,15 +498,15 @@ public class RegisterActivity extends AppCompatActivity {
                 builder.setTitle("大学を選択してください");
 
                 builder.setItems(universityArray, (dialog, which) -> {
-                   String selectedUniversity = universityArray[which];
+                    String selectedUniversity = universityArray[which];
 
-                   if(selectedUniversity.equals("+大学を追加する")){
-                       Log.d(TAG, "追加ボタンが押されました。");
-                       showAddUniversityDialog();
-                   } else {
-                       TextView universityText = findViewById(R.id.universityText);
-                       universityText.setText(selectedUniversity);
-                   }
+                    if(selectedUniversity.equals("+大学を追加する")){
+                        Log.d(TAG, "追加ボタンが押されました。");
+                        showAddUniversityDialog();
+                    } else {
+                        TextView universityText = findViewById(R.id.universityText);
+                        universityText.setText(selectedUniversity);
+                    }
                 });
 
                 builder.show();
