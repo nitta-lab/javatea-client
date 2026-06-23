@@ -39,6 +39,9 @@
             android:name=".views.TimetableActivity"
             android:exported="false" />
         <activity
+            android:name=".views.OtherLecturesActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false">
         </activity>
