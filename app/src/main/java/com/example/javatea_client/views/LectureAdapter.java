@@ -32,19 +32,19 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
     }
 
 
-    //ViewHolderクラスを定義
+    //ViewHolderクラスを定義(一行の情報を入れる箱みたいなものを先に作成する)
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public final AppCompatButton lectureName;
 
         //表示したい場所idを紐づけ
         public ViewHolder(@NonNull View view){
             super(view);
-            lectureName = view.findViewById(R.id.lecture_name_text);
+            lectureName = view.findViewById(R.id.lecture_name_text); //lecture_name_text:部品のid(item_lecture_list.xml内)
         }
     }
 
 
-    //取得したデータの長さ分の各行のビューを作成
+    //取得したデータの長さ分の各行のViewHolderを作成
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
@@ -52,15 +52,15 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    //データをビューに紐づけ
+    //データをViewHolderに紐づけ
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position){
-        Lecture item = lectureList.get(position);
-        holder.lectureName.setText(item.getName());
+        Lecture item = lectureList.get(position); //LectureListから順にデータをitemに入れる
+        holder.lectureName.setText(item.getName()); //lectureNameにitemのデータをset
 
         //項目がクリックされたとき
         holder.lectureName.setOnClickListener(v -> {
-            Intent intent = new Intent(context, TimetableActivity.class);
+            Intent intent = new Intent(context, TimetableActivity.class); //画面遷移
             //intent.putExtra("lectureName", item.getName());
             context.startActivity(intent);
         });

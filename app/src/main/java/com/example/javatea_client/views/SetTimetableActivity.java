@@ -92,7 +92,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
         lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
 
-        RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ
+        RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new LectureAdapter(this, lectureList)); //Adapterにこの画面の情報と科目の情報を渡す
 
