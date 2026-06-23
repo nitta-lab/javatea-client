@@ -87,6 +87,10 @@ public class SetTimetableActivity extends AppCompatActivity {
         lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1));
         lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2));
         lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
 
         RecyclerView recyclerView = findViewById(R.id.lecture_name_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
