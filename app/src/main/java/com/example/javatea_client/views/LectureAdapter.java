@@ -35,7 +35,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
         //表示したい場所idを紐づけ
         public ViewHolder(@NonNull View view){
             super(view);
-            lectureName = view.findViewById(R.id.lecture_name_list);
+            lectureName = view.findViewById(R.id.lecture_name_text);
         }
     }
 
@@ -52,6 +52,6 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position){
         Lecture item = lectureList.get(position);
-        //holder.lectureName.setText(item.name);
+        holder.lectureName.setText(item.getName());
     }
 }

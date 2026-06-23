@@ -11,9 +11,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javatea_client.R;
+import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.viewModels.TimetableViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SetTimetableActivity extends AppCompatActivity {
 
@@ -75,5 +81,16 @@ public class SetTimetableActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // ダミーデータ（動作確認用）
+        List<Lecture> lectureList = new ArrayList<>();
+        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1));
+        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
+
+        RecyclerView recyclerView = findViewById(R.id.lecture_name_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new LectureAdapter(lectureList));
+
     }
 }
