@@ -3,9 +3,9 @@ package com.example.javatea_client.views;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javatea_client.R;
@@ -30,7 +30,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
 
     //ViewHolderクラスを定義
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public final TextView lectureName;
+        public final AppCompatButton lectureName;
 
         //表示したい場所idを紐づけ
         public ViewHolder(@NonNull View view){
