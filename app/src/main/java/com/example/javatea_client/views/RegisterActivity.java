@@ -619,6 +619,8 @@ public class RegisterActivity extends AppCompatActivity {
             return insets;
         });
 
+        Javatea javatea = (Javatea) this.getApplication();
+        javatea.setView("Register");
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         setupObservers();
