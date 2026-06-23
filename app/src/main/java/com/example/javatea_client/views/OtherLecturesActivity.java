@@ -26,7 +26,6 @@ import java.util.List;
 
 public class OtherLecturesActivity extends AppCompatActivity {
     TimetableViewModel timetableViewModel;
-    LectureViewModel lectureViewModel;
     LinearLayout otherLectures;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,22 +51,20 @@ public class OtherLecturesActivity extends AppCompatActivity {
 
         //viewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
-//        lectureViewModel = new ViewModelProvider(this).get(LectureViewModel.class);
         timetableViewModel.loadTimetableLectures(userId,year,token);
         timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
             @Override
             public void onChanged(List<Lecture> strings) {
-                for(Lecture lectureId : strings){
-                    //Lecture lecture = lectureViewModel.getLecture(lectureId);
-                    String name = "基礎英語";
-                    Integer grade = 2;
-                    String semester = "前期";
-                    Integer frame = 2;//コマ数
-                    String day = "水";
-                    Integer period = 2;
+                for(Lecture lecture : strings){
+                    String name = lecture.getName();
+                    Integer grade = lecture.getGrade();
+                    String semester = lecture.getSemester();
+                    Integer frame = lecture.getFrame();//コマ数
+                    String day = lecture.getDay();
+                    Integer period = lecture.getPeriod();
                     if(semester.equals("その他")){
-                        TextView lecture = createLectureTextView(name);
-                        lecture.setOnLongClickListener(new View.OnLongClickListener() {
+                        TextView lectureTextView = createLectureTextView(name);
+                        lectureTextView.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
                                 Intent intent = new Intent(OtherLecturesActivity.this,SetTimetableActivity.class);
@@ -76,7 +73,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
                                 return true;
                             }
                         });
-                        otherLectures.addView(lecture);
+                        otherLectures.addView(lectureTextView);
                     }
                 }
             }

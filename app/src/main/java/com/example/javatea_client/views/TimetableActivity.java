@@ -38,7 +38,6 @@ public class TimetableActivity extends AppCompatActivity {
     private String token;
     //ViewModel
     private TimetableViewModel timetableViewModel;
-    private LectureViewModel lectureViewModel;
     private LinearLayout layout;
     private PopupWindow popup;
     private TextView selectedYearTextView;
@@ -70,7 +69,6 @@ public class TimetableActivity extends AppCompatActivity {
 
         //ViewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
-        //lectureViewModel = new ViewModelProvider(this).get(LectureViewModel.class);
 
         //時間割が作られた年度一覧の初期化
         years = new ArrayList<>();
@@ -86,14 +84,6 @@ public class TimetableActivity extends AppCompatActivity {
                 }
             }
         });
-//        lectureViewModel.getError().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(String s) {
-//                if(s != null){
-//                    Toast.makeText(TimetableActivity.this,s, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
         //ModeBarのセットアップ
         ModeBar.setup(this,"時間割");
@@ -319,14 +309,13 @@ public class TimetableActivity extends AppCompatActivity {
             currentSemester.setText(curSemester);
         }
 
-        for(Lecture lectureId:timetableLecturesMap.get(selectedYearTextView.getText())){
-            //Lecture lecture = lectureViewModel.getLecture(lectureId);
-            String name = "基礎英語";
-            Integer grade = 2;
-            String semester = "前期";
-            Integer frame = 2;//コマ数
-            String day = "水";
-            Integer period = 2;
+        for(Lecture lecture:timetableLecturesMap.get(selectedYearTextView.getText())){
+            String name = lecture.getName();
+            Integer grade = lecture.getGrade();
+            String semester = lecture.getSemester();
+            Integer frame = lecture.getFrame();//コマ数
+            String day = lecture.getDay();
+            Integer period = lecture.getPeriod();
             if(semester.equals(curSemester)||semester.equals("通年")){
                 for(int i=0;i<frame;i++){
 //                    TextView curLectureTextView = currentTimetable.get(day).get(period + i);
