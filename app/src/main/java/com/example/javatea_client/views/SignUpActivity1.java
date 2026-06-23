@@ -45,6 +45,13 @@ public class SignUpActivity1 extends AppCompatActivity {
         // viewModelの取得
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
+        System.out.println("テスト"+javatea.getUserId());
+        if(!javatea.getUserId().isEmpty() && javatea.getView() != "SignUp") {
+            Intent intent = new Intent(SignUpActivity1.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         // 入力欄・ボタンの取得
         EditText userIdEditText = findViewById(R.id.editTextUserId);
         EditText passwordEditText = findViewById(R.id.editTextPassword);

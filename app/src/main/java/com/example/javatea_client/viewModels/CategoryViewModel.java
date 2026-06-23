@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
 
@@ -69,15 +70,15 @@ public class CategoryViewModel extends ViewModel {
     // 新規作成時に発行された大学IDを保持するためのLiveData
     private final MutableLiveData<String> createdUnivId = new MutableLiveData<>();
     // 画面に表示用のLiveData(lecture用)
-    private final MutableLiveData<List<String>> univLectures = new MutableLiveData<>();
+    private final MutableLiveData<Collection<Lecture>> univLectures = new MutableLiveData<>();
 
     private final MutableLiveData<List<String>> currentFaculty = new MutableLiveData<>();
     private final MutableLiveData<String> createdFacultyName = new MutableLiveData<>();
-    private final MutableLiveData<List<String>> facLectures = new MutableLiveData<>();
+    private final MutableLiveData<Collection<Lecture>> facLectures = new MutableLiveData<>();
 
     private final MutableLiveData<List<String>> currentDepartment = new MutableLiveData<>();
     private final MutableLiveData<String> createdDepartmentName = new MutableLiveData<>();
-    private final MutableLiveData<List<String>> departLectures = new MutableLiveData<>();
+    private final MutableLiveData<Collection<Lecture>> departLectures = new MutableLiveData<>();
 
     // ログ用のタグ
     private static final String TAG = "CategoryViewModel";
@@ -86,7 +87,7 @@ public class CategoryViewModel extends ViewModel {
     // デプロイしてないから今はlocalhostで IntelliJ IDEA とこっち、どちらも起動させる
     public CategoryViewModel() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("localhost8080:/")
+                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
@@ -101,7 +102,7 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<String> getCreatedUnivId() {
         return createdUnivId;
     }
-    public LiveData<List<String>> getUnivLectures() {
+    public LiveData<Collection<Lecture>> getUnivLectures() {
         return univLectures;
     }
 
@@ -111,7 +112,7 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<String> getCreatedFacultyName() {
         return createdFacultyName;
     }
-    public LiveData<List<String>> getFacLectures() {
+    public LiveData<Collection<Lecture>> getFacLectures() {
         return facLectures;
     }
 
@@ -121,7 +122,7 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<String> getCreatedDepartmentName() {
         return createdDepartmentName;
     }
-    public LiveData<List<String>> getDepartLectures() {
+    public LiveData<Collection<Lecture>> getDepartLectures() {
         return departLectures;
     }
 
@@ -233,32 +234,35 @@ public class CategoryViewModel extends ViewModel {
         });
     }
 
-    public void getUnivLectures(String univId) {
-        categoryResource.getUnivLectures(univId).enqueue(new Callback<List<String>>() {
+    // 大学全般の授業一覧を取得する
+
+
+    public void loadUniversityLectures(String univId) {
+        categoryResource.getUniversityLectures(univId).enqueue(new Callback<Collection<Lecture>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+            public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     univLectures.setValue(response.body());
-                    Log.d(TAG, "大学特有の授業一覧取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
                 }
-
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+            public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
+
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
     }
+
 
     public void putUnivLectures(String univId, String lectId) {
         categoryResource.putUnivLectures(univId, lectId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
-                    getUnivLectures(univId);
+                    loadUniversityLectures(univId);
                     Log.d(TAG, "大学特有の科目追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -311,10 +315,10 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 学部特有
-    public void getLectures(String univId, String facultyName) {
-        categoryResource.getLectures(univId, facultyName).enqueue(new Callback<List<String>>() {
+    public void loadFacultyLectures(String univId, String facultyName) {
+        categoryResource.getFacultyLectures(univId, facultyName).enqueue(new Callback<Collection<Lecture>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+            public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     facLectures.setValue(response.body());
                     Log.d(TAG, "学部特有の授業一覧取得成功：" + response.body().size() + "件");
@@ -324,7 +328,7 @@ public class CategoryViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+            public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
@@ -336,7 +340,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if(response.isSuccessful()){
-                    getLectures(univId, facultyName);
+                    loadFacultyLectures(univId, facultyName);
                     Log.d(TAG, "学部特有の授業追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -389,10 +393,10 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 学科特有
-    public void getLectures(String univId, String facultyName, String departmentName) {
-        categoryResource.getLectures(univId, facultyName, departmentName).enqueue(new Callback<List<String>>() {
+    public void loadDepartmentLectures(String univId, String facultyName, String departmentName) {
+        categoryResource.getDepartmentLectures(univId, facultyName, departmentName).enqueue(new Callback<Collection<Lecture>>() {
             @Override
-            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+            public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     departLectures.setValue(response.body());
                     Log.d(TAG, "学科特有の授業一覧取得成功：" + response.body().size() + "件");
@@ -402,7 +406,7 @@ public class CategoryViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable throwable) {
+            public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
@@ -414,7 +418,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if(response.isSuccessful()){
-                    getLectures(univId, facultyName, departmentName);
+                    loadDepartmentLectures(univId, facultyName, departmentName);
                     Log.d(TAG, "学科特有の授業追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());

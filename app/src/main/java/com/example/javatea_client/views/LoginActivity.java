@@ -47,6 +47,10 @@ public class LoginActivity extends AppCompatActivity {
         TextView errorText = findViewById(R.id.error_textView);
         ModeBar.setup(this, "ログイン");
 
+        Javatea app = (Javatea) this.getApplication();
+        userIdEditText.setText(app.getUserId());
+        passwordEditText.setText(app.getPassword());
+
         userViewModel.getError().observe(this, errorMsg -> {
             if (errorMsg != null && !errorMsg.isEmpty()) {
                 switch(errorMsg) {
@@ -81,8 +85,18 @@ public class LoginActivity extends AppCompatActivity {
                 if (!token.isEmpty()) {
                     Javatea app = (Javatea) LoginActivity.this.getApplication();
                     app.setToken(token);
-
-                    Intent intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                    Intent intent = null;
+                    switch(app.getView()) {
+                        case "Register":
+                            intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                            break;
+                        case "TimeTable":
+                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            break;
+                        default:
+                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            break;
+                    }
                     startActivity(intent);
                     finish();
                 }
@@ -124,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         signupButton.setOnClickListener(view -> {
+            app.setView("SignUp");
             Intent intent = new Intent(LoginActivity.this, SignUpActivity1.class);
             startActivity(intent);
         });
