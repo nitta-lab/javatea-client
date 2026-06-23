@@ -129,6 +129,7 @@ public class TimetableActivity extends AppCompatActivity {
                 setYearsFromTimetableLecturesMap();
 //                String currentYear = selectedYearTextView.getText().toString().substring(0, selectedYearTextView.getText().toString().length()-2);
                 updateLayout();
+                setCurrentTimetable();
             }
         });
         //Popupを表示する
@@ -327,46 +328,40 @@ public class TimetableActivity extends AppCompatActivity {
             Integer period = 2;
             if(semester.equals(curSemester)||semester.equals("通年")){
                 for(int i=0;i<frame;i++){
-                    TextView curLectureTextView = currentTimetable.get(day).get(period + i);
-                    curLectureTextView.setText(name);
-                    currentTimetable.get(day).put(period,curLectureTextView);
-                    timetable.addView(curLectureTextView);
+//                    TextView curLectureTextView = currentTimetable.get(day).get(period + i);
+                    currentTimetable.get(day).get(period + i).setText(name);
+                    currentTimetable.get(day).put(period,currentTimetable.get(day).get(period + i));
+//                    timetable.addView(curLectureTextView);
                 }
             }
         }
     }
 
     private float startY;
-
-    // スワイプ開始位置（画面上端から100px以内）
-    private static final float START_AREA = 600f;
-
-    // 下方向へこの距離以上動いたら発火
-    private static final float SWIPE_THRESHOLD = 100f;
+    // 上方向へこの距離以上動いたら発火
+    private static final float SWIPE_THRESHOLD = 400f;
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(!isDecidedYear){
-            return super.dispatchTouchEvent(ev);
-        }
+//        if(!isDecidedYear){
+//            return super.dispatchTouchEvent(ev);
+//        }
         switch (ev.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
                 startY = ev.getY();
+
                 break;
 
             case MotionEvent.ACTION_UP:
 
                 float endY = ev.getY();
-                float diffY = endY - startY;
+                float diffY = startY - endY;
 
-                // 画面上部から下方向へスワイプ
-                if (startY <= START_AREA &&
-                        diffY >= SWIPE_THRESHOLD) {
-
-//                    Intent intent =
-//                            new Intent(this, otherLecturesActivity.class);
-//                    startActivity(intent);
-
+                // 画面下方向から上部へスワイプ
+                if (diffY >= SWIPE_THRESHOLD) {
+                    Intent intent = new Intent(this, OtherLecturesActivity.class);
+                    intent.putExtra("year",Integer.parseInt(selectedYearTextView.getText().toString().substring(0, selectedYearTextView.getText().toString().length()-2)));
+                    startActivity(intent);
                     return true;
                 }
 
