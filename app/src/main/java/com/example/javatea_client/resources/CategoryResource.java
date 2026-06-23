@@ -1,5 +1,6 @@
 package com.example.javatea_client.resources;
 
+import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.models.University;
 
 import java.util.Collection;
@@ -67,7 +68,7 @@ public interface CategoryResource {
      * 大学全般に属する科目一覧(ID)の取得
      */
     @GET("categories/universities/{univ-id}/lectures")
-    Call<List<String>> getUnivLectures(
+    Call<Collection<Lecture>> getUniversityLectures(
             @Path("univ-id") String univId
     );
 
@@ -101,7 +102,7 @@ public interface CategoryResource {
      * 科目一覧の取得
      */
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/lectures")
-    Call<List<String>> getLectures(
+    Call<Collection<Lecture>> getFacultyLectures(
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName
     );
@@ -139,7 +140,7 @@ public interface CategoryResource {
      * 各学科特有の授業追加
      */
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
-    Call<List<String>> getLectures(
+    Call<Collection<Lecture>> getDepartmentLectures(
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName,
             @Path("department-name") String departmentName
