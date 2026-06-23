@@ -65,7 +65,7 @@ public class TimetableActivity extends AppCompatActivity {
         //ユーザ情報の取得
         //Javatea javaTea = (Javatea) getApplication();
         userId = "test01";
-        token = "ffa8ee3c-7e70-45bd-91a2-300214ae3e33";
+        token = "696a3b79-8d35-4a26-a9cb-39def76fbc28";
 
         //ViewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
@@ -80,6 +80,7 @@ public class TimetableActivity extends AppCompatActivity {
             @Override
             public void onChanged(String s) {
                 if(s != null){
+                    Log.d("Error",s);
                     Toast.makeText(TimetableActivity.this,s, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -101,7 +102,7 @@ public class TimetableActivity extends AppCompatActivity {
             selectedYearTextView.setText(selectedYearTextView.getText().toString().substring(0, selectedYearTextView.getText().toString().length()-2) + " ▼");
         });
         //年度と時間割の取得
-//        timetableViewModel.loadTimetable(userId,token);
+        timetableViewModel.loadTimetable(userId,token);
         //新しい年度が追加されたら更新
         timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<Lecture>>>() {
             @Override
@@ -231,7 +232,7 @@ public class TimetableActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 int year = Integer.parseInt(selectYears[which]);
-//                timetableViewModel.addYear(userId,year,token);
+                timetableViewModel.addYear(userId,year,token);
                 dialog.dismiss();
             }
         });
