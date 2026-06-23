@@ -118,27 +118,27 @@ public interface LectureResource {
             @Field("period") int period
     );
 
-
-
-    //-----------------
-    // 大学全般の授業ID一覧を取得
-    @GET("categories/universities/{univ-id}/lectures")
-    Call<Collection<Lecture>> getUniversityLectureIds(
-            @Path("univ-id") String univId
-    );
-
-    // 学部全般の授業ID一覧を取得
-    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/lectures")
-    Call<Collection<Lecture>> getFacultyLectureIds(
-            @Path("univ-id") String univId,
-            @Path("faculty-name") String facultyName
-    );
-
-    // 学科特有の授業ID一覧を取得
-    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
-    Call<Collection<Lecture>> getDepartmentLectureIds(
-            @Path("univ-id") String univId,
-            @Path("faculty-name") String facultyName,
-            @Path("department-name") String departmentName
-    );
+//
+//
+//    //-----------------
+//    // 大学全般の授業ID一覧を取得
+//    @GET("categories/universities/{univ-id}/lectures")
+//    Call<Collection<Lecture>> getUniversityLectureIds(
+//            @Path("univ-id") String univId
+//    );
+//
+//    // 学部全般の授業ID一覧を取得
+//    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/lectures")
+//    Call<Collection<Lecture>> getFacultyLectureIds(
+//            @Path("univ-id") String univId,
+//            @Path("faculty-name") String facultyName
+//    );
+//
+//    // 学科特有の授業ID一覧を取得
+//    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
+//    Call<Collection<Lecture>> getDepartmentLectureIds(
+//            @Path("univ-id") String univId,
+//            @Path("faculty-name") String facultyName,
+//            @Path("department-name") String departmentName
+//    );
 }

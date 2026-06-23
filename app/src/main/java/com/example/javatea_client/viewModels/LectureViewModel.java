@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.resources.LectureResource;
 
-import java.util.Collection;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,9 +29,6 @@ public class LectureViewModel extends ViewModel {
     private final MutableLiveData<String> lectureId =
             new MutableLiveData<>();
 
-    // 大学・学部・学科から取得した授業一覧を保存する
-    private final MutableLiveData<Collection<Lecture>> lectures =
-            new MutableLiveData<>();
 
     // 通信中かどうかを保存する
     private final MutableLiveData<Boolean> loading =
@@ -67,9 +64,6 @@ public class LectureViewModel extends ViewModel {
         return lectureId;
     }
 
-    public LiveData<Collection<Lecture>> getLectures() {
-        return lectures;
-    }
 
     public LiveData<Boolean> isLoading() {
         return loading;
@@ -192,160 +186,5 @@ public class LectureViewModel extends ViewModel {
 
 
 
-    // 大学全般の授業一覧を取得する
 
-
-    public void loadUniversityLectures(String univId) {
-
-        loading.setValue(true);
-        error.setValue(null);
-
-        lectureResource.getUniversityLectureIds(univId)
-                .enqueue(new Callback<Collection<Lecture>>() {
-
-                    @Override
-                    public void onResponse(
-                            Call<Collection<Lecture>> call,
-                            Response<Collection<Lecture>> response
-                    ) {
-
-                        loading.setValue(false);
-
-                        if (response.isSuccessful()
-                                && response.body() != null) {
-
-                            lectures.setValue(response.body());
-
-                        } else {
-                            error.setValue(
-                                    "大学全般の授業一覧取得失敗: "
-                                            + response.code()
-                            );
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-                            Call<Collection<Lecture>> call,
-                            Throwable t
-                    ) {
-
-                        loading.setValue(false);
-
-                        error.setValue(
-                                "通信エラー: " + t.getMessage()
-                        );
-                    }
-                });
-    }
-
-
-
-    // 学部全般の授業一覧を取得する
-
-
-    public void loadFacultyLectures(
-            String univId,
-            String facultyName
-    ) {
-
-        loading.setValue(true);
-        error.setValue(null);
-
-        lectureResource.getFacultyLectureIds(
-                univId,
-                facultyName
-        ).enqueue(new Callback<Collection<Lecture>>() {
-
-            @Override
-            public void onResponse(
-                    Call<Collection<Lecture>> call,
-                    Response<Collection<Lecture>> response
-            ) {
-
-                loading.setValue(false);
-
-                if (response.isSuccessful()
-                        && response.body() != null) {
-
-                    lectures.setValue(response.body());
-
-                } else {
-                    error.setValue(
-                            "学部全般の授業一覧取得失敗: "
-                                    + response.code()
-                    );
-                }
-            }
-
-            @Override
-            public void onFailure(
-                    Call<Collection<Lecture>> call,
-                    Throwable t
-            ) {
-
-                loading.setValue(false);
-
-                error.setValue(
-                        "通信エラー: " + t.getMessage()
-                );
-            }
-        });
-    }
-
-
-
-    // 学科特有の授業一覧を取得する
-
-
-    public void loadDepartmentLectures(
-            String univId,
-            String facultyName,
-            String departmentName
-    ) {
-
-        loading.setValue(true);
-        error.setValue(null);
-
-        lectureResource.getDepartmentLectureIds(
-                univId,
-                facultyName,
-                departmentName
-        ).enqueue(new Callback<Collection<Lecture>>() {
-
-            @Override
-            public void onResponse(
-                    Call<Collection<Lecture>> call,
-                    Response<Collection<Lecture>> response
-            ) {
-
-                loading.setValue(false);
-
-                if (response.isSuccessful()
-                        && response.body() != null) {
-
-                    lectures.setValue(response.body());
-
-                } else {
-                    error.setValue(
-                            "学科の授業一覧取得失敗: "
-                                    + response.code()
-                    );
-                }
-            }
-
-            @Override
-            public void onFailure(
-                    Call<Collection<Lecture>> call,
-                    Throwable t
-            ) {
-
-                loading.setValue(false);
-
-                error.setValue(
-                        "通信エラー: " + t.getMessage()
-                );
-            }
-        });
-    }
 }
