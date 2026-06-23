@@ -12,16 +12,19 @@ public class Lecture  {
     private String day;
     private int period;
 
+    private String lectureId;
+
     //コンストラクタ
     public Lecture() {}
 
-    public Lecture(String name, int grade, String semester, int frame, String day, int period) {
+    public Lecture(String name, int grade, String semester, int frame, String day, int period, String lectureId) {
         this.name = name;
         this.grade = grade;
         this.semester = semester;
         this.frame = frame;
         this.day = day;
         this.period = period;
+        this.lectureId = lectureId;
     }
 
     public String getName() { return name; }
@@ -41,4 +44,6 @@ public class Lecture  {
 
     public int getPeriod() { return period; }
     public void setPeriod(int period) { this.period = period; }
+
+    public  String getLectureId() { return lectureId; }
 }

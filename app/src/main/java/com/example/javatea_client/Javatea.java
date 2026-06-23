@@ -7,6 +7,7 @@ public class Javatea extends Application {
     private String token;
     private String userId;
     private String password;
+    private String view;
 
     @Override
     public void onCreate() {
@@ -35,12 +36,20 @@ public class Javatea extends Application {
         saveUserData();
     }
 
+    public String getView() {return view;}
+
+    public void setView(String view) {
+        this.view = view;
+        saveUserData();
+    }
+
     private void saveUserData() {
         SharedPreferences prefs = getSharedPreferences("user_data", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("token", token);
         editor.putString("userId", userId);
         editor.putString("password", password);
+        editor.putString("view", view);
         editor.apply();
     }
 
@@ -49,5 +58,6 @@ public class Javatea extends Application {
         token = prefs.getString("token", "");
         userId = prefs.getString("userId", "");
         password = prefs.getString("password", "");
+        view = prefs.getString("view", "");
     }
 }
