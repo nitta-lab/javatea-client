@@ -87,7 +87,7 @@ public class CategoryViewModel extends ViewModel {
     // デプロイしてないから今はlocalhostで IntelliJ IDEA とこっち、どちらも起動させる
     public CategoryViewModel() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server/hello")
+                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
