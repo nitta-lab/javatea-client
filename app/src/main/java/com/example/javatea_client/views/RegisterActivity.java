@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.viewModels.CategoryViewModel;
@@ -459,6 +460,12 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String selectedUniversityInfo = universityArray[which]; //大学名とカナのセット
+                        if(selectedUniversityInfo.equals("+大学を追加する")){
+                            Log.d(TAG, "追加ボタンが押されました。");
+                            showAddUniversityDialog();
+                            return;
+                        }
+
                         StringBuilder selectedUniversityNameBuilder = new StringBuilder();
                         StringBuilder selectedUniversityKanaBuilder = new StringBuilder();
                         for(int i=0;i<selectedUniversityInfo.length();i++){
@@ -481,13 +488,8 @@ public class RegisterActivity extends AppCompatActivity {
                             }
                         }
 
-                        if(selectedUniversity.equals("+大学を追加する")){
-                            Log.d(TAG, "追加ボタンが押されました。");
-                            showAddUniversityDialog();
-                        } else {
-                            TextView universityText = findViewById(R.id.universityText);
-                            universityText.setText(selectedUniversity);
-                        }
+                        TextView universityText = findViewById(R.id.universityText);
+                        universityText.setText(selectedUniversity);
                     }
                 });
 
@@ -555,6 +557,7 @@ public class RegisterActivity extends AppCompatActivity {
                     departments.add(department);
                 }
 
+                departments.add("学科なし");
                 departments.add("+学科を追加する");
 
                 String[] departmentArray = departments.toArray(new String[0]);
