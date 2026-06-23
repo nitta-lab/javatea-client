@@ -44,4 +44,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.squareup.retrofit2:converter-jackson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
 }

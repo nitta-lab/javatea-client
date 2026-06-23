@@ -1,16 +1,533 @@
 package com.example.javatea_client.views;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
+import com.example.javatea_client.models.University;
+import com.example.javatea_client.viewModels.CategoryViewModel;
+import com.example.javatea_client.viewModels.UserViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+// Commit&Pushする前にManifestとCategoryViewModelを元に戻すのを忘れないように
+
 
 public class RegisterActivity extends AppCompatActivity {
+    private CategoryViewModel categoryViewModel;
+    private UserViewModel userViewModel;
+    private static final String TAG = "RegisterActivity";
+    private boolean flag = false;
+
+//    private final List<String> univNames = new ArrayList<>();
+
+    private List<String> universities;
+
+
+    //〇行のボタン(これは必須)
+    private void showKanaDialog() {
+        String[] kanaGroups = {
+            //"選択してください",//これを選択したときは、別の処理を書きたい
+            "ア行",
+            "カ行",
+            "サ行",
+            "タ行",
+            "ナ行",
+            "ハ行",
+            "マ行",
+            "ヤ行",
+            "ラ行",
+            "ワ行"
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setItems(kanaGroups, (dialog, which) -> {
+            String selectedKana = kanaGroups[which];
+
+            showUniversityDialog(selectedKana);
+        });
+
+        builder.show();
+    }
+
+    //大学一覧
+    private void showUniversityDialog(String kana) {
+        switch (kana) {
+            case "ア行":
+                // 大学の科目一覧を取得する命令（通信）
+                categoryViewModel.getAllUnivId("ア", "カ");
+                Log.d(TAG, "ア行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("愛媛大学");
+//                universities.add("青山学院大学");
+//                universities.add("会津大学");
+//                universities.add("+大学を追加する");
+                break;
+
+            case "カ行":
+                categoryViewModel.getAllUnivId("カ", "サ");
+//                categoryViewModel.getCurrentUniversity();
+                Log.d(TAG, "カ行の大学の取得を開始");
+//                universities.add("香川大学");
+//                universities.add("鹿児島大学");
+//                universities.add("関西大学");
+//                universities.add("+大学を追加する");
+                break;
+
+            case "サ行":
+                categoryViewModel.getAllUnivId("サ", "タ");
+                Log.d(TAG, "サ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("埼玉大学");
+//                universities.add("滋賀大学");
+//                universities.add("静岡大学");
+//                universities.add("+大学を追加する");
+                break;
+
+            case "タ行":
+                categoryViewModel.getAllUnivId("タ", "ナ");
+                Log.d(TAG, "タ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+            case "ナ行":
+                categoryViewModel.getAllUnivId("ナ", "ハ");
+                Log.d(TAG, "ナ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+            case "ハ行":
+                categoryViewModel.getAllUnivId("ハ", "マ");
+                Log.d(TAG, "ハ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+            case "マ行":
+                categoryViewModel.getAllUnivId("マ", "ヤ");
+                Log.d(TAG, "マ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+            case "ヤ行":
+                categoryViewModel.getAllUnivId("ヤ", "ラ");
+                Log.d(TAG, "ヤ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+            case "ラ行":
+                categoryViewModel.getAllUnivId("ラ", "ワ");
+                Log.d(TAG, "ラ行大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+            case "ワ行":
+                categoryViewModel.getAllUnivId("ワ", "ン");
+                Log.d(TAG, "ワ行の大学の取得を開始");
+//                universities.addAll(univNames);
+//                universities.add("+大学を追加する");
+                break;
+
+        }
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        builder.setTitle("大学を選択してください");
+//
+//        String[] items = universities.toArray(new String[0]);
+//        builder.setItems(items, (dialog, which) -> {
+//
+//            String selectedUniversity = items[which];
+//
+//            if (selectedUniversity.equals("+大学を追加する")){
+//                showAddUniversityDialog();
+//                return;
+//            }
+//
+//            TextView universityText = findViewById(R.id.universityText);
+//
+//            universityText.setText(selectedUniversity);
+//        });
+//
+//        builder.show();
+    }
+
+    //大学の新規登録
+    private void showAddUniversityDialog() {
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        EditText nameEdit = new EditText(this);
+        nameEdit.setHint("大学名　　　　例：〇〇大学");
+        nameEdit.setSingleLine(true);
+
+        EditText kanaEdit = new EditText(this);
+        kanaEdit.setHint("フリガナ　　　例：〇〇ダイガク");
+        kanaEdit.setSingleLine(true);
+
+        layout.addView(nameEdit);
+        layout.addView(kanaEdit);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle("大学を追加")
+            .setView(layout)
+            .setPositiveButton("登録", null)
+            .setNegativeButton("キャンセル", null)
+            .create();
+
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String universityName = nameEdit.getText().toString().trim();
+            String universityKana = kanaEdit.getText().toString().trim();
+
+            if (universityName.isEmpty() && universityKana.isEmpty()) {
+                nameEdit.setError("大学名を入力してください");
+                kanaEdit.setError("フリガナを入力してください");
+                return;
+            }
+
+            if (universityName.isEmpty()) {
+                nameEdit.setError("大学名を入力してください");
+                return;
+            }
+
+            if (universityKana.isEmpty()) {
+                kanaEdit.setError("フリガナを入力してください");
+                return;
+            }
+
+            if(!universityName.endsWith("大学")) {
+                universityName = universityName + "大学";
+            }
+
+            if(!universityKana.endsWith("ダイガク")) {
+                universityKana = universityKana + "ダイガク";
+            }
+
+            //読み仮名がひらがなで入力されているか。
+            if(!universityKana.matches("^[\\u30A1-\\u30FC]+$")) {
+                Toast.makeText(this, "フリガナは全角カタカナで入力してください", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            //大学を追加する
+            categoryViewModel.postNewUnivId(universityName,universityKana);
+            Log.d(TAG, "大学IDの作成に成功");
+            Toast.makeText(this, "登録しました", Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        });
+    }
+
+    //学部一覧
+    private void showFacultyDialog() {
+        String[] faculties = {
+            "工学部",
+            "経済学部",
+            "教育学部",
+            "+学部を追加する"
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("学部を選択してください");
+
+        builder.setItems(faculties, (dialog, which) -> {
+
+            String selectedFaculty = faculties[which];
+
+            if (selectedFaculty.equals("+学部を追加する")){
+                showAddFacultyDialog();
+                return;
+            }
+
+            TextView facultyText = findViewById(R.id.facultyText);
+            facultyText.setText(selectedFaculty);
+        });
+
+        builder.show();
+    }
+
+    //学部の新規登録
+    private void showAddFacultyDialog() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        EditText nameEdit = new EditText(this);
+        nameEdit.setHint("学部名");
+        nameEdit.setSingleLine(true);
+
+        layout.addView(nameEdit);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle("学部を追加")
+            .setView(layout)
+            .setPositiveButton("登録", null)
+            .setNegativeButton("キャンセル", null)
+            .create();
+
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+
+            String facultyName = nameEdit.getText().toString().trim();
+
+            if (facultyName.isEmpty()) {
+                nameEdit.setError("学部名を入力してください");
+                return;
+            }
+
+            Toast.makeText(this, "登録しました", Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        });
+    }
+
+    //学科一覧
+    private void showDepartmentDialog() {
+        String[] departments = {
+            "工学科",
+            "経済学科",
+            "教育学科",
+            "学科なし",
+            "+学科を追加する"
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("学科を選択してください");
+
+        builder.setItems(departments, (dialog, which) -> {
+
+            String selectedDepartment = departments[which];
+
+            if (selectedDepartment.equals("+学科を追加する")){
+                showAddDepartmentDialog();
+                return;
+            }
+
+            TextView departmentText = findViewById(R.id.departmentText);
+            departmentText.setText(selectedDepartment);
+        });
+
+        builder.show();
+    }
+
+    //学科の新規登録
+    private void showAddDepartmentDialog() {
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        EditText nameEdit = new EditText(this);
+        nameEdit.setHint("学科名");
+        nameEdit.setSingleLine(true);
+
+        layout.addView(nameEdit);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setTitle("学科を追加")
+            .setView(layout)
+            .setPositiveButton("登録", null)
+            .setNegativeButton("キャンセル", null)
+            .create();
+
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+
+            String departmentName = nameEdit.getText().toString().trim();
+
+            if (departmentName.isEmpty()) {
+                nameEdit.setError("学科名を入力してください");
+                return;
+            }
+
+            Toast.makeText(this, "登録しました", Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        });
+    }
+
+    //学年一覧
+    private void showGradeDialog() {
+        String[] grades = {
+            "1",
+            "2",
+            "3",
+            "4",
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("学年を選択してください");
+
+        builder.setItems(grades, (dialog, which) -> {
+
+            String selectedGrade = grades[which];
+
+            TextView gradeText = findViewById(R.id.gradeText);
+            gradeText.setText(selectedGrade);
+        });
+
+        builder.show();
+    }
+
+    //確定ボタンを押したときの処理
+    private void showConfirmScreen(){
+        setInputEnabled(false,"");
+        TextView description = findViewById(R.id.description);
+        //1度押したとき
+        if(!flag){
+            String text = "確定してもよろしいでしょうか？\n\n※後から変更できません。";
+            SpannableString spannable = new SpannableString(text);
+            spannable.setSpan(new ForegroundColorSpan(Color.RED), 15, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            description.setText(spannable);
+            Button fixButton = findViewById(R.id.fixButton);
+            fixButton.setVisibility(View.VISIBLE);
+            flag = true;
+        }else{ //2度押したとき(画面遷移)
+            Intent intent = new Intent(RegisterActivity.this, TimetableActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    //修正ボタンを押したときの処理
+    private void returnToInputScreen(){
+        TextView description = findViewById(R.id.description);
+
+        description.setText("あなたの　　　　　　　　　　　　　　\n大学・学部・学科・学年を\n　　　　　　　　　　入力してください");
+
+        setInputEnabled(true,"▼");
+        Button fixButton = findViewById(R.id.fixButton);
+
+        fixButton.setVisibility(View.INVISIBLE);//ボタンを見えなくする
+
+        flag = false;
+
+    }
+
+    //確定ボタンを押したときの登録画面のクリック無効化
+    private void setInputEnabled(boolean enabled,String text){
+        TextView universityPullDownText = findViewById(R.id.universityPullDownText);
+        findViewById(R.id.universityPullDownText).setEnabled(enabled);
+        universityPullDownText.setText(text);
+
+        TextView facultyPullDownText = findViewById(R.id.facultyPullDownText);
+        findViewById(R.id.facultyPullDownText).setEnabled(enabled);
+        facultyPullDownText.setText(text);
+
+        TextView departmentPullDownText = findViewById(R.id.departmentPullDownText);
+        findViewById(R.id.departmentPullDownText).setEnabled(enabled);
+        departmentPullDownText.setText(text);
+
+        TextView gradePullDownText = findViewById(R.id.gradePullDownText);
+        findViewById(R.id.gradePullDownText).setEnabled(enabled);
+        gradePullDownText.setText(text);
+
+    }
+
+    private void setupObservers() {
+        // categoryViewModelの今の大学一覧の状態をobserve
+        // (univIdListは引数、普通onChangedで書くが、今回のようにラムダ式で書くとスマートらしい)
+        categoryViewModel.getCurrentUniversities().observe(this, universityList -> {
+            // サーバーからデータが届いたら、自動的にこの中身（ラムダ式）が実行
+            if (universityList != null) {
+                Log.d(TAG, "全大学情報一覧を受信：" + universityList.size() + "件");
+
+                if(universities == null) {
+                    universities = new ArrayList<>();
+                }
+
+                // 無限増殖防ぐため
+                universities.clear();
+
+                for (University university : universityList) {
+                    Log.d(TAG, "大学名：" + university.getName());
+                    universities.add(university.getName());
+                }
+
+                universities.add("+大学を追加する");
+
+                String[] universityArray = universities.toArray(new String[0]);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("大学を選択してください");
+
+                builder.setItems(universityArray, (dialog, which) -> {
+                   String selectedUniversity = universityArray[which];
+
+                   if(selectedUniversity.equals("+大学を追加する")){
+                       Log.d(TAG, "追加ボタンが押されました。");
+                       showAddUniversityDialog();
+                   } else {
+                       TextView universityText = findViewById(R.id.universityText);
+                       universityText.setText(selectedUniversity);
+                   }
+                });
+
+                builder.show();
+            }
+        });
+
+        // 今の学部一覧の状態をobserve
+        categoryViewModel.getCurrentFaculty().observe(this, faculties -> {
+            if(faculties != null) {
+                Log.d(TAG, "学部一覧を受信：" + faculties.size() + "件");
+                for(String faculty : faculties) {
+                    Log.d(TAG, "学部名：" + faculty);
+                }
+            }
+        });
+
+        // 今の学科一覧の状態をobserve
+        categoryViewModel.getCurrentDepartment().observe(this, departments -> {
+            if(departments != null) {
+                Log.d(TAG, "学科一覧を受信：" + departments.size() + "件");
+                for(String department : departments) {
+                    Log.d(TAG, "学科名：" + department);
+                }
+            }
+        });
+
+        // 大学追加の瞬間をobserveしないといけない？
+        categoryViewModel.getCreatedUnivId().observe(this, university -> {
+            if(university != null) {
+                Log.d(TAG, "追加された大学ID：" + university);
+                categoryViewModel.getUnivInfo(university);
+            }
+        });
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +538,92 @@ public class RegisterActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        //userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        setupObservers();
+
+
+        // 戻るボタンの処理を遮断
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
+        //上のバー
+        ModeBar.setup(this, "はじめに");
+
+        //大学選択
+        TextView universityPullDownText = findViewById(R.id.universityPullDownText);
+
+        universityPullDownText.setOnClickListener(v -> {
+            showKanaDialog();
+        });
+
+        //学部選択
+        TextView facultyPullDownText = findViewById(R.id.facultyPullDownText);
+
+        facultyPullDownText.setOnClickListener(v -> {
+            TextView universityText = findViewById(R.id.universityText);
+            String selectedUniversity = universityText.getText().toString();
+
+            if (selectedUniversity.equals("選択してください")){
+                Toast.makeText(this, "先に大学を選択してください", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            showFacultyDialog();
+        });
+
+        //学科選択
+        TextView departmentPullDownText = findViewById(R.id.departmentPullDownText);
+
+        departmentPullDownText.setOnClickListener(v -> {
+            TextView facultyText = findViewById(R.id.facultyText);
+            String selectedFaculty = facultyText.getText().toString();
+
+            if (selectedFaculty.equals("選択してください")){
+                Toast.makeText(this, "先に学部を選択してください", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            showDepartmentDialog();
+        });
+
+        //学年選択
+        TextView gradePullDownText = findViewById(R.id.gradePullDownText);
+
+        gradePullDownText.setOnClickListener(v -> {
+            showGradeDialog();
+        });
+
+        //修正ボタンを押したときの処理
+        Button fixButton = findViewById(R.id.fixButton);
+        fixButton.setVisibility(View.INVISIBLE);//登録時は見えないようにしておく
+
+        fixButton.setOnClickListener(v -> {
+            returnToInputScreen();
+        });
+
+        //確定ボタンを押したときの処理
+        Button confirmButton = findViewById(R.id.confirmButton);
+
+        confirmButton.setOnClickListener(v -> {
+            TextView universityText = findViewById(R.id.universityText);
+            TextView facultyText = findViewById(R.id.facultyText);
+            TextView departmentText = findViewById(R.id.departmentText);
+            TextView gradeText = findViewById(R.id.gradeText);
+            String selectedUniversity = universityText.getText().toString();
+            String selectedFaculty = facultyText.getText().toString();
+            String selectedDepartment = departmentText.getText().toString();
+            String selectedGrade = gradeText.getText().toString();
+
+            if (selectedUniversity.equals("選択してください") || selectedFaculty.equals("選択してください") || selectedDepartment.equals("選択してください") || selectedGrade.equals("選択してください")){
+                Toast.makeText(this, "未選択の項目があります", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            showConfirmScreen();
         });
     }
 }
