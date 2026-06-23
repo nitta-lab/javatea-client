@@ -45,7 +45,7 @@ public class SetTimetableActivity extends AppCompatActivity {
 
         //各ウィジェット動作処理
         //閉じるボタン
-        Button closeButton = findViewById(R.id.close_subject_button);
+        Button closeButton = findViewById(R.id.close_lecture_button);
         closeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
@@ -54,7 +54,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         });
 
         //科目追加ボタン(後でID変更必須 現在は時間割画面に遷移)
-        Button addButton = findViewById(R.id.add_subject_button);
+        Button addButton = findViewById(R.id.add_lecture_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
@@ -68,7 +68,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         });
 
         //"設定しない"ボタン
-        Button cancelButton = findViewById(R.id.cancel_subject_button);
+        Button cancelButton = findViewById(R.id.cancel_lecture_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
