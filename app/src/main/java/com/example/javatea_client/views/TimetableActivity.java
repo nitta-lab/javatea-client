@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.viewModels.LectureViewModel;
 import com.example.javatea_client.viewModels.TimetableViewModel;
 import com.example.javatea_client.R;
@@ -45,7 +46,7 @@ public class TimetableActivity extends AppCompatActivity {
     private TextView currentSemester;
     //時間割が作られた年度一覧
     private ArrayList<String> years;
-    private HashMap<Integer,HashSet<String>> timetableLecturesMap;//年度と授業IDのmap
+    private HashMap<Integer,HashSet<Lecture>> timetableLecturesMap;//年度と授業IDのmap
     private HashMap<String,HashMap<Integer,TextView>> currentTimetable;//時間割
     private boolean isDecidedYear;
     //JavaTea javatea;
@@ -112,9 +113,9 @@ public class TimetableActivity extends AppCompatActivity {
         //年度と時間割の取得
 //        timetableViewModel.loadTimetable(userId,token);
         //新しい年度が追加されたら更新
-        timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<String>>>() {
+        timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<Lecture>>>() {
             @Override
-            public void onChanged(TreeMap<Integer, HashSet<String>> timetable) {
+            public void onChanged(TreeMap<Integer, HashSet<Lecture>> timetable) {
                 Log.d("TIMETABLE", "onChanged");
                 ArrayList<Integer> integers = new ArrayList<>(timetable.keySet());
                 Collections.sort(integers);
@@ -318,7 +319,7 @@ public class TimetableActivity extends AppCompatActivity {
             currentSemester.setText(curSemester);
         }
 
-        for(String lectureId:timetableLecturesMap.get(selectedYearTextView.getText())){
+        for(Lecture lectureId:timetableLecturesMap.get(selectedYearTextView.getText())){
             //Lecture lecture = lectureViewModel.getLecture(lectureId);
             String name = "基礎英語";
             Integer grade = 2;

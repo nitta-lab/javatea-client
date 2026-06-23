@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
+import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.viewModels.LectureViewModel;
 import com.example.javatea_client.viewModels.TimetableViewModel;
 
@@ -53,10 +54,10 @@ public class OtherLecturesActivity extends AppCompatActivity {
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
 //        lectureViewModel = new ViewModelProvider(this).get(LectureViewModel.class);
         timetableViewModel.loadTimetableLectures(userId,year,token);
-        timetableViewModel.getLectureIds().observe(this, new Observer<List<String>>() {
+        timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
             @Override
-            public void onChanged(List<String> strings) {
-                for(String lectureId : strings){
+            public void onChanged(List<Lecture> strings) {
+                for(Lecture lectureId : strings){
                     //Lecture lecture = lectureViewModel.getLecture(lectureId);
                     String name = "基礎英語";
                     Integer grade = 2;
