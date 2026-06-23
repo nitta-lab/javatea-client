@@ -64,6 +64,8 @@ public class TimetableActivity extends AppCompatActivity {
         });
         //ユーザ情報の取得
         //Javatea javaTea = (Javatea) getApplication();
+        //this.getApplication();
+        //Javatea.setView("Timetable");
         userId = "test01";
         token = "696a3b79-8d35-4a26-a9cb-39def76fbc28";
 
@@ -142,6 +144,7 @@ public class TimetableActivity extends AppCompatActivity {
                         builder.show();
                     }else{
                         selectedYearTextView.setText(year + " ▼");
+                        setCurrentTimetable();
                     }
                     popup.dismiss();//popupを閉じる
                 });
@@ -269,9 +272,12 @@ public class TimetableActivity extends AppCompatActivity {
                 textView.setLayoutParams(params);
                 textView.setTag(new Point(row,col));
                 if(col != 0&&row != 0){
+                    Log.d("day",day[col-1]);
+                    Log.d("day", String.valueOf(row));
                     if(!currentTimetable.containsKey(day[col-1])){
                         currentTimetable.put(day[col-1],new HashMap<>());
                     }
+
                     currentTimetable.get(day[col-1]).put(row,textView);
                     textView.setOnLongClickListener(v -> {
                         if(!isDecidedYear){
@@ -309,20 +315,29 @@ public class TimetableActivity extends AppCompatActivity {
             curSemester ="";
             currentSemester.setText(curSemester);
         }
-
-        for(Lecture lecture:timetableLecturesMap.get(selectedYearTextView.getText())){
-            String name = lecture.getName();
-            Integer grade = lecture.getGrade();
-            String semester = lecture.getSemester();
-            Integer frame = lecture.getFrame();//コマ数
-            String day = lecture.getDay();
-            Integer period = lecture.getPeriod();
-            if(semester.equals(curSemester)||semester.equals("通年")){
-                for(int i=0;i<frame;i++){
+        Log.d("semester", String.valueOf(curSemester));
+        if(!selectedYearTextView.equals("年度を追加する")) {
+            int currentYear = Integer.parseInt(selectedYearTextView.getText().toString().substring(0,4));
+//            Log.d("year", String.valueOf(currentYear));
+//            Log.d("Semester",curSemester);
+            for(String day:currentTimetable.keySet()){
+                for(Integer period:currentTimetable.get(day).keySet()){
+                    currentTimetable.get(day).get(period).setText("");
+                }
+            }
+            for(Lecture lecture:timetableLecturesMap.get(currentYear)){
+                String name = lecture.getName();
+                Integer grade = lecture.getGrade();
+                String semester = lecture.getSemester();
+                Integer frame = lecture.getFrame();//コマ数
+                String day = lecture.getDay();
+                Integer period = lecture.getPeriod();
+                if(semester.equals(curSemester)||semester.equals("通年")){
+                    for(int i=0;i<frame;i++){
 //                    TextView curLectureTextView = currentTimetable.get(day).get(period + i);
-                    currentTimetable.get(day).get(period + i).setText(name);
-                    currentTimetable.get(day).put(period,currentTimetable.get(day).get(period + i));
+                        currentTimetable.get(day).get(period + i).setText(name);
 //                    timetable.addView(curLectureTextView);
+                    }
                 }
             }
         }
@@ -351,7 +366,7 @@ public class TimetableActivity extends AppCompatActivity {
                 // 画面下方向から上部へスワイプ
                 if (diffY >= SWIPE_THRESHOLD) {
                     Intent intent = new Intent(this, OtherLecturesActivity.class);
-                    intent.putExtra("year",Integer.parseInt(selectedYearTextView.getText().toString().substring(0, selectedYearTextView.getText().toString().length()-2)));
+                    intent.putExtra("year",Integer.parseInt(selectedYearTextView.getText().toString().substring(0,4)));
                     startActivity(intent);
                     return true;
                 }
