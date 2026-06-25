@@ -42,7 +42,6 @@ public class SetTimetableActivity extends AppCompatActivity {
         String day = reIntent.getStringExtra("day");
         int period = reIntent.getIntExtra("period", 1);
         int year = reIntent.getIntExtra("year", 1);
-        int lectureId = reIntent.getIntExtra("lectureId", 1);
         String semester = reIntent.getStringExtra("semester");
 
         // 他のActivityから画面を取得
@@ -84,13 +83,13 @@ public class SetTimetableActivity extends AppCompatActivity {
 
         // ダミーデータ（動作確認用）
         List<Lecture> lectureList = new ArrayList<>();
-        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1));
-        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3));
+        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1,"lecture-01"));
+        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2, "lecture-02"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-03"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-04"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-05"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-06"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-07"));
 
         RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
