@@ -30,7 +30,7 @@ public class UserViewModel extends ViewModel {
 
     public UserViewModel() {
         this.retrofit = new Retrofit.Builder()
-                .baseUrl("http://160.247.112.199:8080/")
+                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();

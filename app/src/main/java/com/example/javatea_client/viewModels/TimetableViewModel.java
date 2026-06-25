@@ -33,7 +33,7 @@ public class TimetableViewModel extends ViewModel {
     public TimetableViewModel() {
         this.retrofit = new Retrofit.Builder()
                 //.baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea/")
-                .baseUrl("http://192.168.0.29:8080/")
+                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
