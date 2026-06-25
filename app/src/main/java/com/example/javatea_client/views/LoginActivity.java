@@ -84,7 +84,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!token.isEmpty()) {
                     Javatea app = (Javatea) LoginActivity.this.getApplication();
+                    String userId = app.getUserId();
                     app.setToken(token);
+                    app.setUserId(userId);
                     Intent intent = null;
                     switch(app.getView()) {
                         case "Register":
