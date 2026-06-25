@@ -451,39 +451,6 @@ public class RegisterActivity extends AppCompatActivity {
                 showDepartmentSelectionDialog(departmentArray);
             }
         });
-
-//        //大学追加の瞬間をobserve
-//        categoryViewModel.getCreatedUnivId().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(String university) {
-//                if (university != null) {
-//                    Log.d(TAG, "追加された大学ID：" + university);
-//                    categoryViewModel.getUnivInfo(university);
-//                }
-//            }
-//        });
-//
-//        //学部追加の瞬間をobserve
-//        categoryViewModel.getCreatedFacultyName().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(String faculty) {
-//                if (faculty != null) {
-//                    Log.d(TAG, "追加された学部：" + faculty);
-//                    categoryViewModel.getFaculty(selectedUniversityId);
-//                }
-//            }
-//        });
-//
-//        //学科追加の瞬間をobserve
-//        categoryViewModel.getCreatedDepartmentName().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(String department) {
-//                if (department != null) {
-//                    Log.d(TAG, "追加された学科：" + department);
-//                    categoryViewModel.getDepartments(selectedUniversityId,selectedFacultyName);
-//                }
-//            }
-//        });
     }
 
 
