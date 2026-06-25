@@ -52,7 +52,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
 
 //        Javatea javatea = (Javatea) getApplication();
         userId = "test01";
-        token = "696a3b79-8d35-4a26-a9cb-39def76fbc28";
+        token = "83aa20d9-683a-44c2-b72a-daabb071245e";
 
         //viewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
