@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <Button
+        android:id="@+id/btnUniversityGeneral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="大学全般" />
+
+    <Button
+        android:id="@+id/btnLetters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="文学部" />
+
+    <Button
+        android:id="@+id/btnScience"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="理学部" />
+
+    <Button
+        android:id="@+id/btnIntelligence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="知能情報学部" />
+
+</LinearLayout>
