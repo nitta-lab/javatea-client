@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,6 +68,36 @@ public class SetTimetableActivity extends AppCompatActivity {
 
 
 
+
+        // ダミーデータ（動作確認用）
+        List<Lecture> lectureList = new ArrayList<>();
+        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1,"lecture-01"));
+        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2, "lecture-02"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-03"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-04"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-05"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-06"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-07"));
+
+        //リストの生成
+        RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new LectureAdapter(lectureList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
+
+        // リストの科目を選択した後(timetable更新)を検知して画面遷移
+        timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
+            @Override
+            public void onChanged(List<Lecture> lectureList) {
+                if (lectureList != null) {
+                    Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+
+
         //各ウィジェット動作処理
         //閉じるボタン
         Button closeButton = findViewById(R.id.close_lecture_button);
@@ -98,20 +129,5 @@ public class SetTimetableActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // ダミーデータ（動作確認用）
-        List<Lecture> lectureList = new ArrayList<>();
-        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1,"lecture-01"));
-        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2, "lecture-02"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-03"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-04"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-05"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-06"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-07"));
-
-        RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new LectureAdapter(this, lectureList)); //Adapterにこの画面の情報と科目の情報を渡す
-
     }
 }
