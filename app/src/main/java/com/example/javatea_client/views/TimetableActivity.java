@@ -67,7 +67,6 @@ public class TimetableActivity extends AppCompatActivity {
         });
         //ユーザ情報の取得
         Javatea javaTea = (Javatea) getApplication();
-        this.getApplication();
         javaTea.setView("Timetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
@@ -136,13 +135,7 @@ public class TimetableActivity extends AppCompatActivity {
         //時間割の部
         GridLayout timetable = createTimetableGridLayout();
         //年度と時間割の取得
-//        timetableViewModel.loadTimetable(userId,token);
-        //4月以降であれば現在の年、それ以前なら現在の年-1を追加する
-        if(currentMonth >= 4){
-            timetableViewModel.addYear(userId, currentYear,token);
-        }else{
-            timetableViewModel.addYear(userId, currentYear -1,token);
-        }
+        timetableViewModel.loadTimetable(userId,token);
         //新しい年度が追加されたら更新
         timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<Lecture>>>() {
             @Override
@@ -211,11 +204,21 @@ public class TimetableActivity extends AppCompatActivity {
                 selectedYearTextView.setText(years.get(0));
             }else{
                 isDecidedYear = true;
-                if(years.contains(currentYear + "前期")){
-                    selectedYearTextView.setText(currentYear + "前期" + " ▼");
+                //4月以降であれば現在の年、それ以前なら現在の年-1を追加する
+                if(currentMonth >= 4){
+                    if(years.contains(currentYear + "前期")){
+                        selectedYearTextView.setText(currentYear + "前期" + " ▼");
+                    }else{
+                        selectedYearTextView.setText(years.get(0) + " ▼");
+                    }
                 }else{
-                    selectedYearTextView.setText(years.get(0) + " ▼");
+                    if(years.contains((currentYear-1) + "前期")){
+                        selectedYearTextView.setText((currentYear-1) + "前期" + " ▼");
+                    }else{
+                        selectedYearTextView.setText(years.get(0) + " ▼");
+                    }
                 }
+
             }
         }else{
             isDecidedYear = true;
