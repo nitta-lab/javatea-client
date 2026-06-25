@@ -46,4 +46,6 @@ public class Lecture  {
     public void setPeriod(int period) { this.period = period; }
 
     public  String getLectureId() { return lectureId; }
+
+    public void  setLectureId(String lectureId) { this.lectureId = lectureId; }
 }

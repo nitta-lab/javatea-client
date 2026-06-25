@@ -90,20 +90,11 @@ public class LectureViewModel extends ViewModel {
         loading.setValue(true);
         error.setValue(null);
 
-        lectureResource.createLecture(
-                name,
-                grade,
-                semester,
-                frame,
-                day,
-                period
+        lectureResource.createLecture(name, grade, semester, frame, day, period
         ).enqueue(new Callback<String>() {
 
             @Override
-            public void onResponse(
-                    Call<String> call,
-                    Response<String> response
-            ) {
+            public void onResponse(Call<String> call, Response<String> response) {
 
                 loading.setValue(false);
 
@@ -114,23 +105,17 @@ public class LectureViewModel extends ViewModel {
                     lectureId.setValue(response.body());
 
                 } else {
-                    error.setValue(
-                            "授業作成失敗: " + response.code()
+                    error.setValue("授業作成失敗: " + response.code()
                     );
                 }
             }
 
             @Override
-            public void onFailure(
-                    Call<String> call,
-                    Throwable t
-            ) {
+            public void onFailure(Call<String> call, Throwable t) {
 
                 loading.setValue(false);
 
-                error.setValue(
-                        "通信エラー: " + t.getMessage()
-                );
+                error.setValue("通信エラー: " + t.getMessage());
             }
         });
     }
@@ -140,46 +125,33 @@ public class LectureViewModel extends ViewModel {
     // 授業IDから授業1件を取得する
 
 
-    public void loadLecture(String lectureId) {
+    public void loadLecture(String Id) {
 
         loading.setValue(true);
         error.setValue(null);
 
-        lectureResource.getLecture(lectureId)
-                .enqueue(new Callback<Lecture>() {
+        lectureResource.getLecture(Id).enqueue(new Callback<Lecture>() {
 
                     @Override
-                    public void onResponse(
-                            Call<Lecture> call,
-                            Response<Lecture> response
-                    ) {
+                    public void onResponse(Call<Lecture> call, Response<Lecture> response) {
 
                         loading.setValue(false);
 
-                        if (response.isSuccessful()
-                                && response.body() != null) {
+                        if (response.isSuccessful() && response.body() != null) {
 
                             lecture.setValue(response.body());
 
                         } else {
-                            error.setValue(
-                                    "授業取得失敗: "
-                                            + response.code()
-                            );
+                            error.setValue("授業取得失敗: " + response.code());
                         }
                     }
 
                     @Override
-                    public void onFailure(
-                            Call<Lecture> call,
-                            Throwable t
-                    ) {
+                    public void onFailure(Call<Lecture> call, Throwable t) {
 
                         loading.setValue(false);
 
-                        error.setValue(
-                                "通信エラー: " + t.getMessage()
-                        );
+                        error.setValue("通信エラー: " + t.getMessage());
                     }
                 });
     }
