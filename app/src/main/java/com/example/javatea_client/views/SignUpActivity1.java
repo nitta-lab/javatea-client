@@ -21,8 +21,6 @@ import com.example.javatea_client.R;
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.viewModels.UserViewModel;
 
-import java.util.prefs.Preferences;
-
 public class SignUpActivity1 extends AppCompatActivity {
     private Javatea javatea;
     UserViewModel userViewModel;
@@ -45,8 +43,8 @@ public class SignUpActivity1 extends AppCompatActivity {
         // viewModelの取得
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        System.out.println("テスト"+javatea.getUserId());
-        if(!javatea.getUserId().isEmpty() && javatea.getView() != "SignUp") {
+        // すでにユーザIDが登録済みならログイン画面に移動
+        if(!javatea.getUserId().isEmpty() && !javatea.getView().equals("SignUp")) {
             Intent intent = new Intent(SignUpActivity1.this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -99,6 +97,10 @@ public class SignUpActivity1 extends AppCompatActivity {
                 backButton.setVisibility(View.VISIBLE);
                 registerButton.setVisibility(View.VISIBLE);
                 nextButton.setVisibility(View.INVISIBLE);
+                passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                eyeButton.setAlpha(1f);
+                isVisiblePassword = false;
             }else{
                 Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
             }
@@ -148,7 +150,7 @@ public class SignUpActivity1 extends AppCompatActivity {
             }
 
             // パスワードチェック
-            if (password.length() < 8 || !password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*") || !containsNumber(password)) {
+            if (password.length() < 8 || !password.matches(".*[A-Z].*") || !password.matches(".*[a-z].*") || !IsContainsNumber(password)) {
                 Toast.makeText(SignUpActivity1.this, "パスワードは大文字、小文字、数字を含め、8文字以上にしてください", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -174,7 +176,8 @@ public class SignUpActivity1 extends AppCompatActivity {
         registerButton.setOnClickListener(view -> userViewModel.createUser(userId, nickname, password));
     }
 
-    private boolean containsNumber(String str) {
+    // 数字が含まれているかを返す関数
+    private boolean IsContainsNumber(String str) {
         if (str == null || str.isEmpty()) return false;
 
         for (char c : str.toCharArray()) {
