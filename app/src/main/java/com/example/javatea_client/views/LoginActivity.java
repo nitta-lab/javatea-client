@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         userViewModel.getToken().observe(this, new Observer<String>() {
-
             @Override
             public void onChanged(String token) {
                 if (token == null) {
@@ -85,9 +84,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (!token.isEmpty()) {
                     Javatea app = (Javatea) LoginActivity.this.getApplication();
                     String userId = app.getUserId();
+                    String password = app.getPassword();
+                    Intent intent;
+
                     app.setToken(token);
-                    app.setUserId(userId);
-                    Intent intent = null;
+                    app.setUserId(userIdEditText.getText().toString().trim());
+                    app.setPassword(passwordEditText.getText().toString());
+
                     switch(app.getView()) {
                         case "Register":
                             intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -99,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             intent = new Intent(LoginActivity.this, TimetableActivity.class);
                             break;
                     }
+
                     startActivity(intent);
                     finish();
                 }
@@ -122,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
                 errorText.setVisibility(View.VISIBLE);
                 userIdLayout.setBackgroundResource(R.drawable.input_textbox_error);
                 passwordLayout.setBackgroundResource(R.drawable.input_textbox_error);
-                return;
             }
             else if (userId.isEmpty()) {
                 errorText.setText("※ユーザーIDを入力してください");
