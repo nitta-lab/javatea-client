@@ -91,20 +91,25 @@ public class LoginActivity extends AppCompatActivity {
                     app.setUserId(userIdEditText.getText().toString().trim());
                     app.setPassword(passwordEditText.getText().toString());
 
-                    switch(app.getView()) {
-                        case "Register":
-                            intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                            break;
-                        case "TimeTable":
-                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                            break;
-                        default:
-                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                            break;
+                    if (app.getUniversity() == null || app.getUniversity().isEmpty()) {
+                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-
-                    startActivity(intent);
-                    finish();
+                    else {
+                        switch (app.getView()) {
+                            case "TimeTable":
+                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            default:
+                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+                        }
+                    }
                 }
                 else {
                     Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
