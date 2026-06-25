@@ -14,8 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.models.Lecture;
+import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.TimetableViewModel;
 
 import java.util.ArrayList;
@@ -23,20 +25,26 @@ import java.util.List;
 
 public class SetTimetableActivity extends AppCompatActivity {
 
-    //使用するViewModelを記述
+    //使用するViewModel
     TimetableViewModel timetableViewModel;
+    CategoryViewModel categoryViewModel;
+
+    //Javateaクラスからtokenとuidを受け取るための変数
+    private String userId;
+    private String token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_set_timetable);
-        timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Intent reIntent = getIntent();
         // TimetableActivityから、曜日と時間を取得
         String day = reIntent.getStringExtra("day");
@@ -47,6 +55,17 @@ public class SetTimetableActivity extends AppCompatActivity {
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
         ModeBar.setup(this, "時間割設定"); //ModeBarを設定
+
+        //ViewModelの初期化
+        timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+
+        //ユーザ情報の取得
+        //Javatea javaTea = (Javatea) getApplication();
+        userId = "test01";
+        token = "ffa8ee3c-7e70-45bd-91a2-300214ae3e33";
+
+
 
         //各ウィジェット動作処理
         //閉じるボタン
@@ -62,11 +81,10 @@ public class SetTimetableActivity extends AppCompatActivity {
         Button addButton = findViewById(R.id.add_lecture_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                Intent intent = new Intent(SetTimetableActivity.this, AddLectureActivity.class);
                 //科目追加画面に曜日と時間を渡す
                 intent.putExtra("day",day);
                 intent.putExtra("period",period);
-                intent.putExtra("year", year);
                 intent.putExtra("semester", semester);
                 startActivity(intent);
             }
