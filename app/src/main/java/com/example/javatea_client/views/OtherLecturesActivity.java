@@ -2,11 +2,13 @@ package com.example.javatea_client.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +28,9 @@ import java.util.List;
 
 public class OtherLecturesActivity extends AppCompatActivity {
     TimetableViewModel timetableViewModel;
-    LectureViewModel lectureViewModel;
     LinearLayout otherLectures;
+    String userId;
+    String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,33 +44,44 @@ public class OtherLecturesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //前の画面から年度をもらってくる。
         int year = intent.getIntExtra("year",0);
+        Log.d("year", String.valueOf(year));
         //ModeBarのセットアップ
         ModeBar.setup(this,"時間割");
         //Navigationのセットアップ
         Navigation.setup(this);
 
         Javatea javatea = (Javatea) getApplication();
-        String userId = javatea.getUserId();
-        String token = javatea.getToken();
+        userId = javatea.getUserId();
+        token = javatea.getToken();
 
         //viewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
-//        lectureViewModel = new ViewModelProvider(this).get(LectureViewModel.class);
+        //エラー表示
+        timetableViewModel.getError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                if(s != null){
+                    Log.d("Error",s);
+                    Toast.makeText(OtherLecturesActivity.this,s, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         timetableViewModel.loadTimetableLectures(userId,year,token);
         timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
             @Override
             public void onChanged(List<Lecture> strings) {
-                for(Lecture lectureId : strings){
-                    //Lecture lecture = lectureViewModel.getLecture(lectureId);
-                    String name = "基礎英語";
-                    Integer grade = 2;
-                    String semester = "前期";
-                    Integer frame = 2;//コマ数
-                    String day = "水";
-                    Integer period = 2;
+                Log.d("change","onChanged");
+                for(Lecture lecture : strings){
+                    String name = lecture.getName();
+                    Integer grade = lecture.getGrade();
+                    String semester = lecture.getSemester();
+                    Integer frame = lecture.getFrame();//コマ数
+                    String day = lecture.getDay();
+                    Integer period = lecture.getPeriod();
                     if(semester.equals("その他")){
-                        TextView lecture = createLectureTextView(name);
-                        lecture.setOnLongClickListener(new View.OnLongClickListener() {
+                        TextView lectureTextView = createLectureTextView(name);
+                        lectureTextView.setText(name);
+                        lectureTextView.setOnLongClickListener(new View.OnLongClickListener() {
                             @Override
                             public boolean onLongClick(View v) {
                                 Intent intent = new Intent(OtherLecturesActivity.this,SetTimetableActivity.class);
@@ -76,17 +90,12 @@ public class OtherLecturesActivity extends AppCompatActivity {
                                 return true;
                             }
                         });
-                        otherLectures.addView(lecture);
+                        otherLectures.addView(lectureTextView);
                     }
                 }
             }
         });
         otherLectures = findViewById(R.id.otherLectures);
-        TextView lecture = new TextView(this);
-        lecture.setBackgroundResource(R.drawable.cell_border);
-        lecture.setTextSize(20);
-        lecture.setGravity(Gravity.CENTER);
-        otherLectures.addView(lecture);
     }
     private TextView createLectureTextView(String name){
         TextView lecture = new TextView(this);

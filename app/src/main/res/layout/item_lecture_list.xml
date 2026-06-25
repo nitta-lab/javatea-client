@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 科目リストの部品のデザイン -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- 部品(ボタン)自体のデザイン -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/lecture_name_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6E0E9"
+        android:gravity="start|center_vertical"
+        android:importantForAccessibility="no"
+        android:padding="20dp"
+        android:textStyle="bold" />
+
+    <!-- ボタン間のデザイン -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#d9d7d9" />
+
+</LinearLayout>

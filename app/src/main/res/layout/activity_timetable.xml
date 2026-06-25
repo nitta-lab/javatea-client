@@ -8,18 +8,20 @@
     tools:context=".views.TimetableActivity">
     <include layout="@layout/navigation"/>
     <include layout="@layout/activity_mode_bar"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="110dp"
-        android:layout_marginTop="70dp"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="70dp"
         android:layout_marginRight="30dp"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical">
+        app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/pop_up_window"
             android:layout_width="match_parent"
@@ -32,14 +34,14 @@
             android:layout_height="0dp"
             android:layout_weight="8"
             android:columnCount="6"
-            android:rowCount="8"/>
+            android:rowCount="8" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="📱タップ：Q&amp;A｜☞ 長押し：編集｜\n↕ ：その他授業"
-            android:textSize="20dp"/>
+            android:text="📱タップ：Q&amp;A｜☞ 長押し：編集｜↕：その他授業"
+            android:textSize="20dp" />
 
     </LinearLayout>
 

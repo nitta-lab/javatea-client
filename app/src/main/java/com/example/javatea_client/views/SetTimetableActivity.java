@@ -11,9 +11,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javatea_client.R;
+import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.viewModels.TimetableViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SetTimetableActivity extends AppCompatActivity {
 
@@ -31,12 +37,20 @@ public class SetTimetableActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        Intent reIntent = getIntent();
+        // TimetableActivityから、曜日と時間を取得
+        String day = reIntent.getStringExtra("day");
+        int period = reIntent.getIntExtra("period", 1);
+        int year = reIntent.getIntExtra("year", 1);
+        String semester = reIntent.getStringExtra("semester");
+
+        // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
         ModeBar.setup(this, "時間割設定"); //ModeBarを設定
 
         //各ウィジェット動作処理
         //閉じるボタン
-        Button closeButton = findViewById(R.id.close_subject_button);
+        Button closeButton = findViewById(R.id.close_lecture_button);
         closeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
@@ -45,21 +59,41 @@ public class SetTimetableActivity extends AppCompatActivity {
         });
 
         //科目追加ボタン(後でID変更必須 現在は時間割画面に遷移)
-        Button addButton = findViewById(R.id.add_subject_button);
+        Button addButton = findViewById(R.id.add_lecture_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                //科目追加画面に曜日と時間を渡す
+                intent.putExtra("day",day);
+                intent.putExtra("period",period);
+                intent.putExtra("year", year);
+                intent.putExtra("semester", semester);
                 startActivity(intent);
             }
         });
 
         //"設定しない"ボタン
-        Button cancelButton = findViewById(R.id.cancel_subject_button);
+        Button cancelButton = findViewById(R.id.cancel_lecture_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
                 startActivity(intent);
             }
         });
+
+        // ダミーデータ（動作確認用）
+        List<Lecture> lectureList = new ArrayList<>();
+        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1,"lecture-01"));
+        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2, "lecture-02"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-03"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-04"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-05"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-06"));
+        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-07"));
+
+        RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new LectureAdapter(this, lectureList)); //Adapterにこの画面の情報と科目の情報を渡す
+
     }
 }
