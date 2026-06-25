@@ -50,9 +50,9 @@ public class OtherLecturesActivity extends AppCompatActivity {
         //Navigationのセットアップ
         Navigation.setup(this);
 
-//        Javatea javatea = (Javatea) getApplication();
-        userId = "test01";
-        token = "83aa20d9-683a-44c2-b72a-daabb071245e";
+        Javatea javatea = (Javatea) getApplication();
+        userId = javatea.getUserId();
+        token = javatea.getToken();
 
         //viewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
