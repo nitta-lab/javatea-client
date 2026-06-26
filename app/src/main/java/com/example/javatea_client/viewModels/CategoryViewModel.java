@@ -11,6 +11,7 @@ import com.example.javatea_client.models.Lecture;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +81,14 @@ public class CategoryViewModel extends ViewModel {
     private final MutableLiveData<String> createdDepartmentName = new MutableLiveData<>();
     private final MutableLiveData<Collection<Lecture>> departLectures = new MutableLiveData<>();
 
+    // 最終的にViewに渡す授業リスト
+    private final MutableLiveData<Collection<Lecture>> searchLectureResults = new MutableLiveData<>();
+    // サーバーから届いたデータを一時的に保存するリスト, Mutableはいらない
+    private Collection<Lecture> universityLectures = null;
+    private Collection<Lecture> facultyLectures = null;
+    private Collection<Lecture> departmentLectures = null;
+
+
     // ログ用のタグ
     private static final String TAG = "CategoryViewModel";
 
@@ -124,6 +133,72 @@ public class CategoryViewModel extends ViewModel {
     }
     public LiveData<Collection<Lecture>> getDepartLectures() {
         return departLectures;
+    }
+    public LiveData<Collection<Lecture>> getSearchLectureResults() {
+        return searchLectureResults;
+    }
+
+    // 大学特有の授業が届いた時に呼ばれるメソッド
+    public void setUniversityLectures(Collection<Lecture> universityLectures) {
+        if(universityLectures != null) {
+            this.universityLectures = universityLectures;
+        } else {
+            this.universityLectures = new ArrayList<>();
+        }
+    }
+
+    public void setFacultyLectures(Collection<Lecture> facultyLectures) {
+        if(facultyLectures != null) {
+            this.facultyLectures = facultyLectures;
+        } else {
+            this.facultyLectures = new ArrayList<>();
+        }
+    }
+
+    public void setDepartmentLectures(Collection<Lecture> departmentLectures) {
+        if(departmentLectures != null) {
+            this.departmentLectures = departmentLectures;
+        } else {
+            this.departmentLectures = new ArrayList<>();
+        }
+    }
+
+
+    // 大学特有、学部特有、学科特有の授業が揃っているか確認し、統合するメソッド
+    private List<Lecture> checkLectureCombine() {
+        List<Lecture> allCombinedLectures = new ArrayList<>();
+        if(universityLectures != null) {
+            allCombinedLectures.addAll(universityLectures);
+        }
+        if(facultyLectures != null) {
+            allCombinedLectures.addAll(facultyLectures);
+        }
+        if(departmentLectures != null) {
+            allCombinedLectures.addAll(departmentLectures);
+        }
+        return allCombinedLectures;
+    }
+
+    // 条件をViewからもらい、そこから上で統合したリストから検索するメソッド
+    public void searchLectures(String semester, String day, int period) {
+        // 情報がそろってない場合はreturn返す
+        if(universityLectures == null || facultyLectures == null || departmentLectures == null) {
+            return;
+        }
+
+        List<Lecture> allLectures = checkLectureCombine();
+
+        List<Lecture> filteredList = new ArrayList<>();
+        for(Lecture lecture : allLectures) {
+            boolean matchSemester = lecture.getSemester().equals(semester);
+            boolean matchDay = lecture.getDay().equals(day);
+            boolean matchPeriod = (lecture.getPeriod() == period);
+
+            if(matchSemester && matchDay && matchPeriod) {
+                filteredList.add(lecture);
+            }
+        }
+        searchLectureResults.setValue(filteredList);
     }
 
 
@@ -234,15 +309,14 @@ public class CategoryViewModel extends ViewModel {
         });
     }
 
-    // 大学全般の授業一覧を取得する
-
-
+    // 大学全般の授業一覧を取得する, 同時に統合するためのリストにセットする
     public void loadUniversityLectures(String univId) {
         categoryResource.getUniversityLectures(univId).enqueue(new Callback<Collection<Lecture>>() {
             @Override
             public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     univLectures.setValue(response.body());
+                    setUniversityLectures(response.body());
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
                 }
@@ -250,7 +324,7 @@ public class CategoryViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
-
+                setUniversityLectures(null);
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
@@ -321,6 +395,7 @@ public class CategoryViewModel extends ViewModel {
             public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     facLectures.setValue(response.body());
+                    setFacultyLectures(response.body());
                     Log.d(TAG, "学部特有の授業一覧取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -329,6 +404,7 @@ public class CategoryViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
+                setFacultyLectures(null);
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
@@ -399,6 +475,7 @@ public class CategoryViewModel extends ViewModel {
             public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     departLectures.setValue(response.body());
+                    setDepartmentLectures(response.body());
                     Log.d(TAG, "学科特有の授業一覧取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -407,6 +484,7 @@ public class CategoryViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
+                setDepartmentLectures(null);
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
