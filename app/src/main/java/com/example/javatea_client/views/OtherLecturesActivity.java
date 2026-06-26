@@ -31,6 +31,8 @@ public class OtherLecturesActivity extends AppCompatActivity {
     LinearLayout otherLectures;
     String userId;
     String token;
+    int year;
+    String semester;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +45,8 @@ public class OtherLecturesActivity extends AppCompatActivity {
         });
         Intent intent = getIntent();
         //前の画面から年度をもらってくる。
-        int year = intent.getIntExtra("year",0);
+        year = intent.getIntExtra("year",0);
+        semester = intent.getStringExtra("semester");
         Log.d("year", String.valueOf(year));
         //ModeBarのセットアップ
         ModeBar.setup(this,"時間割");
@@ -118,6 +121,8 @@ public class OtherLecturesActivity extends AppCompatActivity {
                 float diffY = endY - startY; // 画面上部から下方向へスワイプ
                 if (diffY >= SWIPE_THRESHOLD) {
                     Intent intent = new Intent(this, TimetableActivity.class);
+                    intent.putExtra("year",year);
+                    intent.putExtra("semester",semester);
                     startActivity(intent);
                     return true;
                 }

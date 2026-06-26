@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -37,8 +38,10 @@ public class TimetableActivity extends AppCompatActivity {
     //ユーザ情報
     private String userId;
     private String token;
-    private int currentYear = LocalDateTime.now().getYear();
-    private int currentMonth = LocalDateTime.now().getMonthValue();
+    private final int currentYear = LocalDateTime.now().getYear();
+    private final int currentMonth = LocalDateTime.now().getMonthValue();
+    private int intentYear;
+    private String intentSemester;
     //ViewModel
     private TimetableViewModel timetableViewModel;
     private LinearLayout layout;
@@ -67,10 +70,20 @@ public class TimetableActivity extends AppCompatActivity {
         });
         //ユーザ情報の取得
         Javatea javaTea = (Javatea) getApplication();
+        if(javaTea.getView().equals("Register")){
+            getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                }
+            });
+        }
         javaTea.setView("Timetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
 
+        Intent intent = getIntent();
+        intentYear = intent.getIntExtra("year",0);
+        intentSemester = intent.getStringExtra("semester");
         //ViewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
 
@@ -115,6 +128,7 @@ public class TimetableActivity extends AppCompatActivity {
                 return;
             }
             layout.removeAllViews();
+            selectedYearTextView.setText(selectedYearTextView.getText().toString().substring(0, selectedYearTextView.getText().toString().length()-2) + " ▲");
             for(int i=0;i<years.size();i++){
                 TextView yearTextView = createYearTextView(i);
                 String year = years.get(i);
@@ -204,8 +218,13 @@ public class TimetableActivity extends AppCompatActivity {
                 selectedYearTextView.setText(years.get(0));
             }else{
                 isDecidedYear = true;
-                //4月以降であれば現在の年、それ以前なら現在の年-1を追加する
-                if(currentMonth >= 4){
+                if(intentYear != 0){//事前にyearが決まっている場合はそれ
+                    if(years.contains(intentYear + intentSemester)){
+                        selectedYearTextView.setText(intentYear + intentSemester + " ▼");
+                    }else{
+                        selectedYearTextView.setText(years.get(0) + " ▼");
+                    }
+                }else if(currentMonth >= 4){//4月以降であれば現在の年、それ以前なら現在の年-1を追加する
                     if(years.contains(currentYear + "前期")){
                         selectedYearTextView.setText(currentYear + "前期" + " ▼");
                     }else{
@@ -242,9 +261,9 @@ public class TimetableActivity extends AppCompatActivity {
     }
     private AlertDialog.Builder createAddYearAlertDialogBuilder(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String[] selectYears = new String[40];
-        for(int i=2006;i<2046;i++){
-            selectYears[i-2006] = String.valueOf(i);
+        String[] selectYears = new String[currentYear - 2010 + 2];
+        for(int i=2010;i<=currentYear+1;i++){
+            selectYears[i-2010] = String.valueOf(i);
         }
         builder.setCancelable(true);//戻るボタンで戻れるようにする。
         builder.setItems(selectYears, new DialogInterface.OnClickListener() {
@@ -377,8 +396,12 @@ public class TimetableActivity extends AppCompatActivity {
                 // 画面下方向から上部へスワイプ
                 if (diffY >= SWIPE_THRESHOLD) {
                     Intent intent = new Intent(this, OtherLecturesActivity.class);
-                    Log.d("year",selectedYearTextView.getText().toString().substring(0,4));
                     intent.putExtra("year",Integer.parseInt(selectedYearTextView.getText().toString().substring(0,4)));
+                    if(selectedYearTextView.toString().contains("前期")){
+                        intent.putExtra("semester","前期");
+                    }else{
+                        intent.putExtra("semester","後期");
+                    }
                     startActivity(intent);
                     return true;
                 }
