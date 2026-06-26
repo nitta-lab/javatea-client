@@ -75,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         userViewModel.getToken().observe(this, new Observer<String>() {
-
             @Override
             public void onChanged(String token) {
                 if (token == null) {
@@ -84,21 +83,33 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (!token.isEmpty()) {
                     Javatea app = (Javatea) LoginActivity.this.getApplication();
+                    String userId = app.getUserId();
+                    String password = app.getPassword();
+                    Intent intent;
+
                     app.setToken(token);
-                    Intent intent = null;
-                    switch(app.getView()) {
-                        case "Register":
-                            intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                            break;
-                        case "TimeTable":
-                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                            break;
-                        default:
-                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                            break;
+                    app.setUserId(userIdEditText.getText().toString().trim());
+                    app.setPassword(passwordEditText.getText().toString());
+
+                    if (app.getUniversity() == null || app.getUniversity().isEmpty()) {
+                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                    startActivity(intent);
-                    finish();
+                    else {
+                        switch (app.getView()) {
+                            case "TimeTable":
+                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+                            default:
+                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                                startActivity(intent);
+                                finish();
+                                break;
+                        }
+                    }
                 }
                 else {
                     Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
@@ -120,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                 errorText.setVisibility(View.VISIBLE);
                 userIdLayout.setBackgroundResource(R.drawable.input_textbox_error);
                 passwordLayout.setBackgroundResource(R.drawable.input_textbox_error);
-                return;
             }
             else if (userId.isEmpty()) {
                 errorText.setText("※ユーザーIDを入力してください");
