@@ -134,6 +134,8 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<Collection<Lecture>> getDepartLectures() {
         return departLectures;
     }
+
+    // 授業に関してActivity側が呼び出すのはこれ
     public LiveData<Collection<Lecture>> getSearchLectureResults() {
         return searchLectureResults;
     }
@@ -179,7 +181,7 @@ public class CategoryViewModel extends ViewModel {
         return allCombinedLectures;
     }
 
-    // 条件をViewからもらい、そこから上で統合したリストから検索するメソッド
+    // 条件をViewからもらい、そのあと統合したリストから検索するメソッド
     public void searchLectures(String semester, String day, int period) {
         // 情報がそろってない場合はreturn返す
         if(universityLectures == null || facultyLectures == null || departmentLectures == null) {
