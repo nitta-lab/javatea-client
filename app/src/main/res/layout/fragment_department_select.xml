@@ -1,22 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp">
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnFacultyGeneral"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="学部全般" />
+        android:padding="24dp">
 
-    <Button
-        android:id="@+id/btnDepartmentInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="知能情報学科" />
+        <!-- 大学全般ボタン -->
+        <Button
+            android:id="@+id/btnFacultyGeneral"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="大学全般"
+            android:layout_marginTop="250dp"
+            android:layout_marginStart="70dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+        <!-- 学部一覧 -->
+        <LinearLayout
+            android:id="@+id/layoutDepartmentList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/btnFacultyGeneral"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
