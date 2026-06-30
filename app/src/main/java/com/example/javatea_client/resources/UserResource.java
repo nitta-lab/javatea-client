@@ -14,28 +14,28 @@ public interface UserResource {
 
     //アカウント登録
     @FormUrlEncoded
-    @PUT("/users/{uid}")
+    @PUT("users/{uid}")
     Call<User> createUser(
             @Path("uid") String uid,
             @Field("name") String name,
             @Field("pw") String pw
     );
 
-    @GET("/users/{uid}")
+    @GET("users/{uid}")
     Call<User> getUser(
             @Path("uid") String uid
     );
 
     //ログイン
     @FormUrlEncoded
-    @POST("/users/{uid}/login")
+    @POST("users/{uid}/login")
     Call<String> login(
             @Path("uid") String uid,
             @Field("pw") String pw
     );
 
     //ユーザの大学名を取得
-    @GET("/users/{uid}/university")
+    @GET("users/{uid}/university")
     Call<String> getUniversity(
             @Path("uid") String uid,
             @Query("token") String token
@@ -43,7 +43,7 @@ public interface UserResource {
 
     //ユーザの大学名を登録
     @FormUrlEncoded
-    @PUT("/users/{uid}/university")
+    @PUT("users/{uid}/university")
     Call<String> setUniversity(
             @Path("uid") String uid,
             @Field("university") String university,
@@ -51,7 +51,7 @@ public interface UserResource {
     );
 
     //ユーザの学部を取得
-    @GET("/users/{uid}/faculty")
+    @GET("users/{uid}/faculty")
     Call<String> getFaculty(
             @Path("uid") String uid,
             @Query("token") String token
@@ -59,7 +59,7 @@ public interface UserResource {
 
     //ユーザの学部を登録
     @FormUrlEncoded
-    @PUT("/users/{uid}/faculty")
+    @PUT("users/{uid}/faculty")
     Call<String> setFaculty(
             @Path("uid") String uid,
             @Field("faculty") String faculty,
@@ -67,7 +67,7 @@ public interface UserResource {
     );
 
     //ユーザの学科を取得
-    @GET("/users/{uid}/department")
+    @GET("users/{uid}/department")
     Call<String> getDepartment(
             @Path("uid") String uid,
             @Query("token") String token
@@ -75,7 +75,7 @@ public interface UserResource {
 
     //ユーザの学科を登録
     @FormUrlEncoded
-    @PUT("/users/{uid}/department")
+    @PUT("users/{uid}/department")
     Call<String> setDepartment(
             @Path("uid") String uid,
             @Field("department") String department,
@@ -83,7 +83,7 @@ public interface UserResource {
     );
 
     //ユーザの学年を取得
-    @GET("/users/{uid}/grade")
+    @GET("users/{uid}/grade")
     Call<Integer> getGrade(
             @Path("uid") String uid,
             @Query("token") String token
@@ -91,7 +91,7 @@ public interface UserResource {
 
     //ユーザの学年を登録
     @FormUrlEncoded
-    @PUT("/users/{uid}/grade")
+    @PUT("users/{uid}/grade")
     Call<Integer> setGrade(
             @Path("uid") String uid,
             @Field("grade") int grade,
@@ -99,7 +99,7 @@ public interface UserResource {
     );
 
     //ユーザのニックネームを取得
-    @GET("/users/{uid}/name")
+    @GET("users/{uid}/name")
     Call<String> getName(
             @Path("uid") String uid,
             @Query("token") String token
