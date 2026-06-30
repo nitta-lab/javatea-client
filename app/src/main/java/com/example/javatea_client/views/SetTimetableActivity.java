@@ -2,6 +2,7 @@ package com.example.javatea_client.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -30,9 +31,44 @@ public class SetTimetableActivity extends AppCompatActivity {
     TimetableViewModel timetableViewModel;
     CategoryViewModel categoryViewModel;
 
+    private static final String TAG = "SetTimetableActivity"; //log(デバッグ)用のTAG宣言
+
+
     //Javateaクラスからtokenとuidを受け取るための変数
     private String userId;
     private String token;
+
+    //Observe
+    private void setupObservers() {
+
+        // 検索結果の取得
+        categoryViewModel.getSearchLectureResults().observe(this, filteredLectures -> {
+            if(filteredLectures != null) {
+                Log.d(TAG, "個人用の授業一覧を受信：" + filteredLectures.size());
+            }
+
+            List<Lecture> LecturesList = new ArrayList<>(); //検索結果の授業名のリスト
+
+            for(Lecture lecture : filteredLectures) {
+                Log.d(TAG, "授業名：" + lecture.getName());
+                // この辺に表示するようのunivLecuturesListに入れる
+            }
+
+        });
+
+        // リストの科目を選択した後(timetable更新)を検知して画面遷移
+        timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
+            @Override
+            public void onChanged(List<Lecture> lectureList) {
+                if (lectureList != null) {
+                    Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+
+    }
+
 
 
     @Override
@@ -66,7 +102,12 @@ public class SetTimetableActivity extends AppCompatActivity {
         userId = "test01";
         token = "ffa8ee3c-7e70-45bd-91a2-300214ae3e33";
 
-
+        // Javateaクラスから取ってくるであろう所属大学、所属学部、所属学科を使って通信を呼ぶ(今は甲南大学を入れてる状態)
+        categoryViewModel.loadUniversityLectures("univ-id1");
+        categoryViewModel.loadFacultyLectures("univ-id1", "知能情報学部");
+        categoryViewModel.loadDepartmentLectures("univ-id1", "知能情報学部", "知能情報学科");
+        // Timetableから受けた検索項目をViewModelに送信(periodだけint型です)
+        categoryViewModel.searchLectures(semester, day, period);
 
 
         // ダミーデータ（動作確認用）
@@ -83,18 +124,6 @@ public class SetTimetableActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new LectureAdapter(lectureList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
-
-        // リストの科目を選択した後(timetable更新)を検知して画面遷移
-        timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
-            @Override
-            public void onChanged(List<Lecture> lectureList) {
-                if (lectureList != null) {
-                    Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-
 
 
 
