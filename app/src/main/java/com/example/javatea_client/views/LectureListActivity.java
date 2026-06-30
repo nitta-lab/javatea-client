@@ -9,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ public class LectureListActivity extends AppCompatActivity {
         tvCategory = findViewById(R.id.tvCategory);
 
         updateCategoryText();
+        //前回開いていた画面を開くようにする
+        Javatea javatea = (Javatea) this.getApplication();
+        javatea.setView("LectureList");
     }
 
     //階層を1つ追加
