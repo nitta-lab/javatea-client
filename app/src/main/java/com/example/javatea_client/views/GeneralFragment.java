@@ -47,13 +47,10 @@ public class GeneralFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d(TAG, "onViewCreated が実行されました！");
 
-        // 【修正②】ViewModelを正しく初期化する（コメントアウトを解除）
         categoryViewModel = new ViewModelProvider(requireActivity()).get(CategoryViewModel.class);
-
-        // 【修正①の続き】データの監視（observe）はここで行うのが最も安全で確実です
         categoryViewModel.getCurrentUniversities().observe(getViewLifecycleOwner(), new Observer<Collection<University>>() {
+
             @Override
             public void onChanged(Collection<University> currentUniversities) {
                 if (currentUniversities == null) {
@@ -91,8 +88,6 @@ public class GeneralFragment extends Fragment {
             return;
         }
 
-        Log.d(TAG, "fetchUniversityList が実行されました！");
-
         switch (kana) {
             case "ア行": categoryViewModel.getAllUnivId("ア", "カ"); break;
             case "カ行": categoryViewModel.getAllUnivId("カ", "サ"); break;
@@ -122,6 +117,9 @@ public class GeneralFragment extends Fragment {
 
                 for (University university : currentUniversities) {
                     if (university.getName().equals(selectedUniversityName) && university.getKana().equals(selectedUniversityKana)) {
+                        if (getActivity() != null) {
+                            ((LectureListActivity) requireActivity()).setUniversityName(university.getName());
+                        }
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.fragment_container, new FacultySelectFragment())
