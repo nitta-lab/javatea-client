@@ -21,6 +21,8 @@ public class LectureListActivity extends AppCompatActivity {
 
     // 現在の階層
     private final List<String> categoryPath = new ArrayList<>();
+    //大学名を保持する変数
+    private String universityName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,23 @@ public class LectureListActivity extends AppCompatActivity {
         //前回開いていた画面を開くようにする
         Javatea javatea = (Javatea) this.getApplication();
         javatea.setView("LectureList");
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new GeneralFragment())
+                .commit();
+    }
+
+    // 大学名を保存する
+    public void setUniversityName(String universityName) {
+        this.universityName = universityName;
+
+        // カテゴリ表示にも追加
+        addCategory(universityName);
+    }
+
+    // 階層を取得する
+    public List<String> getCategoryPath() {
+        return categoryPath;
     }
 
     //階層を1つ追加
@@ -62,6 +81,7 @@ public class LectureListActivity extends AppCompatActivity {
         tvCategory.setText(text.toString());
     }
 
+    // 一つ戻る
     public void removeLastCategory() {
 
         if (!categoryPath.isEmpty()) {
