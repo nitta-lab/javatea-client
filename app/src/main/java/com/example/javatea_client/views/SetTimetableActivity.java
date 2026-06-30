@@ -89,6 +89,8 @@ public class SetTimetableActivity extends AppCompatActivity {
             return insets;
         });
 
+        setupObservers();
+
         Intent reIntent = getIntent();
         // TimetableActivityから、曜日と時間を取得
         String day = reIntent.getStringExtra("day");
@@ -118,6 +120,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         categoryViewModel.loadUniversityLectures(university);
         categoryViewModel.loadFacultyLectures(university, faculty);
         categoryViewModel.loadDepartmentLectures(university, faculty, department);
+        Log.d(TAG, "通信成功");
         // Timetableから受けた検索項目をViewModelに送信(periodだけint型です)
         categoryViewModel.searchLectures(semester, day, period);
 
