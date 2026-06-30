@@ -118,11 +118,11 @@ public class GeneralFragment extends Fragment {
                 for (University university : currentUniversities) {
                     if (university.getName().equals(selectedUniversityName) && university.getKana().equals(selectedUniversityKana)) {
                         if (getActivity() != null) {
-                            ((LectureListActivity) requireActivity()).setUniversityName(university.getName());
+                            ((LectureListActivity) requireActivity()).setUnivId(university.getId());
                         }
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.fragment_container, new FacultySelectFragment())
+                                .replace(R.id.fragment_container, new UniversityFragment())
                                 .addToBackStack(null)
                                 .commit();
                         break;
