@@ -34,9 +34,15 @@ public class SetTimetableActivity extends AppCompatActivity {
     private static final String TAG = "SetTimetableActivity"; //log(デバッグ)用のTAG宣言
 
 
-    //Javateaクラスからtokenとuidを受け取るための変数
+    //Javateaクラスからデータを受け取るための変数
     private String userId;
     private String token;
+    private String university;
+    private String faculty;
+    private String department;
+
+    List<Lecture> lecturesList = new ArrayList<>(); //授業情報のリスト
+    RecyclerView recyclerView; //RecyclerViewのフィールドを宣言
 
     //Observe
     private void setupObservers() {
@@ -45,13 +51,14 @@ public class SetTimetableActivity extends AppCompatActivity {
         categoryViewModel.getSearchLectureResults().observe(this, filteredLectures -> {
             if(filteredLectures != null) {
                 Log.d(TAG, "個人用の授業一覧を受信：" + filteredLectures.size());
+                //リストの更新
+                lecturesList.clear(); //過去のリストの内容を削除
+                lecturesList.addAll(filteredLectures);
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
-
-            List<Lecture> LecturesList = new ArrayList<>(); //検索結果の授業名のリスト
 
             for(Lecture lecture : filteredLectures) {
                 Log.d(TAG, "授業名：" + lecture.getName());
-                // この辺に表示するようのunivLecuturesListに入れる
             }
 
         });
@@ -98,32 +105,26 @@ public class SetTimetableActivity extends AppCompatActivity {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         //ユーザ情報の取得
-        //Javatea javaTea = (Javatea) getApplication();
-        userId = "test01";
-        token = "ffa8ee3c-7e70-45bd-91a2-300214ae3e33";
+        Javatea javaTea = (Javatea) getApplication();
+        javaTea.setView("SetTimetable");
+        userId = javaTea.getUserId();
+        token = javaTea.getToken();
+        university = javaTea.getUniversity();
+        faculty = javaTea.getFaculty();
+        department = javaTea.getDepartment();
+
 
         // Javateaクラスから取ってくるであろう所属大学、所属学部、所属学科を使って通信を呼ぶ(今は甲南大学を入れてる状態)
-        categoryViewModel.loadUniversityLectures("univ-id1");
-        categoryViewModel.loadFacultyLectures("univ-id1", "知能情報学部");
-        categoryViewModel.loadDepartmentLectures("univ-id1", "知能情報学部", "知能情報学科");
+        categoryViewModel.loadUniversityLectures(university);
+        categoryViewModel.loadFacultyLectures(university, faculty);
+        categoryViewModel.loadDepartmentLectures(university, faculty, department);
         // Timetableから受けた検索項目をViewModelに送信(periodだけint型です)
         categoryViewModel.searchLectures(semester, day, period);
 
-
-        // ダミーデータ（動作確認用）
-        List<Lecture> lectureList = new ArrayList<>();
-        lectureList.add(new Lecture("プログラミング演習 I", 1, "前期", 1, "月", 1,"lecture-01"));
-        lectureList.add(new Lecture("オブジェクト指向プログラミング", 2, "前期", 2, "火", 2, "lecture-02"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-03"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-04"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-05"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-06"));
-        lectureList.add(new Lecture("データベース", 3, "後期", 3, "水", 3, "lecture-07"));
-
         //リストの生成
-        RecyclerView recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
+        recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new LectureAdapter(lectureList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
+        recyclerView.setAdapter(new LectureAdapter(lecturesList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
 
 
 
