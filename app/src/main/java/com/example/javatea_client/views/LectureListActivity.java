@@ -22,7 +22,9 @@ public class LectureListActivity extends AppCompatActivity {
     // 現在の階層
     private final List<String> categoryPath = new ArrayList<>();
     //大学名を保持する変数
-    private String universityName = "";
+    private String univId = "";
+    private String facultyName = "";
+    private String departmentName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +47,43 @@ public class LectureListActivity extends AppCompatActivity {
                 .commit();
     }
 
+    //大学名を取得する
+    public String getUnivId() {
+        return univId;
+    }
+
     // 大学名を保存する
-    public void setUniversityName(String universityName) {
-        this.universityName = universityName;
+    public void setUnivId(String univId) {
+        this.univId = univId;
 
         // カテゴリ表示にも追加
-        addCategory(universityName);
+        addCategory(univId);
+    }
+
+    //学部名を取得する
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    // 学部名を保存する
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+
+        // カテゴリ表示にも追加
+        addCategory(facultyName);
+    }
+
+    //学科名を取得する
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    // 学科名を保存する
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+
+        // カテゴリ表示にも追加
+        addCategory(departmentName);
     }
 
     // 階層を取得する
