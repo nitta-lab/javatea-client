@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -41,6 +42,29 @@ public class LectureListActivity extends AppCompatActivity {
         //前回開いていた画面を開くようにする
         Javatea javatea = (Javatea) this.getApplication();
         javatea.setView("LectureList");
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                if (!categoryPath.isEmpty()) {
+                    // カテゴリを1つ戻す
+                    removeLastCategory();
+
+                    // Fragmentが戻れるならFragmentを戻す
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        // FragmentがなければActivityを終了
+                        finish();
+                    }
+
+                } else {
+                    // カテゴリが空なら通常通り終了
+                    finish();
+                }
+            }
+        });
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new GeneralFragment())
