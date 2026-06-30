@@ -4,14 +4,25 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
+import com.example.javatea_client.viewModels.CategoryViewModel;
+
+import java.util.List;
 
 public class DepartmentSelectFragment extends Fragment {
+
+    CategoryViewModel categoryViewModel;
+    private Button btnFacultyGeneral;
+    private LinearLayout layoutDepartmentList;
 
     public DepartmentSelectFragment() {
         // 必須
@@ -26,7 +37,52 @@ public class DepartmentSelectFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        categoryViewModel = new ViewModelProvider(requireActivity()).get(CategoryViewModel.class);
 
-        // ここに「学部全般」「知能情報学科」を押したときの処理を書く
+        btnFacultyGeneral = view.findViewById(R.id.btnFacultyGeneral);
+        layoutDepartmentList = view.findViewById(R.id.layoutDepartmentList);
+
+        LectureListActivity activity = (LectureListActivity) requireActivity();
+        String univId = activity.getUnivId();
+        String facultyName = activity.getFacultyName();
+
+        categoryViewModel.getDepartments(univId,facultyName);
+        categoryViewModel.getCurrentDepartment().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> departments) {
+                // 一度リセット
+                layoutDepartmentList.removeAllViews();
+
+                // ボタン生成
+                for (String department: departments) {
+                    createDepartmentButton(department);
+                }
+            }
+        });
+    }
+
+    private void createDepartmentButton(String departmentName) {
+
+        Button button = new Button(requireContext());
+
+        button.setText(departmentName);
+
+        button.setLayoutParams(new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        ));
+
+        button.setOnClickListener(v -> {
+
+            LectureListActivity activity = (LectureListActivity) requireActivity();
+            activity.setDepartmentName(departmentName);
+
+//            activity.getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.fragment_container, new LectureFragment())
+//                    .addToBackStack(null)
+//                    .commit();
+        });
+        layoutDepartmentList.addView(button);
     }
 }

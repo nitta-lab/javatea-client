@@ -120,7 +120,7 @@ public class FacultySelectFragment extends Fragment {
             activity.addCategory(facultyName);
 
             // （後でDepartmentSelectFragmentで使うため）
-            // activity.setFacultyName(facultyName);
+             activity.setFacultyName(facultyName);
 
             activity.getSupportFragmentManager()
                     .beginTransaction()
