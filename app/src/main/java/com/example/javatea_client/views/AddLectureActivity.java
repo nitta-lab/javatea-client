@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProvider;
+import com.example.javatea_client.viewModels.LectureViewModel;
 
 
 import com.example.javatea_client.R;
@@ -46,7 +46,6 @@ public class AddLectureActivity extends AppCompatActivity {
         String semester = reIntent.getStringExtra("semester");
         Navigation.setup(this);
         ModeBar.setup(this, "時間割設定");
-        //lectureViewModel = new ViewModelProvider(this).get(LectureViewModel.class);
 
 
         Spinner spinner1 = findViewById(R.id.spinner1);
@@ -116,7 +115,7 @@ public class AddLectureActivity extends AppCompatActivity {
                     return;
                 }
 
-                //lectureViewModel.setLectureData(name, major, semester, classes, grade);
+                //LectureViewModel.crateLecture(name, grade, semester, classes, day, period);
 
 
                 Intent intent = new Intent(AddLectureActivity.this, SetTimetableActivity.class);
