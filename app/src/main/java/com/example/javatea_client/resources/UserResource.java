@@ -29,7 +29,7 @@ public interface UserResource {
     //ログイン
     @FormUrlEncoded
     @POST("users/{uid}/login")
-    Call<String> login(
+    Call<User> login(
             @Path("uid") String uid,
             @Field("pw") String pw
     );
