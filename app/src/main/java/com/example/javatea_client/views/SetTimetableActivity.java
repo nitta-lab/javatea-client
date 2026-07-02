@@ -44,6 +44,12 @@ public class SetTimetableActivity extends AppCompatActivity {
     List<Lecture> lecturesList = new ArrayList<>(); //授業情報のリスト
     RecyclerView recyclerView; //RecyclerViewのフィールドを宣言
 
+    //Timetableから受け取るフィールドを受け取る変数を宣言
+    private String day;
+    private int period;
+    private int year;
+    private String semester;
+
     //Observe
     private void setupObservers() {
 
@@ -60,7 +66,6 @@ public class SetTimetableActivity extends AppCompatActivity {
             for(Lecture lecture : filteredLectures) {
                 Log.d(TAG, "授業名：" + lecture.getName());
             }
-
         });
 
         // リストの科目を選択した後(timetable更新)を検知して画面遷移
@@ -73,6 +78,7 @@ public class SetTimetableActivity extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 
@@ -89,14 +95,13 @@ public class SetTimetableActivity extends AppCompatActivity {
             return insets;
         });
 
-        setupObservers();
-
         Intent reIntent = getIntent();
         // TimetableActivityから、曜日と時間を取得
-        String day = reIntent.getStringExtra("day");
-        int period = reIntent.getIntExtra("period", 1);
-        int year = reIntent.getIntExtra("year", 1);
-        String semester = reIntent.getStringExtra("semester");
+        day = reIntent.getStringExtra("day");
+        period = reIntent.getIntExtra("period", 1);
+        year = reIntent.getIntExtra("year", 1);
+        semester = reIntent.getStringExtra("semester");
+//        Log.d(TAG, "day:"+day+"period:"+period+"year:"+year+"semester:"+semester);
 
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
@@ -115,20 +120,14 @@ public class SetTimetableActivity extends AppCompatActivity {
         faculty = javaTea.getFaculty();
         department = javaTea.getDepartment();
 
-
-        // Javateaクラスから取ってくるであろう所属大学、所属学部、所属学科を使って通信を呼ぶ(今は甲南大学を入れてる状態)
+        setupObservers(); //Observe実行
         categoryViewModel.loadUniversityLectures(university);
-        categoryViewModel.loadFacultyLectures(university, faculty);
-        categoryViewModel.loadDepartmentLectures(university, faculty, department);
-        Log.d(TAG, "通信成功");
-        // Timetableから受けた検索項目をViewModelに送信(periodだけint型です)
-        categoryViewModel.searchLectures(semester, day, period);
+        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+university+", facluty:"+faculty+", department:"+department);
 
         //リストの生成
         recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new LectureAdapter(lecturesList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
-
 
 
         //各ウィジェット動作処理
