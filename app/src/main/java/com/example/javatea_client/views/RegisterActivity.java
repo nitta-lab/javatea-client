@@ -351,7 +351,7 @@ public class RegisterActivity extends AppCompatActivity {
             fixButton.setVisibility(View.VISIBLE);
             flag = true;
         }else{ //2度押したとき(画面遷移)
-            //user情報の登録(Javateaにも登録)
+            //user情報の登録(javateaにも登録)
             userViewModel.setUniversity(uid,selectedUniversityName,token);
             javatea.setUniversity(selectedUniversityName);
             userViewModel.setFaculty(uid,selectedFacultyName,token);
