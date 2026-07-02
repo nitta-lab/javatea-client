@@ -178,7 +178,7 @@ public class LectureListActivity extends AppCompatActivity {
         switch (index) {
 
             case 0:
-                // 甲南大学をクリック
+                // 甲南大学
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new UniversityFragment())
@@ -186,15 +186,23 @@ public class LectureListActivity extends AppCompatActivity {
                 break;
 
             case 1:
-                // 学部をクリック → 学科一覧へ戻る
+                // 授業
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new FacultySelectFragment())
+                        .commit();
+                break;
+
+            case 2:
+                // 学部
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new DepartmentSelectFragment())
                         .commit();
                 break;
 
-            case 2:
-                // 学科をクリック
+            case 3:
+                // 学科
                 break;
         }
     }
