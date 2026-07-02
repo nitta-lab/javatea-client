@@ -205,7 +205,12 @@ public class CategoryViewModel extends ViewModel {
 
         List<Lecture> filteredList = new ArrayList<>();
         for(Lecture lecture : allLectures) {
-            boolean matchSemester = lecture.getSemester().equals(semester);
+            boolean matchSemester = false;
+            if(lecture.getSemester().equals(semester)){
+                matchSemester = true;
+            }else if((semester.equals("前期")||semester.equals("後期"))&&lecture.getSemester().equals("通年")){
+                matchSemester = true;
+            }
             boolean matchDay = lecture.getDay().equals(day);
             boolean matchPeriod = (lecture.getPeriod() == period);
 

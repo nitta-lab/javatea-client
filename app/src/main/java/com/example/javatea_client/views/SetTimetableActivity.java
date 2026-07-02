@@ -100,7 +100,8 @@ public class SetTimetableActivity extends AppCompatActivity {
         day = reIntent.getStringExtra("day");
         period = reIntent.getIntExtra("period", 1);
         year = reIntent.getIntExtra("year", 1);
-        semester = reIntent.getStringExtra("semester");
+//        semester = reIntent.getStringExtra("semester");
+        semester = "前期";
 //        Log.d(TAG, "day:"+day+"period:"+period+"year:"+year+"semester:"+semester);
 
         // 他のActivityから画面を取得
@@ -124,7 +125,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         department = "知能情報学科";
 
         setupObservers(); //Observe実行
-        categoryViewModel.loadUniversityLectures(university);
+        categoryViewModel.callSearchLectures(university, faculty, department, semester, day, period);
         Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+university+", faculty:"+faculty+", department:"+department);
 
         //リストの生成
