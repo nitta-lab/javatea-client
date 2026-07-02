@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     //〇行のボタン
     private void showKanaSelectionDialog() {
-        String[] kanaGroups = {"ア行", "カ行", "サ行", "タ行", "ナ行", "ハ行", "マ行", "ヤ行", "ラ行", "ワ行","ン"};
+        String[] kanaGroups = {"ア行", "カ行", "サ行", "タ行", "ナ行", "ハ行", "マ行", "ヤ行", "ラ行", "ワ行", "ン"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -61,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 String selectedKana = kanaGroups[which];
 
-                for(int i=0;i<kanaGroups.length-1;i++) { //範囲が違う
+                for(int i=0;i<kanaGroups.length-1;i++) {
                     if (selectedKana.charAt(0) == kanaGroups[i].charAt(0)) {
                         categoryViewModel.getAllUnivId(kanaGroups[i].substring(0,1), kanaGroups[i + 1].substring(0,1));
                         Log.d(TAG, kanaGroups[i] + "の大学の取得を開始");
@@ -221,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         EditText nameEdit = new EditText(this);
-        nameEdit.setHint("学部名");
+        nameEdit.setHint("学部名　　　　例：〇〇学部");
         nameEdit.setSingleLine(true);
 
         layout.addView(nameEdit);
@@ -283,7 +283,7 @@ public class RegisterActivity extends AppCompatActivity {
         layout.setOrientation(LinearLayout.VERTICAL);
 
         EditText nameEdit = new EditText(this);
-        nameEdit.setHint("学科名");
+        nameEdit.setHint("学科名　　　　例：〇〇学科");
         nameEdit.setSingleLine(true);
 
         layout.addView(nameEdit);
