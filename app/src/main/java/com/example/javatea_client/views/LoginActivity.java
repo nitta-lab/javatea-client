@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.login_button);
         Button signupButton = findViewById(R.id.signup_button);
         TextView errorText = findViewById(R.id.error_textView);
+        View loadingOverlay = findViewById(R.id.loadingOverlay);
         ModeBar.setup(this, "ログイン");
 
         Javatea app = (Javatea) this.getApplication();
@@ -115,6 +117,15 @@ public class LoginActivity extends AppCompatActivity {
                 else {
                     Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        userViewModel.isLoading().observe(this, loading -> {
+            if (loading) {
+                loadingOverlay.setVisibility(View.VISIBLE);
+            }
+            else {
+                loadingOverlay.setVisibility(View.GONE);
             }
         });
 
