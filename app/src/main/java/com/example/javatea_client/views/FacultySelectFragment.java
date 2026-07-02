@@ -87,6 +87,7 @@ public class FacultySelectFragment extends Fragment {
         btnUniversityGeneral.setOnClickListener(v -> {
 
             activity.addCategory("大学全般");
+            activity.setLectureListType("general_university");
 
             activity.getSupportFragmentManager()
                     .beginTransaction()
@@ -117,7 +118,7 @@ public class FacultySelectFragment extends Fragment {
                     (LectureListActivity) requireActivity();
 
             // カテゴリ表示更新
-            activity.addCategory(facultyName);
+            //activity.addCategory(facultyName);
 
             // （後でDepartmentSelectFragmentで使うため）
              activity.setFacultyName(facultyName);
