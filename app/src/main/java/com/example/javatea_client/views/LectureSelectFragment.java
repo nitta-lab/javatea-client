@@ -109,28 +109,36 @@ public class LectureSelectFragment extends Fragment {
     // 授業一覧ボタンを生成
     private void createLectureButton(Lecture lecture) {
 
-        Button button = new Button(requireContext());
+        // item_lecture_button.xmlからボタン生成
+        Button button = (Button) LayoutInflater.from(requireContext())
+                .inflate(
+                        R.layout.item_lecture_button,
+                        layoutLectureList,
+                        false
+                );
+
         String lectureName = lecture.getName();
 
+        // 授業名を表示
         button.setText(lectureName);
-
-        button.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
 
         button.setOnClickListener(v -> {
 
-            LectureListActivity activity = (LectureListActivity) requireActivity();
+            LectureListActivity activity =
+                    (LectureListActivity) requireActivity();
+
             activity.setDepartmentName(lectureName);
             activity.addCategory(lectureName);
 
-//            activity.getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, new QeuestionSelectFragment())
-//                    .addToBackStack(null)
-//                    .commit();
+            // 次の画面へ遷移する場合はここに追加
+//        activity.getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.fragment_container,
+//                        new QuestionSelectFragment())
+//                .addToBackStack(null)
+//                .commit();
         });
+
         layoutLectureList.addView(button);
     }
 }
