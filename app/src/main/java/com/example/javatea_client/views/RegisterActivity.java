@@ -360,19 +360,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             //画面遷移
             Intent intent = new Intent(RegisterActivity.this, TimetableActivity.class);
-            if ((userViewModel.getUniversity(uid,token) != null) && (userViewModel.getFaculty(uid,token) != null) && (userViewModel.getGrade(uid,token) != null)){
-                if (selectedDepartmentName.equals("学科なし")) {
-                    Toast.makeText(RegisterActivity.this, "ユーザー情報の登録が完了しました。", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-                }else if (userViewModel.getDepartment(uid,token) != null) {
-                    Toast.makeText(RegisterActivity.this, "ユーザー情報の登録が完了しました。", Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(RegisterActivity.this, "ユーザー情報の登録ができませんでした。もう一度やり直してください。", Toast.LENGTH_SHORT).show();
-                }
-            }else{
-                Toast.makeText(RegisterActivity.this, "ユーザー情報の登録ができませんでした。もう一度やり直してください。", Toast.LENGTH_SHORT).show();
-            }
+            startActivity(intent);
         }
     }
 
