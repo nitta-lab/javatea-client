@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -338,6 +339,7 @@ public class TimetableActivity extends AppCompatActivity {
                         intent.putExtra("year", getSelectedYear());
                         intent.putExtra("day", DAYS[p.y - 1]);
                         intent.putExtra("period", p.x);
+                        intent.putExtra("semester", currentSemester.getText());
                         startActivity(intent);
                         return true;
                     });
