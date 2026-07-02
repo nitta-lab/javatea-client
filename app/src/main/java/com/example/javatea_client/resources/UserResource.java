@@ -44,7 +44,7 @@ public interface UserResource {
     //ユーザの大学名を登録
     @FormUrlEncoded
     @PUT("users/{uid}/university")
-    Call<String> setUniversity(
+    Call<Void> setUniversity(
             @Path("uid") String uid,
             @Field("university") String university,
             @Field("token") String token
@@ -60,7 +60,7 @@ public interface UserResource {
     //ユーザの学部を登録
     @FormUrlEncoded
     @PUT("users/{uid}/faculty")
-    Call<String> setFaculty(
+    Call<Void> setFaculty(
             @Path("uid") String uid,
             @Field("faculty") String faculty,
             @Field("token") String token
@@ -76,7 +76,7 @@ public interface UserResource {
     //ユーザの学科を登録
     @FormUrlEncoded
     @PUT("users/{uid}/department")
-    Call<String> setDepartment(
+    Call<Void> setDepartment(
             @Path("uid") String uid,
             @Field("department") String department,
             @Field("token") String token
@@ -92,7 +92,7 @@ public interface UserResource {
     //ユーザの学年を登録
     @FormUrlEncoded
     @PUT("users/{uid}/grade")
-    Call<Integer> setGrade(
+    Call<Void> setGrade(
             @Path("uid") String uid,
             @Field("grade") int grade,
             @Field("token") String token
