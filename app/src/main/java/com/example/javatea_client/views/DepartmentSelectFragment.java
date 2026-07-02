@@ -71,31 +71,7 @@ public class DepartmentSelectFragment extends Fragment {
         });
     }
 
-//    private void createDepartmentButton(String departmentName) {
-//
-//        Button button = new Button(requireContext());
-//
-//        button.setText(departmentName);
-//
-//        button.setLayoutParams(new LinearLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT
-//        ));
-//
-//        button.setOnClickListener(v -> {
-//            LectureListActivity activity = (LectureListActivity) requireActivity();
-//            activity.setDepartmentName(departmentName);
-//            activity.addCategory(departmentName);
-//            activity.setLectureListType("department");
-//
-//            activity.getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, new LectureSelectFragment())
-//                    .addToBackStack(null)
-//                    .commit();
-//        });
-//        layoutDepartmentList.addView(button);
-//    }
+
     private void createDepartmentButton(String departmentName) {
 
         // item_department_button.xmlからボタン生成
