@@ -95,9 +95,6 @@ public class LectureListActivity extends AppCompatActivity {
     // 大学名を保存する
     public void setUnivId(String univId) {
         this.univId = univId;
-
-        // カテゴリ表示にも追加
-        addCategory(univId);
     }
 
     //学部名を取得する
@@ -108,9 +105,6 @@ public class LectureListActivity extends AppCompatActivity {
     // 学部名を保存する
     public void setFacultyName(String facultyName) {
         this.facultyName = facultyName;
-
-        // カテゴリ表示にも追加
-        addCategory(facultyName);
     }
 
     //学科名を取得する
@@ -121,9 +115,6 @@ public class LectureListActivity extends AppCompatActivity {
     // 学科名を保存する
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
-
-        // カテゴリ表示にも追加
-        addCategory(departmentName);
     }
 
     // 階層を取得する
@@ -180,15 +171,14 @@ public class LectureListActivity extends AppCompatActivity {
 
     private void backToCategory(int index) {
 
+        while (categoryPath.size() > index + 1) {
+            removeLastCategory();
+        }
+
         switch (index) {
 
             case 0:
-                // 「甲南大学」を押した
-                while (categoryPath.size() > 1) {
-                    removeLastCategory();
-                }
-
-                // 授業・学校生活を表示する画面
+                // 甲南大学をクリック
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new UniversityFragment())
@@ -196,27 +186,15 @@ public class LectureListActivity extends AppCompatActivity {
                 break;
 
             case 1:
-                // 「知能情報学部」を押した
-                while (categoryPath.size() > 2) {
-                    removeLastCategory();
-                }
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, new FacultySelectFragment())
-                        .commit();
-                break;
-
-            case 2:
-                // 「知能情報学科」を押した
-                while (categoryPath.size() > 3) {
-                    removeLastCategory();
-                }
-
+                // 学部をクリック → 学科一覧へ戻る
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new DepartmentSelectFragment())
                         .commit();
+                break;
+
+            case 2:
+                // 学科をクリック
                 break;
         }
     }
