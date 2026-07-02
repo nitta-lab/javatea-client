@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.Javatea;
+import com.example.javatea_client.models.User;
 import com.example.javatea_client.viewModels.UserViewModel;
 import com.google.android.material.textfield.*;
 
@@ -74,24 +75,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        userViewModel.getToken().observe(this, new Observer<String>() {
+        userViewModel.getUser().observe(this, new Observer<User>()  {
             @Override
-            public void onChanged(String token) {
-                if (token == null) {
-                    return;
-                }
-
-                if (!token.isEmpty()) {
+            public void onChanged(User user) {
+                if (user != null) {
                     Javatea app = (Javatea) LoginActivity.this.getApplication();
                     String userId = app.getUserId();
                     String password = app.getPassword();
+                    String univ = user.getUniversity();
+                    String fac = user.getFaculty();
+                    String dep = user.getDepartment();
+                    Integer grade = user.getGrade();
                     Intent intent;
 
-                    app.setToken(token);
+                    app.setToken(user.getToken());
                     app.setUserId(userIdEditText.getText().toString().trim());
                     app.setPassword(passwordEditText.getText().toString());
 
-                    if (app.getUniversity() == null || app.getUniversity().isEmpty()) {
+                    if (univ == null || fac == null || dep == null || grade == 0 || univ.isEmpty() || fac.isEmpty() || dep.isEmpty()) {
                         intent = new Intent(LoginActivity.this, RegisterActivity.class);
                         startActivity(intent);
                         finish();
