@@ -29,8 +29,7 @@ public class DepartmentSelectFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_department_select, container, false);
     }
 
@@ -59,6 +58,17 @@ public class DepartmentSelectFragment extends Fragment {
                 }
             }
         });
+
+        // 学部全般ボタン
+        btnFacultyGeneral.setOnClickListener(v -> {
+            activity.addCategory("学部全般");
+            activity.setLectureListType("general_faculty");
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new LectureSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
 
     private void createDepartmentButton(String departmentName) {
@@ -73,15 +83,16 @@ public class DepartmentSelectFragment extends Fragment {
         ));
 
         button.setOnClickListener(v -> {
-
             LectureListActivity activity = (LectureListActivity) requireActivity();
             activity.setDepartmentName(departmentName);
+            activity.addCategory(departmentName);
+            activity.setLectureListType("department");
 
-//            activity.getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, new LectureFragment())
-//                    .addToBackStack(null)
-//                    .commit();
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new LectureSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
         layoutDepartmentList.addView(button);
     }
