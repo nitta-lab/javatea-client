@@ -91,29 +91,40 @@ public class FacultySelectFragment extends Fragment {
      */
     private void createFacultyButton(String facultyName) {
 
-        Button button = new Button(requireContext());
+        // item_faculty_button.xmlからボタンを生成
+        Button button = (Button) LayoutInflater.from(requireContext())
+                .inflate(
+                        R.layout.item_faculty_button,
+                        layoutFacultyList,
+                        false
+                );
 
+        // ボタンに学部名を設定
         button.setText(facultyName);
 
-        button.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
-
+        // ボタン押下時の処理
         button.setOnClickListener(v -> {
-            LectureListActivity activity = (LectureListActivity) requireActivity();
 
-            // （後でDepartmentSelectFragmentで使うため）
-             activity.setFacultyName(facultyName);
-             activity.addCategory(facultyName);
+            LectureListActivity activity =
+                    (LectureListActivity) requireActivity();
 
+            // 次画面で使用する学部名を保存
+            activity.setFacultyName(facultyName);
+
+            // カテゴリ表示更新
+            activity.addCategory(facultyName);
+
+            // 学科選択画面へ
             activity.getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, new DepartmentSelectFragment())
+                    .replace(R.id.fragment_container,
+                            new DepartmentSelectFragment())
                     .addToBackStack(null)
                     .commit();
         });
 
+        // 画面へ追加
         layoutFacultyList.addView(button);
     }
+
 }

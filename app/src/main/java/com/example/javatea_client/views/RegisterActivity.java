@@ -40,6 +40,7 @@ import java.util.*;
 public class RegisterActivity extends AppCompatActivity {
     private CategoryViewModel categoryViewModel;
     private UserViewModel userViewModel;
+    private Javatea javatea;
     private static final String TAG = "RegisterActivity";
     private boolean flag = false;
     private String selectedUniversityId; //今選択されてる大学IDを保存する変数
@@ -350,13 +351,17 @@ public class RegisterActivity extends AppCompatActivity {
             fixButton.setVisibility(View.VISIBLE);
             flag = true;
         }else{ //2度押したとき(画面遷移)
-            //user情報の登録
+            //user情報の登録(Javateaにも登録)
             userViewModel.setUniversity(uid,selectedUniversityName,token);
+            javatea.setUniversity(selectedUniversityName);
             userViewModel.setFaculty(uid,selectedFacultyName,token);
+            javatea.setFaculty(selectedFacultyName);
             if (!selectedDepartmentName.equals("学科なし")){
                 userViewModel.setDepartment(uid,selectedDepartmentName,token);
+                javatea.setDepartment(selectedDepartmentName);
             }
             userViewModel.setGrade(uid,Integer.parseInt(selectedGrade),token);
+            javatea.setGrade(selectedGrade);
 
             //画面遷移
             Intent intent = new Intent(RegisterActivity.this, TimetableActivity.class);
@@ -473,7 +478,7 @@ public class RegisterActivity extends AppCompatActivity {
             return insets;
         });
 
-        Javatea javatea = (Javatea) this.getApplication();
+        javatea = (Javatea) this.getApplication();
         javatea.setView("Register");
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
