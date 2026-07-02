@@ -88,6 +88,10 @@ public class CategoryViewModel extends ViewModel {
     private Collection<Lecture> facultyLectures = null;
     private Collection<Lecture> departmentLectures = null;
 
+    private String semester;
+    private String day;
+    private int period;
+
 
     // ログ用のタグ
     private static final String TAG = "CategoryViewModel";
@@ -179,6 +183,15 @@ public class CategoryViewModel extends ViewModel {
             allCombinedLectures.addAll(departmentLectures);
         }
         return allCombinedLectures;
+    }
+
+    // 通信呼んでもらう用
+    public void callSearchLectures(String univId, String facultyName, String departmentName, String semester, String day, int period) {
+        this.semester = semester;
+        this.day = day;
+        this.period = period;
+
+        loadDepartmentLectures(univId, facultyName, departmentName);
     }
 
     // 条件をViewからもらい、そのあと統合したリストから検索するメソッド
@@ -317,8 +330,9 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    univLectures.setValue(response.body());
+//                    univLectures.setValue(response.body());
                     setUniversityLectures(response.body());
+                    searchLectures(semester, day, period);
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
                 }
@@ -327,6 +341,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
                 setUniversityLectures(null);
+                searchLectures(semester, day, period);
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
@@ -396,8 +411,9 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    facLectures.setValue(response.body());
+//                    facLectures.setValue(response.body());
                     setFacultyLectures(response.body());
+                    loadUniversityLectures(univId);
                     Log.d(TAG, "学部特有の授業一覧取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -407,6 +423,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
                 setFacultyLectures(null);
+                loadUniversityLectures(univId);
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
@@ -476,8 +493,9 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
                 if(response.isSuccessful() && response.body() != null){
-                    departLectures.setValue(response.body());
+//                    departLectures.setValue(response.body());
                     setDepartmentLectures(response.body());
+                    loadFacultyLectures(univId, facultyName);
                     Log.d(TAG, "学科特有の授業一覧取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -487,6 +505,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
                 setDepartmentLectures(null);
+                loadFacultyLectures(univId, facultyName);
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
