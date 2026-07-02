@@ -89,33 +89,6 @@ public class FacultySelectFragment extends Fragment {
     /**
      * 学部ボタンを1つ生成する
      */
-//    private void createFacultyButton(String facultyName) {
-//
-//        Button button = new Button(requireContext());
-//
-//        button.setText(facultyName);
-//
-//        button.setLayoutParams(new LinearLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT
-//        ));
-//
-//        button.setOnClickListener(v -> {
-//            LectureListActivity activity = (LectureListActivity) requireActivity();
-//
-//            // （後でDepartmentSelectFragmentで使うため）
-//             activity.setFacultyName(facultyName);
-//             activity.addCategory(facultyName);
-//
-//            activity.getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, new DepartmentSelectFragment())
-//                    .addToBackStack(null)
-//                    .commit();
-//        });
-//
-//        layoutFacultyList.addView(button);
-//    }
     private void createFacultyButton(String facultyName) {
 
         // item_faculty_button.xmlからボタンを生成
