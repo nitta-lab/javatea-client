@@ -89,18 +89,18 @@ public class UserViewModel extends ViewModel {
     //ログイン
     public void login(String uid, String pw) {
         loading.setValue(true);
-        userResource.login(uid, pw).enqueue(new Callback<String>() {
+        userResource.login(uid, pw).enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<String> c, Response<String> res) {
+            public void onResponse(Call<User> c, Response<User> res) {
                 if (res.isSuccessful()) {
-                    token.setValue(res.body());
+                    user.setValue(res.body());
                 } else {
                     error.setValue("ログイン失敗: " + res.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<String> c, Throwable t) {
+            public void onFailure(Call<User> c, Throwable t) {
                 loading.setValue(false);
                 error.setValue("エラー: " + t.getMessage());
             }

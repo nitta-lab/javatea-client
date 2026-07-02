@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,6 +22,10 @@ public class LectureListActivity extends AppCompatActivity {
 
     // 現在の階層
     private final List<String> categoryPath = new ArrayList<>();
+    //大学名を保持する変数
+    private String univId = "";
+    private String facultyName = "";
+    private String departmentName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,77 @@ public class LectureListActivity extends AppCompatActivity {
         //前回開いていた画面を開くようにする
         Javatea javatea = (Javatea) this.getApplication();
         javatea.setView("LectureList");
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+                if (!categoryPath.isEmpty()) {
+                    // カテゴリを1つ戻す
+                    removeLastCategory();
+
+                    // Fragmentが戻れるならFragmentを戻す
+                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                        getSupportFragmentManager().popBackStack();
+                    } else {
+                        // FragmentがなければActivityを終了
+                        finish();
+                    }
+
+                } else {
+                    // カテゴリが空なら通常通り終了
+                    finish();
+                }
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, new GeneralFragment())
+                .commit();
+    }
+
+    //大学名を取得する
+    public String getUnivId() {
+        return univId;
+    }
+
+    // 大学名を保存する
+    public void setUnivId(String univId) {
+        this.univId = univId;
+
+        // カテゴリ表示にも追加
+        addCategory(univId);
+    }
+
+    //学部名を取得する
+    public String getFacultyName() {
+        return facultyName;
+    }
+
+    // 学部名を保存する
+    public void setFacultyName(String facultyName) {
+        this.facultyName = facultyName;
+
+        // カテゴリ表示にも追加
+        addCategory(facultyName);
+    }
+
+    //学科名を取得する
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    // 学科名を保存する
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+
+        // カテゴリ表示にも追加
+        addCategory(departmentName);
+    }
+
+    // 階層を取得する
+    public List<String> getCategoryPath() {
+        return categoryPath;
     }
 
     //階層を1つ追加
@@ -62,6 +138,7 @@ public class LectureListActivity extends AppCompatActivity {
         tvCategory.setText(text.toString());
     }
 
+    // 一つ戻る
     public void removeLastCategory() {
 
         if (!categoryPath.isEmpty()) {
