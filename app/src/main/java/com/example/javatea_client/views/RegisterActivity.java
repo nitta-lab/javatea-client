@@ -376,7 +376,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
     //修正ボタンを押したときの処理
     private void returnToInputScreen(){
         TextView description = findViewById(R.id.description);
