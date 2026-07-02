@@ -43,7 +43,7 @@ public class LectureViewModel extends ViewModel {
     public LectureViewModel() {
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea/")
+                .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
