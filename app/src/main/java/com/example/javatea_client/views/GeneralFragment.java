@@ -117,9 +117,10 @@ public class GeneralFragment extends Fragment {
 
                 for (University university : currentUniversities) {
                     if (university.getName().equals(selectedUniversityName) && university.getKana().equals(selectedUniversityKana)) {
-                        if (getActivity() != null) {
-                            ((LectureListActivity) requireActivity()).setUnivId(university.getId());
-                        }
+                        // LectureListActivityを取得し、操作
+                        LectureListActivity activity = (LectureListActivity) requireActivity();
+                        activity.setUnivId(university.getId());
+                        activity.addCategory(university.getName());
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.fragment_container, new UniversityFragment())
