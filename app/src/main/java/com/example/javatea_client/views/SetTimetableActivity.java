@@ -116,19 +116,22 @@ public class SetTimetableActivity extends AppCompatActivity {
         javaTea.setView("SetTimetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
-        university = javaTea.getUniversity();
-        faculty = javaTea.getFaculty();
-        department = javaTea.getDepartment();
+//        university = javaTea.getUniversity();
+//        faculty = javaTea.getFaculty();
+//        department = javaTea.getDepartment();
+        university = "univ-id1";
+        faculty = "知能情報学部";
+        department = "知能情報学科";
 
         setupObservers(); //Observe実行
         categoryViewModel.loadUniversityLectures(university);
-        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+university+", facluty:"+faculty+", department:"+department);
+        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+university+", faculty:"+faculty+", department:"+department);
 
         //リストの生成
         recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new LectureAdapter(lecturesList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
-
+        Log.d(TAG, "検索結果: "+lecturesList);
 
         //各ウィジェット動作処理
         //閉じるボタン
