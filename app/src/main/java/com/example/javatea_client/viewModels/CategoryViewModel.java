@@ -92,6 +92,9 @@ public class CategoryViewModel extends ViewModel {
     private String day;
     private int period;
 
+    // 自分の学年
+    private int grade;
+
 
     // ログ用のタグ
     private static final String TAG = "CategoryViewModel";
@@ -186,10 +189,11 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 通信呼んでもらう用
-    public void callSearchLectures(String univId, String facultyName, String departmentName, String semester, String day, int period) {
+    public void callSearchLectures(String univId, String facultyName, String departmentName, String semester, String day, int period, int grade) {
         this.semester = semester;
         this.day = day;
         this.period = period;
+        this.grade = grade;
 
         loadDepartmentLectures(univId, facultyName, departmentName);
     }
