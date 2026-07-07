@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
@@ -45,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = findViewById(R.id.login_button);
         Button signupButton = findViewById(R.id.signup_button);
         TextView errorText = findViewById(R.id.error_textView);
+        View loadingOverlay = findViewById(R.id.loadingOverlay);
         ModeBar.setup(this, "ログイン");
 
         Javatea app = (Javatea) this.getApplication();
@@ -74,46 +73,49 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        userViewModel.getToken().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String token) {
-                if (token == null) {
-                    return;
-                }
+        userViewModel.getUser().observe(this, user ->  {
+            if (user != null) {
+                String univ = user.getUniversity();
+                String fac = user.getFaculty();
+                String dep = user.getDepartment();
+                Integer grade = user.getGrade();
+                Intent intent;
 
-                if (!token.isEmpty()) {
-                    Javatea app = (Javatea) LoginActivity.this.getApplication();
-                    String userId = app.getUserId();
-                    String password = app.getPassword();
-                    Intent intent;
+                app.setToken(user.getToken());
+                app.setUserId(userIdEditText.getText().toString().trim());
+                app.setPassword(passwordEditText.getText().toString());
 
-                    app.setToken(token);
-                    app.setUserId(userIdEditText.getText().toString().trim());
-                    app.setPassword(passwordEditText.getText().toString());
-
-                    if (app.getUniversity() == null || app.getUniversity().isEmpty()) {
-                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    else {
-                        switch (app.getView()) {
-                            case "TimeTable":
-                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                                startActivity(intent);
-                                finish();
-                                break;
-                            default:
-                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                                startActivity(intent);
-                                finish();
-                                break;
-                        }
-                    }
+                if (univ == null || fac == null || dep == null || grade == 0 || univ.isEmpty() || fac.isEmpty() || dep.isEmpty()) {
+                    intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else {
-                    Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
+                    switch (app.getView()) {
+                        case "TimeTable":
+                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        default:
+                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                    }
                 }
+            }
+            else {
+                Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        userViewModel.isLoading().observe(this, loading -> {
+            if (loading) {
+                loadingOverlay.setVisibility(View.VISIBLE);
+            }
+            else {
+                loadingOverlay.setVisibility(View.GONE);
             }
         });
 
