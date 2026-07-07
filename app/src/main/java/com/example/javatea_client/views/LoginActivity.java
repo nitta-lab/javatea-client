@@ -13,12 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.Javatea;
-import com.example.javatea_client.models.User;
 import com.example.javatea_client.viewModels.UserViewModel;
 import com.google.android.material.textfield.*;
 
@@ -108,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             else {
-                //Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
             }
         });
 
