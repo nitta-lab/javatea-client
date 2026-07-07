@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,46 +75,40 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        userViewModel.getUser().observe(this, new Observer<User>()  {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    Javatea app = (Javatea) LoginActivity.this.getApplication();
-                    String userId = app.getUserId();
-                    String password = app.getPassword();
-                    String univ = user.getUniversity();
-                    String fac = user.getFaculty();
-                    String dep = user.getDepartment();
-                    Integer grade = user.getGrade();
-                    Intent intent;
+        userViewModel.getUser().observe(this, user ->  {
+            if (user != null) {
+                String univ = user.getUniversity();
+                String fac = user.getFaculty();
+                String dep = user.getDepartment();
+                Integer grade = user.getGrade();
+                Intent intent;
 
-                    app.setToken(user.getToken());
-                    app.setUserId(userIdEditText.getText().toString().trim());
-                    app.setPassword(passwordEditText.getText().toString());
+                app.setToken(user.getToken());
+                app.setUserId(userIdEditText.getText().toString().trim());
+                app.setPassword(passwordEditText.getText().toString());
 
-                    if (univ == null || fac == null || dep == null || grade == 0 || univ.isEmpty() || fac.isEmpty() || dep.isEmpty()) {
-                        intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                    else {
-                        switch (app.getView()) {
-                            case "TimeTable":
-                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                                startActivity(intent);
-                                finish();
-                                break;
-                            default:
-                                intent = new Intent(LoginActivity.this, TimetableActivity.class);
-                                startActivity(intent);
-                                finish();
-                                break;
-                        }
-                    }
+                if (univ == null || fac == null || dep == null || grade == 0 || univ.isEmpty() || fac.isEmpty() || dep.isEmpty()) {
+                    intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else {
-                    Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
+                    switch (app.getView()) {
+                        case "TimeTable":
+                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        default:
+                            intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                    }
                 }
+            }
+            else {
+                Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
             }
         });
 
