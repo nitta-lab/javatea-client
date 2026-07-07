@@ -118,7 +118,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         javaTea.setView("SetTimetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
-        univId = javaTea.getUniversity();
+        univId = javaTea.getUnivId();
         facultyName = javaTea.getFaculty();
         departmentName = javaTea.getDepartment();
 //        university = "univ-id1";
