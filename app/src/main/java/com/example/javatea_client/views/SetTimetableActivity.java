@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -37,9 +38,9 @@ public class SetTimetableActivity extends AppCompatActivity {
     //Javateaクラスからデータを受け取るための変数
     private String userId;
     private String token;
-    private String university;
-    private String faculty;
-    private String department;
+    private String univId;
+    private String facultyName;
+    private String departmentName;
 
     List<Lecture> lecturesList = new ArrayList<>(); //授業情報のリスト
     RecyclerView recyclerView; //RecyclerViewのフィールドを宣言
@@ -117,16 +118,16 @@ public class SetTimetableActivity extends AppCompatActivity {
         javaTea.setView("SetTimetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
-        university = javaTea.getUniversity();
-        faculty = javaTea.getFaculty();
-        department = javaTea.getDepartment();
+        univId = javaTea.getUniversity();
+        facultyName = javaTea.getFaculty();
+        departmentName = javaTea.getDepartment();
 //        university = "univ-id1";
 //        faculty = "知能情報学部";
 //        department = "知能情報学科";
 
         setupObservers(); //Observe実行
-        categoryViewModel.callSearchLectures(university, faculty, department, semester, day, period);
-        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+university+", faculty:"+faculty+", department:"+department);
+        categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period);
+        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+univId+", faculty:"+facultyName+", department:"+departmentName);
 
         //リストの生成
         recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
@@ -153,7 +154,8 @@ public class SetTimetableActivity extends AppCompatActivity {
                 intent.putExtra("day",day);
                 intent.putExtra("period",period);
                 intent.putExtra("semester", semester);
-                startActivity(intent);
+
+                startActivityForResult(intent, 200); //AddLectureActivityから返ってきたことを示すフラグ(startActivityForResultは現在は非推奨)
             }
         });
 
@@ -165,5 +167,23 @@ public class SetTimetableActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    //AddLectureActivityから帰ってきた後に再検索
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 200) {
+            if(resultCode == RESULT_OK) {
+                Log.d(TAG, "科目追加成功、再検索をします");
+
+                // ViewModelに検索の通信する
+                categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period);
+
+            } else if(resultCode == RESULT_CANCELED) {
+                Log.d(TAG, "科目追加キャンセル");
+            }
+        }
     }
 }
