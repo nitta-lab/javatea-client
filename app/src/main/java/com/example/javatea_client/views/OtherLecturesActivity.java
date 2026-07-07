@@ -89,6 +89,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
                             public boolean onLongClick(View v) {
                                 Intent intent = new Intent(OtherLecturesActivity.this,SetTimetableActivity.class);
                                 intent.putExtra("year",year);
+                                intent.putExtra("semester","その他");
                                 startActivity(intent);
                                 return true;
                             }

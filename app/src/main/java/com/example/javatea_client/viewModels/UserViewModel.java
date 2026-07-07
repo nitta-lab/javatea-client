@@ -92,6 +92,7 @@ public class UserViewModel extends ViewModel {
         userResource.login(uid, pw).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> c, Response<User> res) {
+                loading.setValue(false);
                 if (res.isSuccessful()) {
                     user.setValue(res.body());
                     token.setValue(res.body().getToken());
