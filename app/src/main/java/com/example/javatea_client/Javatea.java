@@ -8,6 +8,7 @@ public class Javatea extends Application {
     private String userId;
     private String password;
     private String view;
+    private String univId;
     private String university;
     private String faculty;
     private String department;
@@ -47,6 +48,13 @@ public class Javatea extends Application {
         saveUserData();
     }
 
+    public String getUnivId() {return univId;}
+
+    public void setUnivId(String univId) {
+        this.univId = univId;
+        saveUserData();
+    }
+
     public String getUniversity() {return university;}
 
     public void setUniversity(String university) {
@@ -82,6 +90,7 @@ public class Javatea extends Application {
         editor.putString("userId", userId);
         editor.putString("password", password);
         editor.putString("view", view);
+        editor.putString("univId", univId);
         editor.putString("university", university);
         editor.putString("faculty", faculty);
         editor.putString("department", department);
@@ -95,6 +104,7 @@ public class Javatea extends Application {
         userId = prefs.getString("userId", "");
         password = prefs.getString("password", "");
         view = prefs.getString("view", "");
+        univId = prefs.getString("univId", "");
         university = prefs.getString("university", "");
         faculty = prefs.getString("faculty", "");
         department = prefs.getString("department", "");
