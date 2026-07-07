@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.LectureViewModel;
 
@@ -32,6 +33,10 @@ import com.example.javatea_client.viewModels.LectureViewModel;
 public class AddLectureActivity extends AppCompatActivity {
 
     LectureViewModel lectureViewModel;
+    private String univId;
+    private  String facultyName;
+    private  String departmentName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,18 +44,23 @@ public class AddLectureActivity extends AppCompatActivity {
 
         lectureViewModel = new LectureViewModel();
         lectureViewModel = new ViewModelProvider(this).get(LectureViewModel.class);
-//        lectureViewModel.getFinishAddLecture().observe(this, finishAddLecture -> {
-//            // nullかfalseはreturn
-//            if(finishAddLecture == null || !finishAddLecture) {
-//                return;
-//            }
-//            // trueなら合図出す
-//            setResult(RESULT_OK);
-//
-//            // 画面閉じる
-//            finish();
-//        });
+        lectureViewModel.getFinishAddLecture().observe(this, finishAddLecture -> {
+            // nullかfalseはreturn
+            if(finishAddLecture == null || !finishAddLecture) {
+                return;
+            }
+            // trueなら合図出す
+            setResult(RESULT_OK);
 
+            // 画面閉じる
+            finish();
+        });
+
+        Javatea javatea = (Javatea) getApplication();
+        javatea.setView("AddLecture");
+        univId = javatea.getUnivId();
+        facultyName = javatea.getFaculty();
+        departmentName = javatea.getDepartment();
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_lecture);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -150,11 +160,11 @@ public class AddLectureActivity extends AppCompatActivity {
 
                 Log.d("AddLectureActivity", "名前" + name + "曜日" + day + "時限" + period );
                 //LectureViewModel.createLecture(name, grade, "前期", classes, "水", period);
-//                lectureViewModel.startAddLecture(name, grade, semester, classes, day, period, univId, facultyName, departmentName, type);
+                lectureViewModel.startAddLecture(name, grade, semester, classes, day, period, univId, facultyName, departmentName, type);
 //                lectureViewModel.startAddLecture("最適化", 2, "前期", 1, "水", 3, "univ-id1", "知能情報学部", "知能情報学科", "faculty");
 
 
-                finish();
+
             }
 
         });
