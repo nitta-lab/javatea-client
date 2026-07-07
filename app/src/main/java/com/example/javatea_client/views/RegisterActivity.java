@@ -352,7 +352,8 @@ public class RegisterActivity extends AppCompatActivity {
             flag = true;
         }else{ //2度押したとき(画面遷移)
             //user情報の登録(Javateaにも登録)
-            userViewModel.setUniversity(uid,selectedUniversityName,token);
+            userViewModel.setUniversity(uid,selectedUniversityId,token);
+            javatea.setUnivId(selectedUniversityId);
             javatea.setUniversity(selectedUniversityName);
             userViewModel.setFaculty(uid,selectedFacultyName,token);
             javatea.setFaculty(selectedFacultyName);
