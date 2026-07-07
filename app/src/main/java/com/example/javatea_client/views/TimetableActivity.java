@@ -344,6 +344,9 @@ public class TimetableActivity extends AppCompatActivity {
                         intent.putExtra("day", DAYS[p.y - 1]);
                         intent.putExtra("period", p.x);
                         intent.putExtra("semester", currentSemester.getText());
+                        if(currentTimetableLecture.get(DAYS[p.y - 1]).get(p.x) != null){
+                            intent.putExtra("lectureId",currentTimetableLecture.get(DAYS[p.y-1]).get(p.x).getLectureId());
+                        }
                         startActivity(intent);
                         return true;
                     });
