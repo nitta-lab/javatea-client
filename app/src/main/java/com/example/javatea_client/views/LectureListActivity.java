@@ -16,6 +16,14 @@ import com.example.javatea_client.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+
 public class LectureListActivity extends AppCompatActivity {
 
     private TextView tvCategory;
@@ -26,6 +34,7 @@ public class LectureListActivity extends AppCompatActivity {
     private String univId = "";
     private String facultyName = "";
     private String departmentName = "";
+    private String lectureListType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,13 @@ public class LectureListActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, new GeneralFragment())
                 .commit();
     }
+    public String getLectureListType() {
+        return lectureListType;
+    }
+
+    public void setLectureListType(String lectureListType) {
+        this.lectureListType = lectureListType;
+    }
 
     //大学名を取得する
     public String getUnivId() {
@@ -79,9 +95,6 @@ public class LectureListActivity extends AppCompatActivity {
     // 大学名を保存する
     public void setUnivId(String univId) {
         this.univId = univId;
-
-        // カテゴリ表示にも追加
-        addCategory(univId);
     }
 
     //学部名を取得する
@@ -92,9 +105,6 @@ public class LectureListActivity extends AppCompatActivity {
     // 学部名を保存する
     public void setFacultyName(String facultyName) {
         this.facultyName = facultyName;
-
-        // カテゴリ表示にも追加
-        addCategory(facultyName);
     }
 
     //学科名を取得する
@@ -105,9 +115,6 @@ public class LectureListActivity extends AppCompatActivity {
     // 学科名を保存する
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
-
-        // カテゴリ表示にも追加
-        addCategory(departmentName);
     }
 
     // 階層を取得する
@@ -124,18 +131,32 @@ public class LectureListActivity extends AppCompatActivity {
     //表示更新
     private void updateCategoryText() {
 
-        StringBuilder text = new StringBuilder("カテゴリ：");
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append("カテゴリ：");
 
         for (int i = 0; i < categoryPath.size(); i++) {
 
             if (i > 0) {
-                text.append(" > ");
+                builder.append(" > ");
             }
 
-            text.append(categoryPath.get(i));
+            final int index = i;
+            String name = categoryPath.get(i);
+
+            int start = builder.length();
+            builder.append(name);
+            int end = builder.length();
+
+            builder.setSpan(new ClickableSpan() {
+                @Override
+                public void onClick(@NonNull View widget) {
+                    backToCategory(index);
+                }
+            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        tvCategory.setText(text.toString());
+        tvCategory.setText(builder);
+        tvCategory.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     // 一つ戻る
@@ -146,5 +167,43 @@ public class LectureListActivity extends AppCompatActivity {
         }
 
         updateCategoryText();
+    }
+
+    private void backToCategory(int index) {
+
+        while (categoryPath.size() > index + 1) {
+            removeLastCategory();
+        }
+
+        switch (index) {
+
+            case 0:
+                // 甲南大学
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new UniversityFragment())
+                        .commit();
+                break;
+
+            case 1:
+                // 授業
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new FacultySelectFragment())
+                        .commit();
+                break;
+
+            case 2:
+                // 学部
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new DepartmentSelectFragment())
+                        .commit();
+                break;
+
+            case 3:
+                // 学科
+                break;
+        }
     }
 }

@@ -29,8 +29,7 @@ public class DepartmentSelectFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_department_select, container, false);
     }
 
@@ -59,30 +58,50 @@ public class DepartmentSelectFragment extends Fragment {
                 }
             }
         });
+
+        // 学部全般ボタン
+        btnFacultyGeneral.setOnClickListener(v -> {
+            activity.addCategory("学部全般");
+            activity.setLectureListType("general_faculty");
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new LectureSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
     }
+
 
     private void createDepartmentButton(String departmentName) {
 
-        Button button = new Button(requireContext());
+        // item_department_button.xmlからボタン生成
+        Button button = (Button) LayoutInflater.from(requireContext())
+                .inflate(
+                        R.layout.item_department_button,
+                        layoutDepartmentList,
+                        false
+                );
 
+        // ボタンに学科名をセット
         button.setText(departmentName);
-
-        button.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-        ));
 
         button.setOnClickListener(v -> {
 
-            LectureListActivity activity = (LectureListActivity) requireActivity();
-            activity.setDepartmentName(departmentName);
+            LectureListActivity activity =
+                    (LectureListActivity) requireActivity();
 
-//            activity.getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.fragment_container, new LectureFragment())
-//                    .addToBackStack(null)
-//                    .commit();
+            activity.setDepartmentName(departmentName);
+            activity.addCategory(departmentName);
+            activity.setLectureListType("department");
+
+            activity.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,
+                            new LectureSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
+
         layoutDepartmentList.addView(button);
     }
 }

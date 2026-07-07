@@ -1,6 +1,5 @@
 package com.example.javatea_client.views;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -58,6 +57,7 @@ public class TimetableActivity extends AppCompatActivity {
     private ArrayList<String> years;
     private HashMap<Integer, HashSet<Lecture>> timetableLecturesMap;//年度と授業IDのmap
     private HashMap<String, HashMap<Integer, TextView>> currentTimetable;//時間割
+    private HashMap<String,HashMap<Integer,Lecture>> currentTimetableLecture;
     private boolean isDecidedYear;//年度が決まっているかどうか。
 
     //JavaTea javatea;
@@ -299,6 +299,7 @@ public class TimetableActivity extends AppCompatActivity {
     private GridLayout createTimetableGridLayout() {
         timetable = findViewById(R.id.grid);
         currentTimetable = new HashMap<>();
+        currentTimetableLecture = new HashMap<>();
         for (int row = 0; row <= 7; row++) {
             for (int col = 0; col <= 5; col++) {
                 TextView textView = new TextView(this);
@@ -327,8 +328,12 @@ public class TimetableActivity extends AppCompatActivity {
                     if (!currentTimetable.containsKey(DAYS[col - 1])) {
                         currentTimetable.put(DAYS[col - 1], new HashMap<>());
                     }
+                    if(!currentTimetableLecture.containsKey(DAYS[col - 1])){
+                        currentTimetableLecture.put(DAYS[col - 1],new HashMap<>());
+                    }
                     textView.setTextSize(10);
                     currentTimetable.get(DAYS[col - 1]).put(row, textView);
+                    currentTimetableLecture.get(DAYS[col - 1]).put(row,null);
                     textView.setOnLongClickListener(v -> {
                         if (!isDecidedYear) {
                             return false;
@@ -338,6 +343,7 @@ public class TimetableActivity extends AppCompatActivity {
                         intent.putExtra("year", getSelectedYear());
                         intent.putExtra("day", DAYS[p.y - 1]);
                         intent.putExtra("period", p.x);
+                        intent.putExtra("semester", currentSemester.getText());
                         startActivity(intent);
                         return true;
                     });
@@ -370,6 +376,7 @@ public class TimetableActivity extends AppCompatActivity {
             for (String day : currentTimetable.keySet()) {
                 for (Integer period : currentTimetable.get(day).keySet()) {
                     currentTimetable.get(day).get(period).setText("");
+                    currentTimetableLecture.get(day).put(period,null);
                 }
             }
             for (Lecture lecture : timetableLecturesMap.get(currentYear)) {
@@ -382,6 +389,7 @@ public class TimetableActivity extends AppCompatActivity {
                 if (semester.equals(curSemester) || semester.equals("通年")) {
                     for (int i = 0; i < frame; i++) {
                         currentTimetable.get(day).get(period + i).setText(name);
+                        currentTimetableLecture.get(day).put(period + i,lecture);
                     }
                 }
             }

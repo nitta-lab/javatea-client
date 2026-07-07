@@ -1,7 +1,5 @@
 package com.example.javatea_client.views;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +10,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.models.Lecture;
+import com.example.javatea_client.viewModels.TimetableViewModel;
 
 import java.util.List;
 
 public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHolder>{
     private final List<Lecture> lectureList; //科目の情報
-    private final Context context; //このリストがある画面の情報(SetTimetableActivity.java)
+    private final String userId;
+    private final String token;
+    private final int year;
+
+    private final TimetableViewModel timetableviewmodel;
 
     //呼び出し時、表示したいデータをフィールドに渡す
-    public LectureAdapter(Context context, List<Lecture> lectureList){
+    public LectureAdapter(List<Lecture> lectureList, TimetableViewModel timetableviewmodel, String userId, String token, int year){
         this.lectureList = lectureList;
-        this.context = context;
+        this.userId = userId;
+        this.token = token;
+        this.year = year;
+        this.timetableviewmodel = timetableviewmodel;
     }
 
     //渡したデータの長さを取得
@@ -58,11 +64,9 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
         Lecture item = lectureList.get(position); //LectureListから順にデータをitemに入れる
         holder.lectureName.setText(item.getName()); //lectureNameにitemのデータをset
 
-        //項目がクリックされたとき
+        //項目がクリックされたとき(画面遷移はSetTimetableActivity.java側)
         holder.lectureName.setOnClickListener(v -> {
-            Intent intent = new Intent(context, TimetableActivity.class); //画面遷移
-            //intent.putExtra("lectureName", item.getName());
-            context.startActivity(intent);
+            timetableviewmodel.addLecture(userId, year, item.getLectureId(), token); //ViewModelに選択された科目を送る(曜日と何限かが足りない)
         });
     }
 }

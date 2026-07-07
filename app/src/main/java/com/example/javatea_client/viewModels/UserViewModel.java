@@ -92,8 +92,10 @@ public class UserViewModel extends ViewModel {
         userResource.login(uid, pw).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> c, Response<User> res) {
+                loading.setValue(false);
                 if (res.isSuccessful()) {
                     user.setValue(res.body());
+                    token.setValue(res.body().getToken());
                 } else {
                     error.setValue("ログイン失敗: " + res.code());
                 }
@@ -128,15 +130,14 @@ public class UserViewModel extends ViewModel {
     //ユーザーの大学名を登録
     public void setUniversity(String uid, String university, String token) {
         loading.setValue(true);
-        userResource.setUniversity(uid, university, token).enqueue(new Callback<String>() {
+        userResource.setUniversity(uid, university, token).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 loading.setValue(false);
                 if (response.isSuccessful()) {
                     // LiveData に更新
                     User currentUser = user.getValue();
                     if (currentUser != null) {
-                        currentUser.setUniversity(response.body());
                         user.setValue(currentUser);
                     }
                 } else {
@@ -145,7 +146,7 @@ public class UserViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 loading.setValue(false);
                 error.setValue("通信エラー: " + t.getMessage());
             }
@@ -173,15 +174,14 @@ public class UserViewModel extends ViewModel {
     //ユーザの学部を登録
     public void setFaculty(String uid, String faculty, String token) {
         loading.setValue(true);
-        userResource.setFaculty(uid, faculty, token).enqueue(new Callback<String>() {
+        userResource.setFaculty(uid, faculty, token).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 loading.setValue(false);
                 if (response.isSuccessful()) {
                     // LiveData に更新
                     User currentUser = user.getValue();
                     if (currentUser != null) {
-                        currentUser.setFaculty(response.body());
                         user.setValue(currentUser);
                     }
                 } else {
@@ -190,7 +190,7 @@ public class UserViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 loading.setValue(false);
                 error.setValue("通信エラー: " + t.getMessage());
             }
@@ -218,15 +218,14 @@ public class UserViewModel extends ViewModel {
     //ユーザの学科を登録
     public void setDepartment(String uid, String department, String token) {
         loading.setValue(true);
-        userResource.setDepartment(uid, department, token).enqueue(new Callback<String>() {
+        userResource.setDepartment(uid, department, token).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 loading.setValue(false);
                 if (response.isSuccessful()) {
                     // LiveData に更新
                     User currentUser = user.getValue();
                     if (currentUser != null) {
-                        currentUser.setDepartment(response.body());
                         user.setValue(currentUser);
                     }
                 } else {
@@ -235,7 +234,7 @@ public class UserViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 loading.setValue(false);
                 error.setValue("通信エラー: " + t.getMessage());
             }
@@ -263,15 +262,14 @@ public class UserViewModel extends ViewModel {
     //ユーザの学年を登録
     public void setGrade(String uid, int grade, String token) {
         loading.setValue(true);
-        userResource.setGrade(uid, grade, token).enqueue(new Callback<Integer>() {
+        userResource.setGrade(uid, grade, token).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 loading.setValue(false);
                 if (response.isSuccessful()) {
                     // LiveData に更新
                     User currentUser = user.getValue();
                     if (currentUser != null) {
-                        currentUser.setGrade(response.body());
                         user.setValue(currentUser);
                     }
                 } else {
@@ -280,7 +278,7 @@ public class UserViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 loading.setValue(false);
                 error.setValue("通信エラー: " + t.getMessage());
             }
