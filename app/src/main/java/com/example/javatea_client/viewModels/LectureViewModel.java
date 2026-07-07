@@ -128,16 +128,13 @@ public class LectureViewModel extends ViewModel {
 
         error.setValue(null);
 
-        lectureResource.createLecture(name, grade, semester, frame, day, period
-        ).enqueue(new Callback<String>() {
+        lectureResource.createLecture(name, grade, semester, frame, day, period).enqueue(new Callback<String>() {
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
 
-                if (response.isSuccessful()
-                        && response.body() != null) {
-
+                if (response.isSuccessful() && response.body() != null) {
 
                     // バックエンドから返された授業IDを保存
 //                    lectureId.setValue(response.body());
@@ -149,17 +146,15 @@ public class LectureViewModel extends ViewModel {
 
 
                 } else {
-                    error.setValue("授業作成失敗: " + response.code()
-                    );
+                    error.setValue("授業作成失敗: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
 
-
-
                 error.setValue("通信エラー: " + t.getMessage());
+
             }
         });
     }
@@ -171,7 +166,7 @@ public class LectureViewModel extends ViewModel {
     private void addCategoryLecture(String univId, String facultyName, String departmentName, String lectureId, String type) {
 
         // 大学特有の場合
-        if("university".equals(type)) {
+        if("その他".equals(type)) {
             categoryResource.putUnivLectures(univId, lectureId).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -191,7 +186,7 @@ public class LectureViewModel extends ViewModel {
             });
 
             // 学部特有の場合
-        } else if ("faculty".equals(type)) {
+        } else if ("学部専門".equals(type)) {
             categoryResource.addLecture(univId, facultyName, lectureId).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
@@ -211,7 +206,7 @@ public class LectureViewModel extends ViewModel {
             });
 
             // 学科特有の場合
-        } else if ("department".equals(type)) {
+        } else if ("学科専門".equals(type)) {
             categoryResource.addLecture(univId, facultyName, departmentName, lectureId).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
