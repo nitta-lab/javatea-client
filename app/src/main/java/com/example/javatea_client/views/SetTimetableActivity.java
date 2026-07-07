@@ -41,6 +41,8 @@ public class SetTimetableActivity extends AppCompatActivity {
     private String univId;
     private String facultyName;
     private String departmentName;
+    private String grade;
+    private int intGrade;
 
     List<Lecture> lecturesList = new ArrayList<>(); //授業情報のリスト
     RecyclerView recyclerView; //RecyclerViewのフィールドを宣言
@@ -121,12 +123,14 @@ public class SetTimetableActivity extends AppCompatActivity {
         univId = javaTea.getUnivId();
         facultyName = javaTea.getFaculty();
         departmentName = javaTea.getDepartment();
+        grade = javaTea.getGrade();
+        intGrade = Integer.parseInt(grade);
 //        university = "univ-id1";
 //        faculty = "知能情報学部";
 //        department = "知能情報学科";
 
         setupObservers(); //Observe実行
-        categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period);
+        categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period, intGrade);
         Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+univId+", faculty:"+facultyName+", department:"+departmentName);
 
         //リストの生成
@@ -179,7 +183,7 @@ public class SetTimetableActivity extends AppCompatActivity {
                 Log.d(TAG, "科目追加成功、再検索をします");
 
                 // ViewModelに検索の通信する
-                categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period);
+                categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period, intGrade);
 
             } else if(resultCode == RESULT_CANCELED) {
                 Log.d(TAG, "科目追加キャンセル");
