@@ -52,6 +52,7 @@ public class SetTimetableActivity extends AppCompatActivity {
     private int period;
     private int year;
     private String semester;
+    private String lectureId;
 
     //Observe
     private void setupObservers() {
@@ -104,7 +105,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         period = reIntent.getIntExtra("period", 1);
         year = reIntent.getIntExtra("year", 1);
         semester = reIntent.getStringExtra("semester");
-//        semester = "前期";
+        lectureId = reIntent.getStringExtra("lectureId");
         Log.d(TAG, "day:"+day+"period:"+period+"year:"+year+"semester:"+semester);
 
         // 他のActivityから画面を取得
@@ -165,8 +166,19 @@ public class SetTimetableActivity extends AppCompatActivity {
 
         //"設定しない"ボタン
         Button cancelButton = findViewById(R.id.cancel_lecture_button);
+
+        // lectureIdがnullなら押せなくする
+        if(lectureId != null) {
+            cancelButton.setEnabled(true);
+        } else {
+            cancelButton.setEnabled(false);
+        }
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(lectureId != null) {
+                    timetableViewModel.removeLecture(userId, year, lectureId, token);
+                }
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
                 startActivity(intent);
             }
