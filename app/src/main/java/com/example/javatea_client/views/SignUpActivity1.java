@@ -71,7 +71,17 @@ public class SignUpActivity1 extends AppCompatActivity {
                 // javateaに保存
                 javatea.setUserId(userId);
                 javatea.setPassword(password);
-                userViewModel.login(userId, password);
+                String token = user.getToken();
+                if(token != null && !token.isEmpty()){
+                    // javateaに保存
+                    javatea.setToken(token);
+                    // 画面遷移
+                    Intent intent = new Intent(SignUpActivity1.this, RegisterActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(SignUpActivity1.this, "トークン取得に失敗しました", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -103,20 +113,6 @@ public class SignUpActivity1 extends AppCompatActivity {
                 isVisiblePassword = false;
             }else{
                 Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // トークンを監視
-        userViewModel.getToken().observe(this,token ->{
-            if(token != null && !token.isEmpty()){
-                // javateaに保存
-                javatea.setToken(token);
-                // 画面遷移
-                Intent intent = new Intent(SignUpActivity1.this, RegisterActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(SignUpActivity1.this, "トークン取得に失敗しました", Toast.LENGTH_SHORT).show();
             }
         });
 
