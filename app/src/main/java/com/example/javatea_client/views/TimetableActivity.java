@@ -299,6 +299,7 @@ public class TimetableActivity extends AppCompatActivity {
     private GridLayout createTimetableGridLayout() {
         timetable = findViewById(R.id.grid);
         currentTimetable = new HashMap<>();
+        currentTimetableLecture = new HashMap<>();
         for (int row = 0; row <= 7; row++) {
             for (int col = 0; col <= 5; col++) {
                 TextView textView = new TextView(this);
