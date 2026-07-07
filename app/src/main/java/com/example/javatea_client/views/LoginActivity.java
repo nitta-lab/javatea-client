@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             else {
-                Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this, "ログインに失敗しました", Toast.LENGTH_SHORT).show();
             }
         });
 
