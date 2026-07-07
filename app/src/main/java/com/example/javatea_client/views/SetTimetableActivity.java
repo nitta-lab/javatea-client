@@ -100,9 +100,9 @@ public class SetTimetableActivity extends AppCompatActivity {
         day = reIntent.getStringExtra("day");
         period = reIntent.getIntExtra("period", 1);
         year = reIntent.getIntExtra("year", 1);
-//        semester = reIntent.getStringExtra("semester");
-        semester = "前期";
-//        Log.d(TAG, "day:"+day+"period:"+period+"year:"+year+"semester:"+semester);
+        semester = reIntent.getStringExtra("semester");
+//        semester = "前期";
+        Log.d(TAG, "day:"+day+"period:"+period+"year:"+year+"semester:"+semester);
 
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
@@ -117,12 +117,12 @@ public class SetTimetableActivity extends AppCompatActivity {
         javaTea.setView("SetTimetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
-//        university = javaTea.getUniversity();
-//        faculty = javaTea.getFaculty();
-//        department = javaTea.getDepartment();
-        university = "univ-id1";
-        faculty = "知能情報学部";
-        department = "知能情報学科";
+        university = javaTea.getUniversity();
+        faculty = javaTea.getFaculty();
+        department = javaTea.getDepartment();
+//        university = "univ-id1";
+//        faculty = "知能情報学部";
+//        department = "知能情報学科";
 
         setupObservers(); //Observe実行
         categoryViewModel.callSearchLectures(university, faculty, department, semester, day, period);

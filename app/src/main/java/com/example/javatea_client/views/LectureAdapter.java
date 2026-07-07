@@ -66,7 +66,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
 
         //項目がクリックされたとき(画面遷移はSetTimetableActivity.java側)
         holder.lectureName.setOnClickListener(v -> {
-            timetableviewmodel.addLecture(userId, year, item.getLectureId(), token); //ViewModelに選択された科目を送る
+            timetableviewmodel.addLecture(userId, year, item.getLectureId(), token); //ViewModelに選択された科目を送る(曜日と何限かが足りない)
         });
     }
 }
