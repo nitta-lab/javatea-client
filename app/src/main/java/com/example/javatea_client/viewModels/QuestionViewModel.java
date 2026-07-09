@@ -16,6 +16,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+//MutableLiveDataは書き換え可能なデータ。LiveDataは書き換え可能でも書き換え不可能でもよい。基本MutableLiveDataでよい。
+//immutableLiveData?は書き換え不可。
 public class QuestionViewModel extends ViewModel {
     private Retrofit retrofit;
     private final QuestionResource questionResource; //サーバー呼び出す用のリソース
