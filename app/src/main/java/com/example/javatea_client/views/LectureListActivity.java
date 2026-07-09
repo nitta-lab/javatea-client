@@ -36,6 +36,7 @@ public class LectureListActivity extends AppCompatActivity {
     private String facultyName = "";
     private String departmentName = "";
     private String lectureListType = "";
+    private String lectureId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +114,19 @@ public class LectureListActivity extends AppCompatActivity {
         return departmentName;
     }
 
-    // 学科名を保存する
+    //学科名を保存する
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    //授業IDを取得する
+    public String getLectureId(String lectureId) {
+        return lectureId;
+    }
+
+    //授業IDを保存する
+    public void setLectureId() {
+        this.lectureId = lectureId;
     }
 
     // 階層を取得する
