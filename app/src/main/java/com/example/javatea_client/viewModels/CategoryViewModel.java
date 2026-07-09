@@ -546,5 +546,62 @@ public class CategoryViewModel extends ViewModel {
         });
     }
 
+    // Q＆A関連
+    public void universityLectures(String univId) {
+        categoryResource.getUniversityLectures(univId).enqueue(new Callback<Collection<Lecture>>() {
+            @Override
+            public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    univLectures.setValue(response.body());
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void facultyLectures(String univId, String facultyName) {
+        categoryResource.getFacultyLectures(univId, facultyName).enqueue(new Callback<Collection<Lecture>>() {
+            @Override
+            public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    facLectures.setValue(response.body());
+                    Log.d(TAG, "学部特有の授業一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void departmentLectures(String univId, String facultyName, String departmentName) {
+        categoryResource.getDepartmentLectures(univId, facultyName, departmentName).enqueue(new Callback<Collection<Lecture>>() {
+            @Override
+            public void onResponse(@NonNull Call<Collection<Lecture>> call, @NonNull Response<Collection<Lecture>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    departLectures.setValue(response.body());
+                    Log.d(TAG, "学科特有の授業一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Collection<Lecture>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
 
 }
