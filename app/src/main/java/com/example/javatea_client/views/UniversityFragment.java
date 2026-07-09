@@ -47,6 +47,7 @@ public class UniversityFragment extends Fragment {
 
         // 学校生活ボタンの処理
         btnSchoolLife.setOnClickListener(v -> {
+            activity.setLectureId("学校生活");
             activity.addCategory("学校生活", "【学校生活】");
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()

@@ -82,6 +82,7 @@ public class GeneralFragment extends Fragment {
         // 全般ボタン
         view.findViewById(R.id.btnGeneral).setOnClickListener(v -> {
             activity.addCategory("全般", "【全般】");
+            activity.setLectureId("全般");
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new QuestionSelectFragment())
