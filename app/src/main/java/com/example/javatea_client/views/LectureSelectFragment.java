@@ -131,12 +131,11 @@ public class LectureSelectFragment extends Fragment {
             activity.addCategory(lectureName);
 
             // 次の画面へ遷移する場合はここに追加
-//        activity.getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.fragment_container,
-//                        new QuestionSelectFragment())
-//                .addToBackStack(null)
-//                .commit();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         layoutLectureList.addView(button);

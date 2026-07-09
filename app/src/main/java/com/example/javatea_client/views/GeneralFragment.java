@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,9 +15,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider; // 追加
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.models.University;
+import com.example.javatea_client.models.User;
 import com.example.javatea_client.viewModels.CategoryViewModel;
+import com.example.javatea_client.viewModels.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,18 +29,17 @@ import java.util.List;
 public class GeneralFragment extends Fragment {
 
     private CategoryViewModel categoryViewModel;
+    private UserViewModel userViewModel;
+    private Javatea javatea;
     private static final String TAG = "GeneralFragment";
 
     public GeneralFragment() {
         // Required empty public constructor
     }
 
-    // 【修正①】@Override をつけ、正しい引数を設定する
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ここでのobserveは、onCreateViewやonViewCreatedに移動させるのが一般的ですが、
-        // ライフサイクルを合わせるため今回は正しいアノテーション付きのonCreateに修正します。
     }
 
     @Override
@@ -48,9 +51,12 @@ public class GeneralFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        LectureListActivity activity = (LectureListActivity) requireActivity();
+        javatea = (Javatea) activity.getApplication();
         categoryViewModel = new ViewModelProvider(requireActivity()).get(CategoryViewModel.class);
-        categoryViewModel.getCurrentUniversities().observe(getViewLifecycleOwner(), new Observer<Collection<University>>() {
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
+        categoryViewModel.getCurrentUniversities().observe(getViewLifecycleOwner(), new Observer<Collection<University>>() {
             @Override
             public void onChanged(Collection<University> currentUniversities) {
                 if (currentUniversities == null) {
@@ -69,7 +75,34 @@ public class GeneralFragment extends Fragment {
             }
         });
 
-        // 各ボタンの紐付け
+        /*
+            各ボタンの紐付け
+         */
+
+        // 全般ボタン
+        view.findViewById(R.id.btnGeneral).setOnClickListener(v -> {
+            activity.addCategory("全般");
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // 自分の所属大学のボタン
+        Button btnMyUniversity = view.findViewById(R.id.btnMyUniversity);
+        btnMyUniversity.setText(javatea.getUniversity());
+        btnMyUniversity.setOnClickListener(v -> {
+            activity.setUnivId(javatea.getUnivId());
+            activity.addCategory(javatea.getUniversity());
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new UniversityFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        // 大学カナ文字検索ボタン
         view.findViewById(R.id.btn_a).setOnClickListener(v -> fetchUniversityList("ア行"));
         view.findViewById(R.id.btn_ka).setOnClickListener(v -> fetchUniversityList("カ行"));
         view.findViewById(R.id.btn_sa).setOnClickListener(v -> fetchUniversityList("サ行"));

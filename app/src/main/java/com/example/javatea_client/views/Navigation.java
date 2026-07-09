@@ -22,7 +22,7 @@ public class Navigation {
         ImageButton qaButton = (ImageButton) activity.findViewById(R.id.qa_button);
         qaButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(activity, LectureListActivity.class);
                 activity.startActivity(intent);
             }
         });
