@@ -120,12 +120,12 @@ public class LectureListActivity extends AppCompatActivity {
     }
 
     //授業IDを取得する
-    public String getLectureId(String lectureId) {
+    public String getLectureId() {
         return lectureId;
     }
 
     //授業IDを保存する
-    public void setLectureId() {
+    public void setLectureId(String lectureId) {
         this.lectureId = lectureId;
     }
 
@@ -191,7 +191,8 @@ public class LectureListActivity extends AppCompatActivity {
 
         switch (categoryPathType.get(categoryPathType.size()-1)) {
 
-            case "全般"://   ここはかわしま町
+            case "全般":
+                setLectureId("全般");
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container,new QuestionSelectFragment())
@@ -214,8 +215,9 @@ public class LectureListActivity extends AppCompatActivity {
                         .commit();
                 break;
 
-            case "【学校生活】":// かわしままち
+            case "【学校生活】":
                 // 授業
+                setLectureId("学校生活");
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new QuestionSelectFragment())
@@ -254,7 +256,7 @@ public class LectureListActivity extends AppCompatActivity {
                         .commit();
                 break;
 
-            case "授業":// かわしままち
+            case "授業":
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container,new QuestionSelectFragment())

@@ -20,6 +20,23 @@ import retrofit2.http.Query;
 
 public interface CategoryResource {
     /**
+    * 【全般】質問の取得
+    */
+    @GET("categories/general/questions")
+    Call<Set<Question>> getGeneralQuestions(
+
+    );
+
+    /**
+     * 【全般】質問の追加
+     */
+    @FormUrlEncoded
+    @PUT("categories/general/questions/{qid}")
+    Call<Void> addGeneralQuestion(
+        @Path("qid") String qid
+    );
+
+    /**
      * 大学一覧の取得
      */
     @GET("categories/universities")
