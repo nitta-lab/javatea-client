@@ -54,13 +54,13 @@ public class LectureSelectFragment extends Fragment {
 
         switch(lectureListType) {
             case "general_university":
-                categoryViewModel.loadUniversityLectures(univId);
+                categoryViewModel.universityLectures(univId);
                 break;
             case "general_faculty":
-                categoryViewModel.loadFacultyLectures(univId, facultyName);
+                categoryViewModel.facultyLectures(univId, facultyName);
                 break;
             case "department":
-                categoryViewModel.loadDepartmentLectures(univId, facultyName, departmentName);
+                categoryViewModel.departmentLectures(univId, facultyName, departmentName);
                 break;
             default:
                 break;
