@@ -24,7 +24,9 @@ import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.TimetableViewModel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 
 public class SetTimetableActivity extends AppCompatActivity {
 
@@ -73,10 +75,10 @@ public class SetTimetableActivity extends AppCompatActivity {
         });
 
         // リストの科目を選択した後(timetable更新)を検知して画面遷移
-        timetableViewModel.getLectures().observe(this, new Observer<List<Lecture>>() {
+        timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<Lecture>>>() {
             @Override
-            public void onChanged(List<Lecture> lectureList) {
-                if (lectureList != null) {
+            public void onChanged(TreeMap<Integer, HashSet<Lecture>> timetable) {
+                if (timetable != null) {
                     Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
                     startActivity(intent);
                 }
@@ -146,8 +148,7 @@ public class SetTimetableActivity extends AppCompatActivity {
         Button closeButton = findViewById(R.id.close_lecture_button);
         closeButton.setOnClickListener(new View.OnClickListener() { //クリック待機
             public void onClick(View v) { //クリックされたとき
-                Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -165,7 +166,7 @@ public class SetTimetableActivity extends AppCompatActivity {
             }
         });
 
-        //"設定しない"ボタン
+        //"削除"ボタン
         Button cancelButton = findViewById(R.id.cancel_lecture_button);
         // lectureIdがnullなら押せなくする
         if(lectureId != null) {
@@ -177,9 +178,10 @@ public class SetTimetableActivity extends AppCompatActivity {
             public void onClick(View v) { //クリックされたとき
                 if(lectureId != null) { //すでに授業が入っていた時
                     timetableViewModel.removeLecture(userId, year, lectureId, token);
+                    Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    startActivity(intent);
+//                    finish();
                 }
-                Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
-                startActivity(intent);
             }
         });
     }
