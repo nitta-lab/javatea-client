@@ -131,6 +131,7 @@ public class SetTimetableActivity extends AppCompatActivity {
 //        department = "知能情報学科";
 
         setupObservers(); //Observe実行
+        //画面遷移時に検索開始
         categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period, intGrade);
         Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+univId+", faculty:"+facultyName+", department:"+departmentName);
 
@@ -143,17 +144,17 @@ public class SetTimetableActivity extends AppCompatActivity {
         //各ウィジェット動作処理
         //閉じるボタン
         Button closeButton = findViewById(R.id.close_lecture_button);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        closeButton.setOnClickListener(new View.OnClickListener() { //クリック待機
+            public void onClick(View v) { //クリックされたとき
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
                 startActivity(intent);
             }
         });
 
-        //科目追加ボタン(後でID変更必須 現在は時間割画面に遷移)
+        //科目追加ボタン
         Button addButton = findViewById(R.id.add_lecture_button);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        addButton.setOnClickListener(new View.OnClickListener() { //クリック待機
+            public void onClick(View v) { //クリックされたとき
                 Intent intent = new Intent(SetTimetableActivity.this, AddLectureActivity.class);
                 //科目追加画面に曜日と時間を渡す
                 intent.putExtra("day",day);
@@ -166,17 +167,15 @@ public class SetTimetableActivity extends AppCompatActivity {
 
         //"設定しない"ボタン
         Button cancelButton = findViewById(R.id.cancel_lecture_button);
-
         // lectureIdがnullなら押せなくする
         if(lectureId != null) {
             cancelButton.setEnabled(true);
         } else {
             cancelButton.setEnabled(false);
         }
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(lectureId != null) {
+        cancelButton.setOnClickListener(new View.OnClickListener() { //クリック待機
+            public void onClick(View v) { //クリックされたとき
+                if(lectureId != null) { //すでに授業が入っていた時
                     timetableViewModel.removeLecture(userId, year, lectureId, token);
                 }
                 Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
