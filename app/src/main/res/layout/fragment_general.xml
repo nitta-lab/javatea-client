@@ -7,7 +7,7 @@
     tools:context=".views.GeneralFragment">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnGeneral"
         android:layout_width="336dp"
         android:layout_height="50dp"
         android:text="全般"
@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="0.207" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btnMyUniversity"
         android:layout_width="336dp"
         android:layout_height="50dp"
         android:text="所属大学"

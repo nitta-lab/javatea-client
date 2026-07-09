@@ -48,7 +48,11 @@ public class UniversityFragment extends Fragment {
         // 学校生活ボタンの処理
         btnSchoolLife.setOnClickListener(v -> {
             activity.addCategory("学校生活");
-            // ここは後で学校生活用の画面に進ませる
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 }
