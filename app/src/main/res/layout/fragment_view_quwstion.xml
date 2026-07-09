@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".views.ViewQuwstionFragment">
+
+    <!-- カテゴリ -->
+
+    <!-- タイトル -->
+
+    <!-- Question本文：ここだけスクロール -->
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#E5E5EA"
+        android:ellipsize="end"
+        android:gravity="center_vertical|start"
+        android:maxLines="3"
+        android:padding="16dp"
+        android:text="タイトル：ここに質問タイトルが入ります"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.182" />
+
+    <LinearLayout
+        android:id="@+id/questionBox"
+        android:layout_width="377dp"
+        android:layout_height="150dp"
+        android:background="#E5E5EA"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.377">
+
+        <!-- ここは固定。サーバーから入れない -->
+        <TextView
+            android:id="@+id/tvQuestionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Question："
+            android:textColor="#222222"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- ここだけスクロール -->
+        <ScrollView
+            android:id="@+id/svQuestion"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical">
+
+            <!-- サーバーから取ってきた本文をここに入れる -->
+            <TextView
+                android:id="@+id/tvQuestionContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:text="ここに質問内容が入ります"
+                android:textColor="#222222"
+                android:textSize="16sp" />
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvCategory"
+        android:layout_width="374dp"
+        android:layout_height="56dp"
+        android:gravity="center|left"
+        android:text="　カテゴリ："
+        android:background="#FFBBC6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.086" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/answer_list"
+        android:layout_width="377dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="16dp"
+        android:background="#E5E5EA"
+        android:padding="10dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.687"
+        tools:listitem="@layout/item_answer" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
