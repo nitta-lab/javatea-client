@@ -1,7 +1,8 @@
 package com.example.javatea_client.models;
 
 
-
+import java.util.HashSet;
+import java.util.Set;
 
 public class Lecture  {
 
@@ -14,6 +15,8 @@ public class Lecture  {
 
     private String lectureId;
 
+    private Set<Question> questions;
+
     //コンストラクタ
     public Lecture() {}
 
@@ -25,6 +28,7 @@ public class Lecture  {
         this.day = day;
         this.period = period;
         this.lectureId = lectureId;
+        this.questions = new HashSet<>();
     }
 
     public String getName() { return name; }
@@ -48,4 +52,11 @@ public class Lecture  {
     public  String getLectureId() { return lectureId; }
 
     public void  setLectureId(String lectureId) { this.lectureId = lectureId; }
+
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+    public void addQuestion(Question question) {
+        questions.add(question);
+    }
 }
