@@ -8,13 +8,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.javatea_client.models.Lecture;
+import com.example.javatea_client.models.Question;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -96,6 +99,18 @@ public class CategoryViewModel extends ViewModel {
     private int grade;
 
 
+    // ここから検索関連
+    private final MutableLiveData<Set<Question>> currentUniversityQuestions = new MutableLiveData<>();
+    private final MutableLiveData<Set<Question>> currentFacultyQuestions = new MutableLiveData<>();
+    private final MutableLiveData<Set<Question>> currentDepartmentQuestions = new MutableLiveData<>();
+
+    private Set<Question> universityQuestions = null;
+    private Set<Question> facultyQuestions = null;
+    private Set<Question> departmentQuestions = null;
+
+
+
+
     // ログ用のタグ
     private static final String TAG = "CategoryViewModel";
 
@@ -146,6 +161,20 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<Collection<Lecture>> getSearchLectureResults() {
         return searchLectureResults;
     }
+
+
+
+    // ここから検索関連(LiveData)
+    public LiveData<Set<Question>> getUniversityQuestions() {
+        return currentUniversityQuestions;
+    }
+    public LiveData<Set<Question>> getFacultyQuestions() {
+        return currentFacultyQuestions;
+    }
+    public LiveData<Set<Question>> getDepartmentQuestions() {
+        return currentDepartmentQuestions;
+    }
+
 
     // 大学特有の授業が届いた時に呼ばれるメソッド
     public void setUniversityLectures(Collection<Lecture> universityLectures) {
@@ -601,6 +630,33 @@ public class CategoryViewModel extends ViewModel {
                 Log.e(TAG, "ネットワークエラーが発生しました", throwable);
             }
         });
+    }
+
+
+    // ここから検索関連(メソッド)
+    // 大学特有の授業が届いた時に呼ばれるメソッド
+    public void setUniversityQuestions(Set<Question> universityQuestions) {
+        if(universityQuestions != null) {
+            this.universityQuestions = universityQuestions;
+        } else {
+            this.universityQuestions = new HashSet<>();
+        }
+    }
+
+    public void setFacultyQuestions(Set<Question> facultyQuestions) {
+        if(facultyQuestions != null) {
+            this.facultyQuestions = facultyQuestions;
+        } else {
+            this.facultyQuestions = new HashSet<>();
+        }
+    }
+
+    public void setDepartmentQuestions(Set<Question> departmentQuestions) {
+        if(departmentQuestions != null) {
+            this.departmentQuestions = departmentQuestions;
+        } else {
+            this.departmentQuestions = new HashSet<>();
+        }
     }
 
 
