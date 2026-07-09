@@ -128,7 +128,7 @@ public class LectureSelectFragment extends Fragment {
                     (LectureListActivity) requireActivity();
 
             activity.setDepartmentName(lectureName);
-            activity.addCategory(lectureName);
+            activity.addCategory(lectureName, "授業");
 
             // 次の画面へ遷移する場合はここに追加
             requireActivity().getSupportFragmentManager()

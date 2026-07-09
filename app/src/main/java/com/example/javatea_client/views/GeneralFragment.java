@@ -81,7 +81,7 @@ public class GeneralFragment extends Fragment {
 
         // 全般ボタン
         view.findViewById(R.id.btnGeneral).setOnClickListener(v -> {
-            activity.addCategory("全般");
+            activity.addCategory("全般", "【全般】");
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new QuestionSelectFragment())
@@ -94,7 +94,7 @@ public class GeneralFragment extends Fragment {
         btnMyUniversity.setText(javatea.getUniversity());
         btnMyUniversity.setOnClickListener(v -> {
             activity.setUnivId(javatea.getUnivId());
-            activity.addCategory(javatea.getUniversity());
+            activity.addCategory(javatea.getUniversity(), "大学");
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new UniversityFragment())
@@ -153,7 +153,7 @@ public class GeneralFragment extends Fragment {
                         // LectureListActivityを取得し、操作
                         LectureListActivity activity = (LectureListActivity) requireActivity();
                         activity.setUnivId(university.getId());
-                        activity.addCategory(university.getName());
+                        activity.addCategory(university.getName(), "大学");
                         requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.fragment_container, new UniversityFragment())
