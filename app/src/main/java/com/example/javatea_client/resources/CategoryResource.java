@@ -177,7 +177,7 @@ public interface CategoryResource {
      * 学部科目の質問の取得
      */
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/lectures/{lecture-id}/questions")
-    Call<Void> getFacultyQuestions(
+    Call<Set<Question>> getFacultyQuestions(
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName,
             @Path("lecture-id") String lectureId
