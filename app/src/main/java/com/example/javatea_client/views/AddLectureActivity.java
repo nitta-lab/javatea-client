@@ -37,7 +37,7 @@ public class AddLectureActivity extends AppCompatActivity {
     private  String facultyName;
     private  String departmentName;
 
-
+    private String day;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,7 @@ public class AddLectureActivity extends AppCompatActivity {
             return insets;
         });
         Intent reIntent = getIntent();
-        String day = reIntent.getStringExtra("day");
+        day = reIntent.getStringExtra("day");
         int period = reIntent.getIntExtra("period",1);
         int year = reIntent.getIntExtra("year",1);
         String semester = reIntent.getStringExtra("semester");
@@ -105,6 +105,7 @@ public class AddLectureActivity extends AppCompatActivity {
         }else if("その他".equals(semester)){
             FirstButton.setText("その他");
             FirstButton.setChecked(true);
+            day = "日";
             AllyearButton.setEnabled(false);
         }
 
