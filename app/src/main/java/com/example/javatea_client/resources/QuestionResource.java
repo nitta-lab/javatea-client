@@ -22,7 +22,8 @@ public interface QuestionResource {
             @Field("uid") String uid,
             @Field("tags") List<String> tags,
             @Field("view-permission") String viewPermission,
-            @Field("res-permission") String resPermission
+            @Field("res-permission") String resPermission,
+            @Field("token") String token
     );
 
     //質問情報の取得
