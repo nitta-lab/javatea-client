@@ -61,15 +61,17 @@ public class CategoryViewModel extends ViewModel {
 
 
     // ここから質問関連
-
-    // 学校生活に関する現在の質問
-    private final MutableLiveData<Set<Question>> currentUniversityGeneralQuestions = new MutableLiveData<>();
-    // 大学全般に関する現在の質問
-    private final MutableLiveData<Set<Question>> currentUniversityQuestions = new MutableLiveData<>();
-    // 学部全般に関する現在の質問
-    private final MutableLiveData<Set<Question>> currentFacultyQuestions = new MutableLiveData<>();
-    // 指定された学科に対する現在の質問
-    private final MutableLiveData<Set<Question>> currentDepartmentQuestions = new MutableLiveData<>();
+    // 全般に関する現在の質問
+    private final MutableLiveData<Set<Question>> currentQuestions = new MutableLiveData<>();
+//    private final MutableLiveData<Set<Question>> currentGeneralQuestions = new MutableLiveData<>();
+//    // 学校生活に関する現在の質問
+//    private final MutableLiveData<Set<Question>> currentUniversityGeneralQuestions = new MutableLiveData<>();
+//    // 大学全般に関する現在の質問
+//    private final MutableLiveData<Set<Question>> currentUniversityQuestions = new MutableLiveData<>();
+//    // 学部全般に関する現在の質問
+//    private final MutableLiveData<Set<Question>> currentFacultyQuestions = new MutableLiveData<>();
+//    // 指定された学科に対する現在の質問
+//    private final MutableLiveData<Set<Question>> currentDepartmentQuestions = new MutableLiveData<>();
 
     // 検索でいるかもしれないので残しておく
 //    private Set<Question> universityQuestions = null;
@@ -132,19 +134,26 @@ public class CategoryViewModel extends ViewModel {
 
 
 
-    // ここから質問関連(LiveData)、これらを呼んでもらう
-    public LiveData<Set<Question>> getUniversityGeneralQuestions() {
-        return currentUniversityGeneralQuestions;
+    // ここから質問関連(LiveData)、これらを呼んでもらう、質問を呼ぶだけなので区別いらない
+    public LiveData<Set<Question>> getQuestions() {
+        return currentQuestions;
     }
-    public LiveData<Set<Question>> getUniversityQuestions() {
-        return currentUniversityQuestions;
-    }
-    public LiveData<Set<Question>> getFacultyQuestions() {
-        return currentFacultyQuestions;
-    }
-    public LiveData<Set<Question>> getDepartmentQuestions() {
-        return currentDepartmentQuestions;
-    }
+
+//    public LiveData<Set<Question>> getGeneralQuestions() {
+//        return currentGeneralQuestions;
+//    }
+//    public LiveData<Set<Question>> getUniversityGeneralQuestions() {
+//        return currentUniversityGeneralQuestions;
+//    }
+//    public LiveData<Set<Question>> getUniversityQuestions() {
+//        return currentUniversityQuestions;
+//    }
+//    public LiveData<Set<Question>> getFacultyQuestions() {
+//        return currentFacultyQuestions;
+//    }
+//    public LiveData<Set<Question>> getDepartmentQuestions() {
+//        return currentDepartmentQuestions;
+//    }
 
 
     // 大学特有の授業が届いた時に呼ばれるメソッド
@@ -604,6 +613,24 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 全般に関する質問
+    public void generalQuestions() {
+        categoryResource.getGeneralQuestions().enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentQuestions.setValue(response.body());
+                    Log.d(TAG, "【全般】に対する質問一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
 
 
 
@@ -613,7 +640,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    currentUniversityGeneralQuestions.setValue(response.body());
+                    currentQuestions.setValue(response.body());
                     Log.d(TAG, "学校生活に対する質問一覧取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -633,7 +660,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    currentUniversityQuestions.setValue(response.body());
+                    currentQuestions.setValue(response.body());
                     Log.d(TAG, "大学全般の質問取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -653,7 +680,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    currentFacultyQuestions.setValue(response.body());
+                    currentQuestions.setValue(response.body());
                     Log.d(TAG, "学部全般の質問取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -673,7 +700,7 @@ public class CategoryViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
-                    currentDepartmentQuestions.setValue(response.body());
+                    currentQuestions.setValue(response.body());
                     Log.d(TAG, "指定した学科に対する質問取得成功：" + response.body().size() + "件");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
