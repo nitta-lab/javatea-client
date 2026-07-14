@@ -104,6 +104,7 @@ public class AddLectureActivity extends AppCompatActivity {
             AllyearButton.setEnabled(true);
         }else if("その他".equals(semester)){
             FirstButton.setText("その他");
+            FirstButton.setChecked(true);
             AllyearButton.setEnabled(false);
         }
 
@@ -119,6 +120,9 @@ public class AddLectureActivity extends AppCompatActivity {
 
                 int majorId = RadioGroupMajor.getCheckedRadioButtonId();
                 int semesterId = RadioButtonSemester.getCheckedRadioButtonId();
+
+                Log.d("addLecture", "majorId: " + majorId);
+                Log.d("addLecture", "semesterId: " + semesterId);
 
                 if(majorId == -1){
                     Toast.makeText(AddLectureActivity.this,"授業科目を選択してください",Toast.LENGTH_SHORT).show();
