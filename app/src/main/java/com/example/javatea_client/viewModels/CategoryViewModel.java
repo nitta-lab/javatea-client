@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.javatea_client.models.Lecture;
+import com.example.javatea_client.models.Question;
 import com.example.javatea_client.models.University;
 import com.example.javatea_client.resources.CategoryResource;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,44 +24,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
-
-/*
-    モデルズでおそらく使わないけどバックエンド側で処理があるのでそれ用のメモ
-    フロントエンド側のモデルズではこれらは使わないので書かない
-    ＜大学の値か名前の変更あるもの＞
-    name(大学の名前)の変更
-    public void setName(String name){ this.name = name; }
-    kana(大学の読み仮名)の変更
-    public void setKana(String kana) { this.kana = kana; }
-    学部を作成
-    public Faculty createFaculty(String faculty_name) {
-        //学部が重複していたら、その学部を返す。
-        if (this.faculties.containsKey(faculty_name)){
-            return null;
-        }
-        faculties.put(faculty_name, new Faculty(faculty_name));
-        return faculties.get(faculty_name);
-    }
-    大学全般科目の追加
-    public void addLecture(String lecture_id, Lecture lecture) { lectures.put(lecture_id, lecture); }
-
-    ＜学部の値か名前の変更あるもの＞
-    学科の作成、追加
-    public Department createDepartment(String department_name){
-        //学科が既に存在していた場合はnullを返す
-        if (departments.containsKey(department_name)){
-            return null;
-        }
-        this.departments.put(department_name, new Department(department_name));
-        return departments.get(department_name);
-    }
-    学部全般科目の追加
-    public void addLecture(String lectureId, Lecture lecture) { lecturesInFaculty.put(lectureId, lecture); }
-
-    ＜学科の値か名前の変更あるもの＞
-    学科特有の科目の追加
-    public void addLecture(String lectureId, Lecture lecture) { lecturesInDepartment.put(lectureId, lecture); }
- */
 
 public class CategoryViewModel extends ViewModel {
     // サーバー呼び出す用のリソース
@@ -94,6 +58,27 @@ public class CategoryViewModel extends ViewModel {
 
     // 自分の学年
     private int grade;
+
+
+    // ここから質問関連
+    // 全般に関する現在の質問
+    private final MutableLiveData<Set<Question>> currentQuestions = new MutableLiveData<>();
+//    private final MutableLiveData<Set<Question>> currentGeneralQuestions = new MutableLiveData<>();
+//    // 学校生活に関する現在の質問
+//    private final MutableLiveData<Set<Question>> currentUniversityGeneralQuestions = new MutableLiveData<>();
+//    // 大学全般に関する現在の質問
+//    private final MutableLiveData<Set<Question>> currentUniversityQuestions = new MutableLiveData<>();
+//    // 学部全般に関する現在の質問
+//    private final MutableLiveData<Set<Question>> currentFacultyQuestions = new MutableLiveData<>();
+//    // 指定された学科に対する現在の質問
+//    private final MutableLiveData<Set<Question>> currentDepartmentQuestions = new MutableLiveData<>();
+
+    // 検索でいるかもしれないので残しておく
+//    private Set<Question> universityQuestions = null;
+//    private Set<Question> facultyQuestions = null;
+//    private Set<Question> departmentQuestions = null;
+
+
 
 
     // ログ用のタグ
@@ -146,6 +131,30 @@ public class CategoryViewModel extends ViewModel {
     public LiveData<Collection<Lecture>> getSearchLectureResults() {
         return searchLectureResults;
     }
+
+
+
+    // ここから質問関連(LiveData)、これらを呼んでもらう、質問を呼ぶだけなので区別いらない
+    public LiveData<Set<Question>> getQuestions() {
+        return currentQuestions;
+    }
+
+//    public LiveData<Set<Question>> getGeneralQuestions() {
+//        return currentGeneralQuestions;
+//    }
+//    public LiveData<Set<Question>> getUniversityGeneralQuestions() {
+//        return currentUniversityGeneralQuestions;
+//    }
+//    public LiveData<Set<Question>> getUniversityQuestions() {
+//        return currentUniversityQuestions;
+//    }
+//    public LiveData<Set<Question>> getFacultyQuestions() {
+//        return currentFacultyQuestions;
+//    }
+//    public LiveData<Set<Question>> getDepartmentQuestions() {
+//        return currentDepartmentQuestions;
+//    }
+
 
     // 大学特有の授業が届いた時に呼ばれるメソッド
     public void setUniversityLectures(Collection<Lecture> universityLectures) {
@@ -602,6 +611,135 @@ public class CategoryViewModel extends ViewModel {
             }
         });
     }
+
+    // 全般に関する質問
+    public void generalQuestions() {
+        categoryResource.getGeneralQuestions().enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentQuestions.setValue(response.body());
+                    Log.d(TAG, "【全般】に対する質問一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+
+
+    // 学校生活に対する質問
+    public void universityGeneralQuestions(String univId) {
+        categoryResource.getUniversityGeneralQuestions(univId).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentQuestions.setValue(response.body());
+                    Log.d(TAG, "学校生活に対する質問一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 大学全般の質問
+    public void universityQuestions(String univId, String lectureId) {
+        categoryResource.getUniversityLectureQuestions(univId, lectureId).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentQuestions.setValue(response.body());
+                    Log.d(TAG, "大学全般の質問取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 学部全般の質問
+    public void facultyQuestions(String univId, String facultyName, String lectureId) {
+        categoryResource.getFacultyQuestions(univId, facultyName, lectureId).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentQuestions.setValue(response.body());
+                    Log.d(TAG, "学部全般の質問取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    // 学科に対する質問
+    public void departmentQuestions(String univId, String facultyName, String departmentName, String lectureId) {
+        categoryResource.getDepartmentQuestions(univId, facultyName, departmentName, lectureId).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentQuestions.setValue(response.body());
+                    Log.d(TAG, "指定した学科に対する質問取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+
+//    // ここから検索関連(メソッド)
+//    // 大学特有の授業が届いた時に呼ばれるメソッド
+//    public void setUniversityQuestions(Set<Question> universityQuestions) {
+//        if(universityQuestions != null) {
+//            this.universityQuestions = universityQuestions;
+//        } else {
+//            this.universityQuestions = new HashSet<>();
+//        }
+//    }
+//
+//    public void setFacultyQuestions(Set<Question> facultyQuestions) {
+//        if(facultyQuestions != null) {
+//            this.facultyQuestions = facultyQuestions;
+//        } else {
+//            this.facultyQuestions = new HashSet<>();
+//        }
+//    }
+//
+//    public void setDepartmentQuestions(Set<Question> departmentQuestions) {
+//        if(departmentQuestions != null) {
+//            this.departmentQuestions = departmentQuestions;
+//        } else {
+//            this.departmentQuestions = new HashSet<>();
+//        }
+//    }
 
 
 }

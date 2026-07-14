@@ -37,7 +37,7 @@ public class AddLectureActivity extends AppCompatActivity {
     private  String facultyName;
     private  String departmentName;
 
-
+    private String day;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,7 @@ public class AddLectureActivity extends AppCompatActivity {
             return insets;
         });
         Intent reIntent = getIntent();
-        String day = reIntent.getStringExtra("day");
+        day = reIntent.getStringExtra("day");
         int period = reIntent.getIntExtra("period",1);
         int year = reIntent.getIntExtra("year",1);
         String semester = reIntent.getStringExtra("semester");
@@ -104,6 +104,8 @@ public class AddLectureActivity extends AppCompatActivity {
             AllyearButton.setEnabled(true);
         }else if("その他".equals(semester)){
             FirstButton.setText("その他");
+            FirstButton.setChecked(true);
+            day = "日";
             AllyearButton.setEnabled(false);
         }
 
@@ -119,6 +121,9 @@ public class AddLectureActivity extends AppCompatActivity {
 
                 int majorId = RadioGroupMajor.getCheckedRadioButtonId();
                 int semesterId = RadioButtonSemester.getCheckedRadioButtonId();
+
+                Log.d("addLecture", "majorId: " + majorId);
+                Log.d("addLecture", "semesterId: " + semesterId);
 
                 if(majorId == -1){
                     Toast.makeText(AddLectureActivity.this,"授業科目を選択してください",Toast.LENGTH_SHORT).show();
@@ -159,7 +164,6 @@ public class AddLectureActivity extends AppCompatActivity {
 
 
                 Log.d("AddLectureActivity", "名前" + name + "曜日" + day + "時限" + period );
-                //LectureViewModel.createLecture(name, grade, "前期", classes, "水", period);
                 lectureViewModel.startAddLecture(name, grade, semester, classes, day, period, univId, facultyName, departmentName, type);
 //                lectureViewModel.startAddLecture("最適化", 2, "前期", 1, "水", 3, "univ-id1", "知能情報学部", "知能情報学科", "faculty");
 
