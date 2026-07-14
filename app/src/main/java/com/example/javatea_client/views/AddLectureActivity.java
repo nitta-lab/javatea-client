@@ -164,7 +164,6 @@ public class AddLectureActivity extends AppCompatActivity {
 
 
                 Log.d("AddLectureActivity", "名前" + name + "曜日" + day + "時限" + period );
-                //LectureViewModel.createLecture(name, grade, "前期", classes, "水", period);
                 lectureViewModel.startAddLecture(name, grade, semester, classes, day, period, univId, facultyName, departmentName, type);
 //                lectureViewModel.startAddLecture("最適化", 2, "前期", 1, "水", 3, "univ-id1", "知能情報学部", "知能情報学科", "faculty");
 
