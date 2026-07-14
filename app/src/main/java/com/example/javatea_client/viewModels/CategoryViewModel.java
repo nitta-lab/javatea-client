@@ -61,9 +61,14 @@ public class CategoryViewModel extends ViewModel {
 
 
     // ここから質問関連
+
+    // 学校生活に関する現在の質問
     private final MutableLiveData<Set<Question>> currentUniversityGeneralQuestions = new MutableLiveData<>();
+    // 大学全般に関する現在の質問
     private final MutableLiveData<Set<Question>> currentUniversityQuestions = new MutableLiveData<>();
+    // 学部全般に関する現在の質問
     private final MutableLiveData<Set<Question>> currentFacultyQuestions = new MutableLiveData<>();
+    // 指定された学科に対する現在の質問
     private final MutableLiveData<Set<Question>> currentDepartmentQuestions = new MutableLiveData<>();
 
     // 検索でいるかもしれないので残しておく
@@ -597,6 +602,10 @@ public class CategoryViewModel extends ViewModel {
             }
         });
     }
+
+    // 全般に関する質問
+
+
 
     // 学校生活に対する質問
     public void universityGeneralQuestions(String univId) {
