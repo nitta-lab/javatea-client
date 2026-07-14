@@ -23,6 +23,7 @@ public interface QuestionResource {
             @Field("tags") List<String> tags,
             @Field("view-permission") String viewPermission,
             @Field("res-permission") String resPermission,
+            @Field("lectureId") String lectureId,
             @Field("token") String token
     );
 

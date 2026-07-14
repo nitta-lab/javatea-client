@@ -37,8 +37,8 @@ public class QuestionViewModel extends ViewModel {
     }
 
     //質問の作成
-    public void createQuestion(String token, String title, String body, String uid, List<String> tags, String viewPermmission, String resPermission){
-        questionResource.createQuestion(title, body, uid, tags, viewPermmission, resPermission, token).enqueue(new Callback<String>() {
+    public void createQuestion(String title, String body, String uid, List<String> tags, String viewPermission, String resPermission, String lectureId, String token){
+        questionResource.createQuestion(title, body, uid, tags, viewPermission, resPermission, lectureId, token).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null){
