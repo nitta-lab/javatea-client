@@ -15,6 +15,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import java.util.*;
+
 public class AnswerViewModel extends ViewModel {
 
     private final Retrofit retrofit;
@@ -42,6 +43,31 @@ public class AnswerViewModel extends ViewModel {
         return answer;
     }
 
+    public void loadAnswers(String qid,String uid,String token){
+        answerResource.getAnswers(qid,uid,token)
+                .enqueue(new Callback<HashMap<String, Answer>>() {
+                    @Override
+                    public void onResponse(Call<HashMap<String, Answer>> call, Response<HashMap<String, Answer>> response) {
+                        if(response.isSuccessful()&&response.body() != null){
+                            answers.setValue(response.body());
+                        }else{
+                            if(response.code() == 404){
+                                error.setValue("ユーザが存在しません");
+                            }else if(response.code() == 401){
+                                error.setValue("認証エラー");
+                            }else{
+                                error.setValue("answerの取得に失敗 " + response.code());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<HashMap<String, Answer>> call, Throwable throwable) {
+                        error.setValue("エラー: " + throwable.getMessage());
+                    }
+                });
+    }
+
     public void createAnswer(String qid,String uid,String body,String token){
         answerResource.createAnswer(qid,uid,body,token)
                 .enqueue(new Callback<Answer>() {
@@ -55,14 +81,39 @@ public class AnswerViewModel extends ViewModel {
                             }else if(response.code() == 401){
                                 error.setValue("認証エラー");
                             }else{
-                                error.setValue("answerの作成に失敗");
+                                error.setValue("answerの作成に失敗 " + response.code());
                             }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Answer> call, Throwable throwable) {
+                        error.setValue("エラー: " + throwable.getMessage());
+                    }
+                });
+    }
 
+    public void loadAnswer(String qid,String aid,String uid,String token){
+        answerResource.getAnswer(qid,aid,uid,token)
+                .enqueue(new Callback<Answer>() {
+                    @Override
+                    public void onResponse(Call<Answer> call, Response<Answer> response) {
+                        if(response.isSuccessful()&&response.body() != null){
+                            answer.setValue(response.body());
+                        }else{
+                            if(response.code() == 404){
+                                error.setValue("ユーザが存在しません");
+                            }else if(response.code() == 401){
+                                error.setValue("認証エラー");
+                            }else{
+                                error.setValue("answerの作成に失敗 " + response.code());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Answer> call, Throwable throwable) {
+                        error.setValue("エラー: " + throwable.getMessage());
                     }
                 });
     }
