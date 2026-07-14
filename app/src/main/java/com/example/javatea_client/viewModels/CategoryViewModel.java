@@ -227,6 +227,11 @@ public class CategoryViewModel extends ViewModel {
             boolean matchDay = lecture.getDay().equals(day);
             boolean matchPeriod = (lecture.getPeriod() == period);
 
+            if(semester.equals("その他")){
+                matchDay = true;
+                matchPeriod = true;
+            }
+
             boolean matchGrade = false;
             int lectureGrade = lecture.getGrade();
             if(grade >= lectureGrade) {
