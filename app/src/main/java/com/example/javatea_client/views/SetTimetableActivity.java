@@ -79,7 +79,14 @@ public class SetTimetableActivity extends AppCompatActivity {
             @Override
             public void onChanged(TreeMap<Integer, HashSet<Lecture>> timetable) {
                 if (timetable != null) {
-                    Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    Intent intent;
+                    if(semester.equals("その他")){
+                        intent = new Intent(SetTimetableActivity.this, OtherLecturesActivity.class);
+                    }else{
+                        intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    }
+                    intent.putExtra("year",year);
+                    intent.putExtra("semester",semester);
                     startActivity(intent);
                 }
             }
@@ -178,7 +185,14 @@ public class SetTimetableActivity extends AppCompatActivity {
             public void onClick(View v) { //クリックされたとき
                 if(lectureId != null) { //すでに授業が入っていた時
                     timetableViewModel.removeLecture(userId, year, lectureId, token);
-                    Intent intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    Intent intent;
+                    if(semester.equals("その他")){
+                        intent = new Intent(SetTimetableActivity.this, OtherLecturesActivity.class);
+                    }else{
+                        intent = new Intent(SetTimetableActivity.this, TimetableActivity.class);
+                    }
+                    intent.putExtra("year",year);
+                    intent.putExtra("semester",semester);
                     startActivity(intent);
 //                    finish();
                 }
