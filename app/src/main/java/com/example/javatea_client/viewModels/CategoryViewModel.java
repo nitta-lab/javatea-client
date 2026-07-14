@@ -61,7 +61,8 @@ public class CategoryViewModel extends ViewModel {
 
 
     // ここから質問関連
-
+    // 全般に関する現在の質問
+    private final MutableLiveData<Set<Question>> currentGeneralQuestions = new MutableLiveData<>();
     // 学校生活に関する現在の質問
     private final MutableLiveData<Set<Question>> currentUniversityGeneralQuestions = new MutableLiveData<>();
     // 大学全般に関する現在の質問
@@ -133,6 +134,9 @@ public class CategoryViewModel extends ViewModel {
 
 
     // ここから質問関連(LiveData)、これらを呼んでもらう
+    public LiveData<Set<Question>> getGeneralQuestions() {
+        return currentGeneralQuestions;
+    }
     public LiveData<Set<Question>> getUniversityGeneralQuestions() {
         return currentUniversityGeneralQuestions;
     }
@@ -604,6 +608,24 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 全般に関する質問
+    public void generalQuestions() {
+        categoryResource.getGeneralQuestions().enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    currentGeneralQuestions.setValue(response.body());
+                    Log.d(TAG, "【全般】に対する質問一覧取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
 
 
 
