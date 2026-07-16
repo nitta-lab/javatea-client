@@ -61,11 +61,12 @@ public class SignUpActivity1 extends AppCompatActivity {
         Button nextButton = findViewById(R.id.NextButton);
         Button backButton = findViewById(R.id.BackButton);
         Button registerButton = findViewById(R.id.RegisterButton);
+        Button goToLoginButton = findViewById(R.id.goToLoginButton);
 
         // 上部の文字
         ModeBar.setup(this, "新規登録");
 
-        // ユーザを監視して登録後、ログインを呼び出す
+        // ユーザを監視して登録後、画面遷移
         userViewModel.getUser().observe(this, user -> {
             if(user != null) {
                 // javateaに保存
@@ -166,6 +167,13 @@ public class SignUpActivity1 extends AppCompatActivity {
             registerButton.setVisibility(View.INVISIBLE);
             backButton.setVisibility(View.INVISIBLE);
             nextButton.setVisibility(View.VISIBLE);
+        });
+
+        // Loginボタンの処理
+        goToLoginButton.setOnClickListener(view -> {
+            Intent intent = new Intent(SignUpActivity1.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         // 登録ボタンの処理
