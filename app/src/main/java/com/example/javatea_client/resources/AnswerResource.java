@@ -27,7 +27,8 @@ public interface AnswerResource {
             @Path("qid") String qid,
             @Field("uid") String uid,
             @Field("body") String body,
-            @Field("token") String token
+            @Field("token") String token,
+            @Field("name") String name
     );
 
     //answerを一つ取得
