@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
@@ -51,20 +54,29 @@ public class ViewAnswerFragment extends Fragment {
 
         //AnswerViewModelの取得
         answerViewModel = new ViewModelProvider(requireActivity()).get(AnswerViewModel.class);
+        answerViewModel.getError().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Log.d("error",s);
+                Toast.makeText(requireActivity(), s, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         LectureListActivity activity = (LectureListActivity) requireActivity();
 
-        //前の画面から情報を取得
-        String qid = getArguments().getString("qid");
-        String aid = getArguments().getString("aid");
+        //親アクティビティから情報を取得
+        String qid = activity.getQid();
+        String aid = activity.getAid();
 
         //Javateaから情報を取得
         Javatea javatea = (Javatea) requireActivity().getApplication();
         userId = javatea.getUserId();
         token = javatea.getToken();
 
-        //指定aidのAnswerを取得する
-        answerViewModel.loadAnswer(qid,aid,userId,token);
+        if(!(qid.isEmpty()||aid.isEmpty())){
+            //指定aidのAnswerを取得する
+            answerViewModel.loadAnswer(qid,aid,userId,token);
+        }
 
         answerViewModel.getAnswer().observe(getViewLifecycleOwner(), new Observer<Answer>() {
             @Override
@@ -80,16 +92,21 @@ public class ViewAnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //画面遷移
-                //getParentFragmentManager().beginTransaction().replace(R.id.fragment_container)
+//                requireActivity().getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .replace(R.id.fragment_container, new viewQuestionFragment())
+//                        .commit();
             }
         });
     }
 
     private void setAnswerer(View view){
-        answererTextView = view.findViewById(R.id.answer);
+        answererTextView = view.findViewById(R.id.answer_text);
+        answerBodyTextView = view.findViewById(R.id.answer_body);
+        answererTextView.setMovementMethod(new ScrollingMovementMethod());//スクロールできるようにする。
         if(displayAnswer == null){
-            answererTextView.setText("");
-            answerBodyTextView.setText("");
+            answererTextView.setText("選択されてません");
+            answerBodyTextView.setText("選択されてません");
         }else{
             String answerer = displayAnswer.getUid();
             answererTextView.setText(answerer + "さんの回答");
