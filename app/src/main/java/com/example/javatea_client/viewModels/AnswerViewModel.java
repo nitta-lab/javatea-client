@@ -68,8 +68,8 @@ public class AnswerViewModel extends ViewModel {
                 });
     }
 
-    public void createAnswer(String qid,String uid,String body,String token){
-        answerResource.createAnswer(qid,uid,body,token)
+    public void createAnswer(String qid,String uid,String body,String token,String name){
+        answerResource.createAnswer(qid,uid,body,token,name)
                 .enqueue(new Callback<Answer>() {
                     @Override
                     public void onResponse(Call<Answer> call, Response<Answer> response) {
