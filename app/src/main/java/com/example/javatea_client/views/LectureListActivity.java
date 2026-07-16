@@ -29,12 +29,14 @@ public class LectureListActivity extends AppCompatActivity {
     private TextView tvCategory;
 
     // 現在の階層
-    private final List<String> categoryPath = new ArrayList<>();
+    private List<String> categoryPath = new ArrayList<>();
+    private List<String> categoryPathType = new ArrayList<>();
     //大学名を保持する変数
     private String univId = "";
     private String facultyName = "";
     private String departmentName = "";
     private String lectureListType = "";
+    private String lectureId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +114,19 @@ public class LectureListActivity extends AppCompatActivity {
         return departmentName;
     }
 
-    // 学科名を保存する
+    //学科名を保存する
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    //授業IDを取得する
+    public String getLectureId() {
+        return lectureId;
+    }
+
+    //授業IDを保存する
+    public void setLectureId(String lectureId) {
+        this.lectureId = lectureId;
     }
 
     // 階層を取得する
@@ -123,8 +135,9 @@ public class LectureListActivity extends AppCompatActivity {
     }
 
     //階層を1つ追加
-    public void addCategory(String categoryName) {
+    public void addCategory(String categoryName, String categoryType) {
         categoryPath.add(categoryName);
+        categoryPathType.add(categoryType);
         updateCategoryText();
     }
 
@@ -164,6 +177,7 @@ public class LectureListActivity extends AppCompatActivity {
 
         if (!categoryPath.isEmpty()) {
             categoryPath.remove(categoryPath.size() - 1);
+            categoryPathType.remove(categoryPathType.size() - 1);
         }
 
         updateCategoryText();
@@ -171,21 +185,46 @@ public class LectureListActivity extends AppCompatActivity {
 
     private void backToCategory(int index) {
 
-        while (categoryPath.size() > index + 1) {
+        while (categoryPathType.size() > index + 1) {
             removeLastCategory();
         }
 
-        switch (index) {
+        switch (categoryPathType.get(categoryPathType.size()-1)) {
 
-            case 0:
-                // 甲南大学
+            case "全般":
+                setLectureId("全般");
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container,new QuestionSelectFragment())
+                        .commit();
+                break;
+
+            case "【大学全般】":
+                // 学科
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new LectureSelectFragment())
+                        .commit();
+                break;
+
+            case "大学":
+                // 大学
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container, new UniversityFragment())
                         .commit();
                 break;
 
-            case 1:
+            case "【学校生活】":
+                // 授業
+                setLectureId("学校生活");
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new QuestionSelectFragment())
+                        .commit();
+                break;
+
+            case "【授業】":
                 // 授業
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -193,7 +232,15 @@ public class LectureListActivity extends AppCompatActivity {
                         .commit();
                 break;
 
-            case 2:
+            case "【学部全般】":
+                // 学科
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new LectureSelectFragment())
+                        .commit();
+                break;
+
+            case "学部":
                 // 学部
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -201,8 +248,19 @@ public class LectureListActivity extends AppCompatActivity {
                         .commit();
                 break;
 
-            case 3:
+            case "学科":
                 // 学科
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new LectureSelectFragment())
+                        .commit();
+                break;
+
+            case "授業":
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container,new QuestionSelectFragment())
+                        .commit();
                 break;
         }
     }

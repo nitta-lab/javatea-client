@@ -1,11 +1,13 @@
 package com.example.javatea_client.resources;
 
 import com.example.javatea_client.models.Lecture;
+import com.example.javatea_client.models.Question;
 import com.example.javatea_client.models.University;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -17,6 +19,23 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface CategoryResource {
+    /**
+    * 【全般】質問の取得
+    */
+    @GET("categories/general/questions")
+    Call<Set<Question>> getGeneralQuestions(
+
+    );
+
+    /**
+     * 【全般】質問の追加
+     */
+    @FormUrlEncoded
+    @PUT("categories/general/questions/{qid}")
+    Call<Void> addGeneralQuestion(
+        @Path("qid") String qid
+    );
+
     /**
      * 大学一覧の取得
      */
@@ -65,6 +84,24 @@ public interface CategoryResource {
     );
 
     /**
+     * 大学全般に関する質問の取得
+     */
+
+    @GET("categories/universities/{univ-id}/general/questions")
+    Call<Set<Question>> getUniversityGeneralQuestions(
+            @Path("univ-id") String univId
+    );
+
+    /**
+     * 大学全般に関する質問の追加
+     */
+    @PUT("categories/universities/{univ-id}/general/questions/{qid}")
+    Call<Void> addUniversityGeneralQuestions(
+            @Path("univ-id") String univId,
+            @Path("qid") String qid
+    );
+
+    /**
      * 大学全般に属する科目一覧(ID)の取得
      */
     @GET("categories/universities/{univ-id}/lectures")
@@ -79,6 +116,25 @@ public interface CategoryResource {
     Call<Void> putUnivLectures(
             @Path("univ-id") String univId,
             @Path("lecture-id") String lectId
+    );
+
+    /**
+     * 大学特有の授業の質問を取得
+     */
+    @GET("categories/universities/{univ-id}/lectures/{lecture-id}/questions")
+    Call<Set<Question>> getUniversityLectureQuestions(
+            @Path("univ-id") String univId,
+            @Path("lecture-id") String lectureId
+    );
+
+    /**
+     * 大学特有の授業の質問を追加
+     */
+    @PUT("categories/universities/{univ-id}/lectures/{lecture-id}/questions/{qid}")
+    Call<Void> addUniversityLectureQuestions(
+            @Path("univ-id") String univId,
+            @Path("lecture-id") String lectureId,
+            @Path("qid") String qid
     );
 
     /**
@@ -118,6 +174,27 @@ public interface CategoryResource {
     );
 
     /**
+     * 学部科目の質問の取得
+     */
+    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/lectures/{lecture-id}/questions")
+    Call<Set<Question>> getFacultyQuestions(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName,
+            @Path("lecture-id") String lectureId
+    );
+
+    /**
+     * 学部科目の質問の追加
+     */
+    @PUT("categories/universities/{univ-id}/faculties/{faculty-name}/lectures/{lecture-id}/questions/{qid}")
+    Call<Void> addFacultyQuestion(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName,
+            @Path("lecture-id") String lectureId,
+            @Path("qid") String qid
+    );
+
+    /**
      * 学科一覧取得
      */
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments")
@@ -137,7 +214,7 @@ public interface CategoryResource {
     );
 
     /**
-     * 各学科特有の授業追加
+     * 各学科特有の授業取得
      */
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures")
     Call<Collection<Lecture>> getDepartmentLectures(
@@ -156,4 +233,50 @@ public interface CategoryResource {
             @Path("department-name") String departmentName,
             @Path("lecture-id") String lectureId
     );
+
+
+    /**
+     * 学科科目の質問の取得
+     */
+    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures/{lecture-id}/questions")
+    Call<Set<Question>> getDepartmentQuestions(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName,
+            @Path("department-name") String departmentName,
+            @Path("lecture-id") String lectureId
+    );
+
+    /**
+     * 学科科目の質問の追加
+     */
+    @PUT("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures/{lecture-id}/questions/{qid}")
+    Call<Void> addDepartmentQuestions(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName,
+            @Path("department-name") String departmentName,
+            @Path("lecture-id") String lectureId,
+            @Path("qid") String qid
+    );
+
+    /**
+     * 検索に使うもの
+     */
+    @GET("categories/universities/{univ-id}/all-questions")
+    Call<Set<Question>> getAllUniversityQuestions(
+            @Path("univ-id") String univId
+    );
+
+    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/all-questions")
+    Call<Set<Question>> getAllFacultyQuestions(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName
+    );
+
+    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/all-questions")
+    Call<Set<Question>> getAllDepartmentQuestions(
+            @Path("univ-id") String univId,
+            @Path("faculty-name") String facultyName,
+            @Path("department-name") String departmentName
+    );
+
 }

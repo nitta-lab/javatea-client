@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class University {
@@ -21,6 +23,10 @@ public class University {
 
     // Listの型に修正
     private List<String> faculties;
+
+    private final Set<Question> questions = new HashSet<>();
+    private final Set<Question> allQuestions = new HashSet<>();
+
 
     // 空のUniversityがないと新しく設定できないためある
     private University(){};
@@ -74,4 +80,9 @@ public class University {
         return faculties;
     }
 
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public Set<Question> getAllQuestions() { return allQuestions; }
 }

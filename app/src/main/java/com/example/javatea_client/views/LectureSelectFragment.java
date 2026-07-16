@@ -54,13 +54,13 @@ public class LectureSelectFragment extends Fragment {
 
         switch(lectureListType) {
             case "general_university":
-                categoryViewModel.loadUniversityLectures(univId);
+                categoryViewModel.universityLectures(univId);
                 break;
             case "general_faculty":
-                categoryViewModel.loadFacultyLectures(univId, facultyName);
+                categoryViewModel.facultyLectures(univId, facultyName);
                 break;
             case "department":
-                categoryViewModel.loadDepartmentLectures(univId, facultyName, departmentName);
+                categoryViewModel.departmentLectures(univId, facultyName, departmentName);
                 break;
             default:
                 break;
@@ -127,16 +127,15 @@ public class LectureSelectFragment extends Fragment {
             LectureListActivity activity =
                     (LectureListActivity) requireActivity();
 
-            activity.setDepartmentName(lectureName);
-            activity.addCategory(lectureName);
+            activity.setLectureId(lecture.getLectureId());
+            activity.addCategory(lectureName, "授業");
 
             // 次の画面へ遷移する場合はここに追加
-//        activity.getSupportFragmentManager()
-//                .beginTransaction()
-//                .replace(R.id.fragment_container,
-//                        new QuestionSelectFragment())
-//                .addToBackStack(null)
-//                .commit();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
 
         layoutLectureList.addView(button);

@@ -90,6 +90,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
                                 Intent intent = new Intent(OtherLecturesActivity.this,SetTimetableActivity.class);
                                 intent.putExtra("year",year);
                                 intent.putExtra("semester","その他");
+                                intent.putExtra("lectureId",lecture.getLectureId());
                                 startActivity(intent);
                                 return true;
                             }
@@ -100,6 +101,17 @@ public class OtherLecturesActivity extends AppCompatActivity {
             }
         });
         otherLectures = findViewById(R.id.otherLectures);
+        TextView other = findViewById(R.id.other);
+        other.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Intent intent = new Intent(OtherLecturesActivity.this,SetTimetableActivity.class);
+                intent.putExtra("year",year);
+                intent.putExtra("semester","その他");
+                startActivity(intent);
+                return true;
+            }
+        });
     }
     private TextView createLectureTextView(String name){
         TextView lecture = new TextView(this);

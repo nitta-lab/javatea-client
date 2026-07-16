@@ -100,10 +100,9 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.52" />
+                app:layout_constraintVertical_bias="0.519" />
 
             <TextView
                 android:id="@+id/Numbers"
@@ -198,7 +197,7 @@
 
             <RadioGroup
                 android:id="@+id/RadioGroupSemester"
-                android:layout_width="287dp"
+                android:layout_width="166dp"
                 android:layout_height="28dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -210,7 +209,7 @@
 
                 <RadioButton
                     android:id="@+id/FirstButton"
-                    android:layout_width="106dp"
+                    android:layout_width="81dp"
                     android:layout_height="28dp"
                     android:text="前期" />
 
@@ -222,13 +221,6 @@
                     android:text="通年"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="442dp" />
-
-                <RadioButton
-                    android:id="@+id/OtherButton2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="その他" />
 
 
             </RadioGroup>
@@ -259,7 +251,7 @@
                     android:text="学科専門" />
 
                 <RadioButton
-                    android:id="@+id/OtherButton1"
+                    android:id="@+id/UnivButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
