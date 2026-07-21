@@ -2,6 +2,7 @@ package com.example.javatea_client.viewModels;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -35,6 +36,8 @@ public class QuestionViewModel extends ViewModel {
                 .build();
         this.questionResource = retrofit.create(QuestionResource.class);
     }
+
+    public LiveData<Question> getCurrentQuestion(){ return question; }
 
     //質問の作成
     public void createQuestion(String title, String body, String uid, List<String> tags, String viewPermission, String resPermission, String lectureId, String token){
