@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".views.ViewQuwstionFragment">
+    tools:context=".views.ViewQuestionFragment">
 
     <!-- カテゴリ -->
 
@@ -24,7 +24,7 @@
         android:gravity="center_vertical|start"
         android:maxLines="3"
         android:padding="16dp"
-        android:text="タイトル：ここに質問タイトルが入ります"
+        android:text="タイトル：読み込み中..."
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="4dp"
-                android:text="ここに質問内容が入ります"
+                android:text="読み込み中..."
                 android:textColor="#222222"
                 android:textSize="16sp" />
 
@@ -110,6 +110,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.687"
         tools:listitem="@layout/item_answer" />
+
+    <Button
+        android:id="@+id/btnAnswer"
+        android:layout_width="128dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#FFBBC6"
+        android:text="回答する"
+        android:textColor="#222222"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.854" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
