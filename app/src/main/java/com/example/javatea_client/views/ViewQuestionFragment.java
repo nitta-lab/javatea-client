@@ -116,7 +116,7 @@ public class ViewQuestionFragment extends Fragment {
         btnAnswer.setOnClickListener(v -> {
 
             //AddAnswerFragmentへ遷移
-            //requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddAnswerFragment()).addToBackStack(null).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddAnswerFragment()).addToBackStack(null).commit();
         });
 
     }

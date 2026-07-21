@@ -81,19 +81,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvCategory"
-        android:layout_width="374dp"
-        android:layout_height="56dp"
-        android:gravity="center|left"
-        android:text="　カテゴリ："
-        android:background="#FFBBC6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.086" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/answer_list"
