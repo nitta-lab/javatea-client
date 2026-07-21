@@ -2,65 +2,62 @@ package com.example.javatea_client.views;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.ScrollCaptureCallback;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
+import com.example.javatea_client.viewModels.AnswerViewModel;
+import com.example.javatea_client.viewModels.UserViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddAnswerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddAnswerFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private AnswerViewModel answerViewModel;
+    private UserViewModel userViewModel;
+    private Javatea javatea;
 
     public AddAnswerFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddAnswerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddAnswerFragment newInstance(String param1, String param2) {
-        AddAnswerFragment fragment = new AddAnswerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_answer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        TextView questionHeader = view.findViewById(R.id.questionHeader);
+        ScrollView questionFrame = view.findViewById(R.id.questionFrame);
+        TextInputEditText questionBody = view.findViewById(R.id.questionBody);
+        TextView answerHeader = view.findViewById(R.id.answerHeader);
+        ScrollView answerFrame = view.findViewById(R.id.answerFrame);
+        TextInputEditText answerBody = view.findViewById(R.id.answerBody);
+        TextView previewHeader = view.findViewById(R.id.previewHeader);
+        View previewDivider = view.findViewById(R.id.previewDivider);
+        ScrollView previewFrame = view.findViewById(R.id.previewFrame);
+        TextInputEditText previewBody = view.findViewById(R.id.previewBody);
+        View loadingOverlay = view.findViewById(R.id.loadingOverlay);
+
+
     }
 }

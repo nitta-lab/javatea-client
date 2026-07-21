@@ -7,7 +7,7 @@
     tools:context=".views.AddAnswerFragment">
 
     <TextView
-        android:id="@+id/QuestionTitle"
+        android:id="@+id/questionHeader"
         android:layout_width="341dp"
         android:layout_height="wrap_content"
         android:background="#FFE6E0E9"
@@ -22,21 +22,21 @@
         app:layout_constraintVertical_bias="0.025" />
 
     <ScrollView
-        android:id="@+id/QuestionFrame"
+        android:id="@+id/questionFrame"
         android:layout_width="341dp"
         android:layout_height="125dp"
         android:background="#FFE6E0E9"
-        app:layout_constraintEnd_toEndOf="@id/QuestionTitle"
-        app:layout_constraintStart_toStartOf="@id/QuestionTitle"
-        app:layout_constraintTop_toBottomOf="@id/QuestionTitle"
+        app:layout_constraintEnd_toEndOf="@id/questionHeader"
+        app:layout_constraintStart_toStartOf="@id/questionHeader"
+        app:layout_constraintTop_toBottomOf="@id/questionHeader"
         app:layout_constraintVertical_bias="0.346">
 
         <TextView
-            android:id="@+id/QuestionBody"
+            android:id="@+id/questionBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#FFE6E0E9"
-            android:text="テストテストテストテストテストテストテストテストテストテストテストテスト"
+            android:text=""
             android:textColor="#000000"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -45,7 +45,7 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/AnswerTitle"
+        android:id="@+id/answerHeader"
         android:layout_width="341dp"
         android:layout_height="wrap_content"
         android:background="#FFE6E0E9"
@@ -56,21 +56,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/QuestionFrame"
+        app:layout_constraintTop_toBottomOf="@id/questionFrame"
         app:layout_constraintVertical_bias="0.02" />
 
     <ScrollView
-        android:id="@+id/AnswerFrame"
+        android:id="@+id/answerFrame"
         android:layout_width="341dp"
         android:layout_height="295dp"
         android:background="#FFE6E0E9"
-        app:layout_constraintEnd_toEndOf="@id/AnswerTitle"
-        app:layout_constraintStart_toStartOf="@id/AnswerTitle"
-        app:layout_constraintTop_toBottomOf="@id/AnswerTitle"
+        app:layout_constraintEnd_toEndOf="@id/answerHeader"
+        app:layout_constraintStart_toStartOf="@id/answerHeader"
+        app:layout_constraintTop_toBottomOf="@id/answerHeader"
         app:layout_constraintVertical_bias="0.346">
 
         <EditText
-            android:id="@+id/AnswerBody"
+            android:id="@+id/answerBody"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FFE6E0E9"
@@ -82,8 +82,60 @@
             tools:layout_editor_absoluteY="75dp" />
     </ScrollView>
 
+    <ScrollView
+        android:id="@+id/previewFrame"
+        android:layout_width="341dp"
+        android:layout_height="421dp"
+        android:background="#FFE6E0E9"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/previewHeader"
+        app:layout_constraintStart_toStartOf="@id/previewHeader"
+        app:layout_constraintTop_toBottomOf="@id/previewHeader">
+
+        <EditText
+            android:id="@+id/previewBody"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFE6E0E9"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="75dp" />
+    </ScrollView>
+
+    <View
+        android:id="@+id/previewDivider"
+        android:layout_width="341dp"
+        android:layout_height="52dp"
+        android:background="@drawable/dashed_lined_box"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/previewHeader"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/previewHeader"
+        android:layout_width="341dp"
+        android:layout_height="wrap_content"
+        android:background="#FFE6E0E9"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingVertical="15dp"
+        android:text="以下の内容でよろしいですか？"
+        android:textColor="#000000"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/questionHeader"
+        app:layout_constraintVertical_bias="0.0" />
+
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/confirmButton"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:backgroundTint="#FFE8E8"
@@ -92,11 +144,44 @@
         android:textColor="#000000"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/AnswerFrame"
+        app:layout_constraintEnd_toEndOf="@id/answerFrame"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/AnswerFrame"
+        app:layout_constraintTop_toBottomOf="@id/answerFrame"
         app:layout_constraintVertical_bias="0.165"
         app:rippleColor="@color/black" />
 
+    <Button
+        android:id="@+id/postButton"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFE8E8"
+        android:paddingVertical="9dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="公開する"
+        android:textColor="#000000"
+        android:visibility="invisible"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/answerFrame"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/answerFrame"
+        app:layout_constraintVertical_bias="0.165"
+        app:rippleColor="@color/black" />
+
+    <View
+        android:id="@+id/loadingOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#66CCCCCC"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
