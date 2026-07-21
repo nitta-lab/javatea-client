@@ -12,4 +12,93 @@
         layout="@layout/navigation" />
     <include layout="@layout/activity_mode_bar"/>
 
+    <View
+        android:id="@+id/user_icon_area"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/btn_add_back_ground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.161" />
+
+    <TextView
+        android:id="@+id/nickname_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ニックネーム"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toEndOf="@+id/user_icon_area"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.143" />
+
+    <TextView
+        android:id="@+id/nickname_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="おはよう"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.216"
+        app:layout_constraintStart_toEndOf="@+id/nickname_label"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.143" />
+
+    <TextView
+        android:id="@+id/answer_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="128dp"
+        android:text="回答数"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.347"
+        app:layout_constraintStart_toEndOf="@+id/user_icon_area"
+        app:layout_constraintTop_toBottomOf="@+id/nickname_label"
+        app:layout_constraintVertical_bias="0.035" />
+
+    <TextView
+        android:id="@+id/answer_count_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.336"
+        app:layout_constraintStart_toEndOf="@+id/answer_count_label"
+        app:layout_constraintTop_toBottomOf="@+id/nickname_text"
+        app:layout_constraintVertical_bias="0.037" />
+
+    <TextView
+        android:id="@+id/best_answer_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="ベストアンサー数"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/user_icon_area"
+        app:layout_constraintTop_toBottomOf="@+id/answer_count_label"
+        app:layout_constraintVertical_bias="0.031" />
+
+    <TextView
+        android:id="@+id/best_answer_count_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toEndOf="@+id/best_answer_count_label"
+        app:layout_constraintTop_toBottomOf="@+id/answer_count_text"
+        app:layout_constraintVertical_bias="0.032" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
