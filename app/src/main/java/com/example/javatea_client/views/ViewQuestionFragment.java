@@ -111,6 +111,14 @@ public class ViewQuestionFragment extends Fragment {
         //サーバへ取得の依頼
         answerViewModel.loadAnswers(qid, uid, token);
 
+
+        //回答するボタンを押したとき
+        btnAnswer.setOnClickListener(v -> {
+
+            //AddAnswerFragmentへ遷移
+            //requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddAnswerFragment()).addToBackStack(null).commit();
+        });
+
     }
 
 }
