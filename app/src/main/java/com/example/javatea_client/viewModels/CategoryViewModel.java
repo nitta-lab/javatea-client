@@ -15,6 +15,7 @@ import com.example.javatea_client.resources.CategoryResource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -74,9 +75,12 @@ public class CategoryViewModel extends ViewModel {
 //    private final MutableLiveData<Set<Question>> currentDepartmentQuestions = new MutableLiveData<>();
 
     // 検索でいるかもしれないので残しておく
-//    private Set<Question> universityQuestions = null;
-//    private Set<Question> facultyQuestions = null;
-//    private Set<Question> departmentQuestions = null;
+    private final MutableLiveData<Set<Question>> searchQuestions = new MutableLiveData<>();
+    private Set<Question> generalQuestions = null;
+    private Set<Question> universityGeneralQuestions = null;
+    private Set<Question> universityQuestions = null;
+    private Set<Question> facultyQuestions = null;
+    private Set<Question> departmentQuestions = null;
 
 
 
@@ -154,6 +158,11 @@ public class CategoryViewModel extends ViewModel {
 //    public LiveData<Set<Question>> getDepartmentQuestions() {
 //        return currentDepartmentQuestions;
 //    }
+
+    // 検索のときのLiveData, これを呼んでもらう予定
+    public LiveData<Set<Question>> getSearchQuestions() {
+        return searchQuestions;
+    }
 
 
     // 大学特有の授業が届いた時に呼ばれるメソッド
@@ -720,31 +729,52 @@ public class CategoryViewModel extends ViewModel {
     }
 
 
-//    // ここから検索関連(メソッド)
-//    // 大学特有の授業が届いた時に呼ばれるメソッド
-//    public void setUniversityQuestions(Set<Question> universityQuestions) {
-//        if(universityQuestions != null) {
-//            this.universityQuestions = universityQuestions;
-//        } else {
-//            this.universityQuestions = new HashSet<>();
-//        }
-//    }
-//
-//    public void setFacultyQuestions(Set<Question> facultyQuestions) {
-//        if(facultyQuestions != null) {
-//            this.facultyQuestions = facultyQuestions;
-//        } else {
-//            this.facultyQuestions = new HashSet<>();
-//        }
-//    }
-//
-//    public void setDepartmentQuestions(Set<Question> departmentQuestions) {
-//        if(departmentQuestions != null) {
-//            this.departmentQuestions = departmentQuestions;
-//        } else {
-//            this.departmentQuestions = new HashSet<>();
-//        }
-//    }
+    // ここから検索関連(メソッド)
+    public void setGeneralQuestions(Set<Question> generalQuestions) {
+        if(generalQuestions != null) {
+            this.generalQuestions = generalQuestions;
+        } else {
+            this.generalQuestions = new HashSet<>();
+        }
+    }
+
+    public void setUniversityGeneralQuestions(Set<Question> universityGeneralQuestions) {
+        if(universityGeneralQuestions != null) {
+            this.universityGeneralQuestions = universityGeneralQuestions;
+        } else {
+            this.universityGeneralQuestions = new HashSet<>();
+        }
+    }
+
+    public void setUniversityQuestions(Set<Question> universityQuestions) {
+        if(universityQuestions != null) {
+            this.universityQuestions = universityQuestions;
+        } else {
+            this.universityQuestions = new HashSet<>();
+        }
+    }
+
+    public void setFacultyQuestions(Set<Question> facultyQuestions) {
+        if(facultyQuestions != null) {
+            this.facultyQuestions = facultyQuestions;
+        } else {
+            this.facultyQuestions = new HashSet<>();
+        }
+    }
+
+    public void setDepartmentQuestions(Set<Question> departmentQuestions) {
+        if(departmentQuestions != null) {
+            this.departmentQuestions = departmentQuestions;
+        } else {
+            this.departmentQuestions = new HashSet<>();
+        }
+    }
+
+    // 通信呼んでもらう用(それぞれの質問と性質を引数にするはず)
+    public void callSearchQuestions() {
+
+    }
+
 
 
 }
