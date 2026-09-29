@@ -137,7 +137,7 @@ public class LectureListActivity extends AppCompatActivity {
     public String getAid() { return aid; }
 
     //Aidを保存する
-    public void setAid() { this.aid = aid; }
+    public void setAid(String aid) { this.aid = aid; }
 
     // 階層を取得する
     public List<String> getCategoryPath() {
