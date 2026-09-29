@@ -37,7 +37,7 @@ public class UniversityFragment extends Fragment {
 
         // 授業ボタンの処理
         btnLecture.setOnClickListener(v -> {
-            activity.addCategory("授業");
+            activity.addCategory("授業", "【授業】");
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new FacultySelectFragment())
@@ -47,8 +47,13 @@ public class UniversityFragment extends Fragment {
 
         // 学校生活ボタンの処理
         btnSchoolLife.setOnClickListener(v -> {
-            activity.addCategory("学校生活");
-            // ここは後で学校生活用の画面に進ませる
+            activity.setLectureId("学校生活");
+            activity.addCategory("学校生活", "【学校生活】");
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 }

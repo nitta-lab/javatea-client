@@ -127,8 +127,21 @@ public class LectureViewModel extends ViewModel {
     ) {
 
         error.setValue(null);
+        String tempFacultyName = null;
+        String tempDepartmentName = null;
 
-        lectureResource.createLecture(name, grade, semester, frame, day, period).enqueue(new Callback<String>() {
+        if(type.equals("その他")) {
+            tempFacultyName = null;
+            tempDepartmentName = null;
+        } else if(type.equals("学部専門")) {
+            tempFacultyName = facultyName;
+            tempDepartmentName = null;
+        } else if(type.equals("学科専門")) {
+            tempFacultyName = facultyName;
+            tempDepartmentName = departmentName;
+        }
+
+        lectureResource.createLecture(name, grade, semester, frame, day, period, tempFacultyName, tempDepartmentName).enqueue(new Callback<String>() {
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

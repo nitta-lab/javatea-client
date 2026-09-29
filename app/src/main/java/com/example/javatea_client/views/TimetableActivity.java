@@ -42,6 +42,7 @@ public class TimetableActivity extends AppCompatActivity {
     //ユーザ情報
     private String userId;
     private String token;
+    private String univId;
     private final int currentYear = LocalDateTime.now().getYear();
     private final int currentMonth = LocalDateTime.now().getMonthValue();
     private int intentYear;
@@ -85,6 +86,7 @@ public class TimetableActivity extends AppCompatActivity {
         javaTea.setView("Timetable");
         userId = javaTea.getUserId();
         token = javaTea.getToken();
+        univId = javaTea.getUnivId();
 
         Intent intent = getIntent();
         intentYear = intent.getIntExtra("year", 0);
@@ -349,6 +351,20 @@ public class TimetableActivity extends AppCompatActivity {
                         }
                         startActivity(intent);
                         return true;
+                    });
+                    textView.setOnClickListener(v -> {
+                        Point p = (Point) v.getTag();
+                        Lecture lecture = currentTimetableLecture.get(DAYS[p.y-1]).get(p.x);
+                        if(lecture != null){
+                            Intent intent = new Intent(TimetableActivity.this, LectureListActivity.class);
+                            intent.putExtra("univId", univId);
+                            intent.putExtra("facultyName", lecture.getFacultyName());
+                            intent.putExtra("departmentName", lecture.getDepartmentName());
+                            intent.putExtra("timetable", "timetable");
+                            intent.putExtra("Lecture-id",lecture.getLectureId());
+                            intent.putExtra("LectureName", lecture.getName());
+                            startActivity(intent);
+                        }
                     });
                 } else if (col == 0 && row == 0) {
                     currentSemester = textView;

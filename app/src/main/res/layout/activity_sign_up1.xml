@@ -11,6 +11,20 @@
     <include layout="@layout/activity_mode_bar"/>
 
     <Button
+        android:id="@+id/goToLoginButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="118dp"
+        android:layout_height="62dp"
+        android:text="Login"
+        android:textColor="#007AFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.206"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96" />
+
+    <Button
         android:id="@+id/NextButton"
         android:layout_width="118dp"
         android:layout_height="60dp"

@@ -5,30 +5,32 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".views.LectureListActivity">
-    <include layout="@layout/navigation"/>
     <include layout="@layout/activity_mode_bar"/>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <include layout="@layout/navigation"/>
 
     <TextView
         android:id="@+id/tvCategory"
-        android:layout_width="374dp"
+        android:layout_width="0dp"
         android:layout_height="56dp"
-        android:gravity="center|left"
-        android:text="　カテゴリ："
+        android:layout_marginTop="70dp"
         android:background="#FFBBC6"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:text="カテゴリ："
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.086" />
+        app:layout_constraintTop_toBottomOf="@id/tvCategory" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

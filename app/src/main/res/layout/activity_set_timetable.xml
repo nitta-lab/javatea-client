@@ -121,7 +121,7 @@
         android:id="@+id/cancel_lecture_button"
         android:layout_width="148dp"
         android:layout_height="50dp"
-        android:text="設定しない"
+        android:text="削　除"
         app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintEnd_toEndOf="@+id/view2"
         app:layout_constraintHorizontal_bias="0.664"
