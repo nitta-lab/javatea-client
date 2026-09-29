@@ -89,7 +89,9 @@ public interface CategoryResource {
 
     @GET("categories/universities/{univ-id}/general/questions")
     Call<Set<Question>> getUniversityGeneralQuestions(
-            @Path("univ-id") String univId
+            @Path("univ-id") String univId,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     /**
@@ -124,7 +126,9 @@ public interface CategoryResource {
     @GET("categories/universities/{univ-id}/lectures/{lecture-id}/questions")
     Call<Set<Question>> getUniversityLectureQuestions(
             @Path("univ-id") String univId,
-            @Path("lecture-id") String lectureId
+            @Path("lecture-id") String lectureId,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     /**
@@ -180,7 +184,9 @@ public interface CategoryResource {
     Call<Set<Question>> getFacultyQuestions(
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName,
-            @Path("lecture-id") String lectureId
+            @Path("lecture-id") String lectureId,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     /**
@@ -243,7 +249,9 @@ public interface CategoryResource {
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName,
             @Path("department-name") String departmentName,
-            @Path("lecture-id") String lectureId
+            @Path("lecture-id") String lectureId,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     /**
@@ -263,20 +271,26 @@ public interface CategoryResource {
      */
     @GET("categories/universities/{univ-id}/all-questions")
     Call<Set<Question>> getAllUniversityQuestions(
-            @Path("univ-id") String univId
+            @Path("univ-id") String univId,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/all-questions")
     Call<Set<Question>> getAllFacultyQuestions(
             @Path("univ-id") String univId,
-            @Path("faculty-name") String facultyName
+            @Path("faculty-name") String facultyName,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/all-questions")
     Call<Set<Question>> getAllDepartmentQuestions(
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName,
-            @Path("department-name") String departmentName
+            @Path("department-name") String departmentName,
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
 }
