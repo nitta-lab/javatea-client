@@ -19,7 +19,9 @@ public interface LectureResource {
             @Field("semester") String semester,
             @Field("frame") int frame,
             @Field("day") String day,
-            @Field("period") int period
+            @Field("period") int period,
+            @Field("facultyName") String facultyName,
+            @Field("departmentName") String departmentName
     );
 
     //授業情報取得

@@ -1,6 +1,8 @@
 package com.example.javatea_client.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -55,6 +57,35 @@ public class LectureListActivity extends AppCompatActivity {
         //前回開いていた画面を開くようにする
         Javatea javatea = (Javatea) this.getApplication();
         javatea.setView("LectureList");
+
+        Intent intent = getIntent();
+        String timetable = intent.getStringExtra("timetable");
+        if (timetable != null && timetable.equals("timetable")){
+            setUnivId(javatea.getUnivId());
+            addCategory(javatea.getUniversity(),"大学");
+            addCategory("授業","【授業】");
+            lectureId = intent.getStringExtra("Lecture-id");
+            if(intent.getStringExtra("facultyName") != null) {
+                facultyName = intent.getStringExtra("facultyName");
+                addCategory(facultyName,"学部");
+                if(intent.getStringExtra("departmentName") != null) {
+                    departmentName = intent.getStringExtra("departmentName");
+                    addCategory(departmentName,"学科");
+                    setLectureListType("department");
+                } else {
+                    setLectureListType("general_faculty");
+                    addCategory("学部全般","【学部全般】");
+                }
+            } else {
+                setLectureListType("general_university");
+                addCategory("大学全般","【大学全般】");
+            }
+            addCategory(intent.getStringExtra("LectureName"),"授業");
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
+                    .commit();
+            return;
+        }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -146,6 +177,7 @@ public class LectureListActivity extends AppCompatActivity {
 
     //階層を1つ追加
     public void addCategory(String categoryName, String categoryType) {
+        Log.d("categoryName",categoryName + " " + categoryType);
         categoryPath.add(categoryName);
         categoryPathType.add(categoryType);
         updateCategoryText();
