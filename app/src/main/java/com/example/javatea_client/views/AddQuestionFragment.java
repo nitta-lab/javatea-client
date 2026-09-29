@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.CategoryViewModel;
 
+import java.util.List;
+
 
 public class AddQuestionFragment extends Fragment {
 
@@ -41,6 +43,10 @@ public class AddQuestionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
 
+        //カテゴリーのパス
+        LectureListActivity activity = (LectureListActivity) requireActivity();
+        List category = activity.getCategoryPath();
+
         //閲覧者制限
         Spinner ViewerSpinner = view.findViewById(R.id.ViewerSpinner);
         String[] viewerlist = {"選択してください","誰でも","同じ学校","同じ学部"};
@@ -55,7 +61,7 @@ public class AddQuestionFragment extends Fragment {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
         AnswerSpinner.setAdapter(adapter2);
 
-        //タグ編集画面遷移
+        //タグ編集(TagFragment)画面遷移
         EditText tagtextfragment = view.findViewById(R.id.TagText);
 //        tagtextfragment.setOnClickListener(v ->{
 //            EditTagFragment editTagFragment = new EditTagFragment();
@@ -70,6 +76,9 @@ public class AddQuestionFragment extends Fragment {
 
         EditText titletextfragment = view.findViewById(R.id.TitleText);
         EditText questiontextfragment = view.findViewById(R.id.QuestionText);
+
+        //タグデータ受け取り
+        //getParentFragmentManager().setFragmentResultListener();
 
         //公開するボタン
         Button nextButton = view.findViewById(R.id.NextButton);
