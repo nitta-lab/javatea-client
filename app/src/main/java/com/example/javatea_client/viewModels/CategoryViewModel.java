@@ -640,8 +640,8 @@ public class CategoryViewModel extends ViewModel {
 
 
     // 学校生活に対する質問
-    public void universityGeneralQuestions(String univId) {
-        categoryResource.getUniversityGeneralQuestions(univId).enqueue(new Callback<Set<Question>>() {
+    public void universityGeneralQuestions(String univId, String uid, String token) {
+        categoryResource.getUniversityGeneralQuestions(univId, uid, token).enqueue(new Callback<Set<Question>>() {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
@@ -660,8 +660,8 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 大学全般の質問
-    public void universityQuestions(String univId, String lectureId) {
-        categoryResource.getUniversityLectureQuestions(univId, lectureId).enqueue(new Callback<Set<Question>>() {
+    public void universityQuestions(String univId, String lectureId, String uid, String token) {
+        categoryResource.getUniversityLectureQuestions(univId, lectureId, uid, token).enqueue(new Callback<Set<Question>>() {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
@@ -680,8 +680,8 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 学部全般の質問
-    public void facultyQuestions(String univId, String facultyName, String lectureId) {
-        categoryResource.getFacultyQuestions(univId, facultyName, lectureId).enqueue(new Callback<Set<Question>>() {
+    public void facultyQuestions(String univId, String facultyName, String lectureId, String uid, String token) {
+        categoryResource.getFacultyQuestions(univId, facultyName, lectureId, uid, token).enqueue(new Callback<Set<Question>>() {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
@@ -700,8 +700,8 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 学科に対する質問
-    public void departmentQuestions(String univId, String facultyName, String departmentName, String lectureId) {
-        categoryResource.getDepartmentQuestions(univId, facultyName, departmentName, lectureId).enqueue(new Callback<Set<Question>>() {
+    public void departmentQuestions(String univId, String facultyName, String departmentName, String lectureId, String uid, String token) {
+        categoryResource.getDepartmentQuestions(univId, facultyName, departmentName, lectureId, uid, token).enqueue(new Callback<Set<Question>>() {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
