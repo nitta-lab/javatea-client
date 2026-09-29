@@ -92,10 +92,10 @@ public class ViewAnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //画面遷移
-//                requireActivity().getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .replace(R.id.fragment_container, new viewQuestionFragment())
-//                        .commit();
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new ViewQuestionFragment())
+                        .commit();
             }
         });
     }
