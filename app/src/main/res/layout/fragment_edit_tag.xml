@@ -40,11 +40,12 @@
                 android:text=" タグ名"
                 android:textSize="15sp"/>
 
-            <TextView
+            <EditText
                 android:id="@+id/addTagText"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"/>
+                android:layout_weight="3"
+                android:hint="タグ名を入力"/>
 
         </LinearLayout>
 

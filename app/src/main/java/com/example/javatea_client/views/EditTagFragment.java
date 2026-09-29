@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.javatea_client.R;
 
@@ -46,6 +47,11 @@ public class EditTagFragment extends Fragment {
 
         //親Activityから大学IDを取得
         LectureListActivity activity = (LectureListActivity) requireActivity();
+
+        EditText addTagText = view.findViewById(R.id.addTagText);
+        String tagName = addTagText.getText().toString();
+
+
     }
 
     @Override
