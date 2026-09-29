@@ -15,6 +15,7 @@
 
     <include layout="@layout/activity_mode_bar" />
 
+
     <ImageView
         android:id="@+id/user_icon_area"
         android:layout_width="100dp"
@@ -22,11 +23,10 @@
         android:src="@drawable/mypage_ic_user"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.157"
+        app:layout_constraintHorizontal_bias="0.115"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.161" />
-
 
     <GridLayout
         android:id="@+id/user_information"
