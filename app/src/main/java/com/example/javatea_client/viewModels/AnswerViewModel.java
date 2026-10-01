@@ -43,6 +43,8 @@ public class AnswerViewModel extends ViewModel {
         return answer;
     }
 
+    public LiveData<String> getError(){return error;}
+
     public void loadAnswers(String qid,String uid,String token){
         answerResource.getAnswers(qid,uid,token)
                 .enqueue(new Callback<HashMap<String, Answer>>() {

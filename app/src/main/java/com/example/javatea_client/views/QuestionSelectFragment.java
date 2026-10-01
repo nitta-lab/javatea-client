@@ -174,6 +174,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.models.Question;
 import com.example.javatea_client.viewModels.CategoryViewModel;
@@ -186,6 +187,7 @@ public class QuestionSelectFragment extends Fragment {
 
     private LinearLayout layoutQuestionList;
     private CategoryViewModel categoryViewModel;
+    private Javatea javatea;
 
     public QuestionSelectFragment() {
         // 必須
@@ -226,32 +228,36 @@ public class QuestionSelectFragment extends Fragment {
         String departmentName = activity.getDepartmentName();
         String lectureListType = activity.getLectureListType();
 
+        javatea = (Javatea) activity.getApplication();
+
         Log.d(TAG, "lectureId = " + lectureId + ", lectureListType = " + lectureListType);
 
         if ("全般".equals(lectureId)) {
             // 全般の質問一覧(階層に関係なく全体で共通)
-            categoryViewModel.generalQuestions();
+            categoryViewModel.generalQuestions(javatea.getUserId(), javatea.getToken());
             return;
         }
 
         if ("学校生活".equals(lectureId)) {
             // 学校生活に関する質問一覧(階層に関係なく大学単位で固定)
-            categoryViewModel.universityGeneralQuestions(univId);
+            categoryViewModel.universityGeneralQuestions(univId, javatea.getUserId(), javatea.getToken());
             return;
         }
 
         // 実際の授業の質問一覧を、どの階層(大学/学部/学科)で選ばれたかに応じて取得
         switch (lectureListType) {
             case "general_university":
-                categoryViewModel.universityQuestions(univId, lectureId);
+                categoryViewModel.universityQuestions(univId, lectureId, javatea.getUserId(), javatea.getToken());
                 break;
 
             case "general_faculty":
-                categoryViewModel.facultyQuestions(univId, facultyName, lectureId);
+                categoryViewModel.facultyQuestions(univId, facultyName, lectureId, javatea.getUserId(), javatea.getToken());
                 break;
 
             case "department":
-                categoryViewModel.departmentQuestions(univId, facultyName, departmentName, lectureId);
+                Log.w(TAG, "javatea.getUserId" + javatea.getUserId());
+                Log.w(TAG, "javatea.getToken" + javatea.getToken());
+                categoryViewModel.departmentQuestions(univId, facultyName, departmentName, lectureId, javatea.getUserId(), javatea.getToken());
                 break;
 
             default:
