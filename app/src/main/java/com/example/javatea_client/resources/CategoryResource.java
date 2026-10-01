@@ -24,7 +24,8 @@ public interface CategoryResource {
     */
     @GET("categories/general/questions")
     Call<Set<Question>> getGeneralQuestions(
-
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     /**
