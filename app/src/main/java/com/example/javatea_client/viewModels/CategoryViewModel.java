@@ -78,6 +78,11 @@ public class CategoryViewModel extends ViewModel {
 //    private Set<Question> facultyQuestions = null;
 //    private Set<Question> departmentQuestions = null;
 
+    private final MutableLiveData<Set<Question>> searchUniversityQuestionsResults = new MutableLiveData<>();
+    private final MutableLiveData<Set<Question>> searchUniversityKeyWordsQuestionsResults = new MutableLiveData<>();
+
+    private final MutableLiveData<Set<Question>> searchGeneralQuestionsResults = new MutableLiveData<>();
+    private final MutableLiveData<Set<Question>> searchGeneralKeyWordsQuestionsResults = new MutableLiveData<>();
 
 
 
@@ -154,6 +159,19 @@ public class CategoryViewModel extends ViewModel {
 //    public LiveData<Set<Question>> getDepartmentQuestions() {
 //        return currentDepartmentQuestions;
 //    }
+
+    public LiveData<Set<Question>> getUniversityQuestions() {
+        return searchUniversityQuestionsResults;
+    }
+    public LiveData<Set<Question>> getUniversityKeyWordsQuestions() {
+        return searchUniversityKeyWordsQuestionsResults;
+    }
+    public LiveData<Set<Question>> getGeneralQuestions() {
+        return searchGeneralQuestionsResults;
+    }
+    public LiveData<Set<Question>> getGeneralKeyWordsQuestions() {
+        return searchGeneralKeyWordsQuestionsResults;
+    }
 
 
     // 大学特有の授業が届いた時に呼ばれるメソッド
@@ -720,31 +738,79 @@ public class CategoryViewModel extends ViewModel {
     }
 
 
-//    // ここから検索関連(メソッド)
-//    // 大学特有の授業が届いた時に呼ばれるメソッド
-//    public void setUniversityQuestions(Set<Question> universityQuestions) {
-//        if(universityQuestions != null) {
-//            this.universityQuestions = universityQuestions;
-//        } else {
-//            this.universityQuestions = new HashSet<>();
-//        }
-//    }
-//
-//    public void setFacultyQuestions(Set<Question> facultyQuestions) {
-//        if(facultyQuestions != null) {
-//            this.facultyQuestions = facultyQuestions;
-//        } else {
-//            this.facultyQuestions = new HashSet<>();
-//        }
-//    }
-//
-//    public void setDepartmentQuestions(Set<Question> departmentQuestions) {
-//        if(departmentQuestions != null) {
-//            this.departmentQuestions = departmentQuestions;
-//        } else {
-//            this.departmentQuestions = new HashSet<>();
-//        }
-//    }
+    public void setUniversityQuestions(String univId, String uid, String token) {
+        categoryResource.getUniversityQuestions(univId, uid, token).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    searchUniversityQuestionsResults.setValue(response.body());
+                    Log.d(TAG, "大学の質問取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void setUniversityKeyWordsQuestions(String univId, String uid, String token, List<String> keyWords) {
+        categoryResource.getUniversityKeyWordsQuestions(univId, uid, token, keyWords).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    searchUniversityKeyWordsQuestionsResults.setValue(response.body());
+                    Log.d(TAG, "大学の質問を取得後、キーワード検索成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+    public void setGeneralQuestions(String uid, String token) {
+        categoryResource.getGeneralQuestions(uid, token).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    searchGeneralQuestionsResults.setValue(response.body());
+                    Log.d(TAG, "全般の質問取得成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+    public void setGeneralKeyWordsQuestions(String uid, String token, List<String> keyWords) {
+        categoryResource.getGeneralKeyWordsQuestions(uid, token, keyWords).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    searchGeneralKeyWordsQuestionsResults.setValue(response.body());
+                    Log.d(TAG, "全般の質問取得後、キーワード検索成功：" + response.body().size() + "件");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Set<Question>> call, @NonNull Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
 
 
 }
