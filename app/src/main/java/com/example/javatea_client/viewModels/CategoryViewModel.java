@@ -618,8 +618,8 @@ public class CategoryViewModel extends ViewModel {
     }
 
     // 全般に関する質問
-    public void generalQuestions() {
-        categoryResource.getGeneralQuestions().enqueue(new Callback<Set<Question>>() {
+    public void generalQuestions(String uid, String token) {
+        categoryResource.getGeneralQuestions(uid, token).enqueue(new Callback<Set<Question>>() {
             @Override
             public void onResponse(@NonNull Call<Set<Question>> call, @NonNull Response<Set<Question>> response) {
                 if(response.isSuccessful() && response.body() != null) {
