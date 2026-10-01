@@ -1,6 +1,7 @@
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -10,9 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
-import com.example.javatea_client.viewModels.TimetableViewModel;
 import com.example.javatea_client.viewModels.UserViewModel;
 
 public class MyPageActivity extends AppCompatActivity {
@@ -22,9 +21,33 @@ public class MyPageActivity extends AppCompatActivity {
     private static final String TAG = "MyPageActivity"; //デバッグ用
 
     // UserViewModelからのデータを入れるフィールド
-    private String name;
+    private TextView nikName;
+    private TextView universityText;
+    private TextView facultyText;
+    private TextView departmentText;
 
-    private void setUpObservers(){}
+    private TextView gradeText;
+
+    private void setUpObservers(){
+
+        //User情報を取得し、情報を更新
+        userViewModel.getUser().observe(this, user -> {
+
+            if(user != null){
+                Log.d(TAG, "ユーザ情報取得成功");
+            } else {
+                Log.d(TAG, "ユーザ情報取得失敗");
+                return ;
+            }
+
+            nikName.setText(user.getName());
+            universityText.setText(user.getUniversity());
+            facultyText.setText(user.getFaculty());
+            departmentText.setText(user.getDepartment());
+            gradeText.setText(user.getGrade());
+
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,43 +67,15 @@ public class MyPageActivity extends AppCompatActivity {
         // ViewModelの初期化
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-//        //ユーザ情報の取得
-//        Javatea javaTea = (Javatea) getApplication();
-//        javaTea.setView("MyPage");
-//        //Javateaから取得する情報を入れるフィールド
-//        String userId = javaTea.getUserId();
-//        String token = javaTea.getToken();
-//        String univId = javaTea.getUnivId();
-//        String facultyName = javaTea.getFaculty();
-//        String departmentName = javaTea.getDepartment();
-//        String grade = javaTea.getGrade();
-
-        String univId = "甲南大学";
-        String facultyName = "知能情報学部";
-        String departmentName = "知能情報学科";
-        String grade = "2";
-
-
         setUpObservers();
 
-        //ニックネームを代入
+        //画面テキストとの対応を設定
+        nikName = findViewById(R.id.nickname_text);
+        universityText = findViewById(R.id.university_text);
+        facultyText = findViewById(R.id.faculty_text);
+        departmentText = findViewById(R.id.department_text);
+        gradeText = findViewById(R.id.grade_text);
 
-
-        //大学名を代入
-        TextView universityText = findViewById(R.id.university_text);
-        universityText.setText(univId);
-
-        //学部名を代入
-        TextView facultyText = findViewById(R.id.faculty_text);
-        facultyText.setText(facultyName);
-
-        //学科名を代入
-        TextView departmentText = findViewById(R.id.department_text);
-        departmentText.setText(departmentName);
-
-        //学年を代入
-        TextView gradeText = findViewById(R.id.grade_text);
-        gradeText.setText(grade);
 
         //ログアウトボタン
     }
