@@ -9,36 +9,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.javatea_client.R;
 
-public class EditTagFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.ArrayList;
 
-    private String mParam1;
-    private String mParam2;
+public class EditTagFragment extends Fragment {
+
+    private ArrayList<String> tagList = new ArrayList<>();
 
     public EditTagFragment() {
-    }
-
-    public static EditTagFragment newInstance(String param1, String param2) {
-        EditTagFragment fragment = new EditTagFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -49,7 +38,28 @@ public class EditTagFragment extends Fragment {
         LectureListActivity activity = (LectureListActivity) requireActivity();
 
         EditText addTagText = view.findViewById(R.id.addTagText);
-        String tagName = addTagText.getText().toString();
+        LinearLayout allTagRow = view.findViewById(R.id.allTagRow);
+
+        //追加するボタンを押したときの処理
+        Button addButton = view.findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagName = addTagText.getText().toString();
+                tagList.add(tagName);
+
+                TextView tagText = new TextView(requireContext());
+                tagText.setText(tagName);
+                tagText.setTextSize(16);
+
+                allTagRow.addView(tagText);
+
+                //xボタンも追加するように
+            }
+        });
+        //xボタンを押したら削除する
+
+        //確定ボタン→activityにタグ情報を送る→画面遷移
 
 
     }
