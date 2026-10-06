@@ -72,6 +72,7 @@ public class SignUpActivity1 extends AppCompatActivity {
                 // javateaに保存
                 javatea.setUserId(userId);
                 javatea.setPassword(password);
+                javatea.setName(nickname);
                 String token = user.getToken();
                 if(token != null && !token.isEmpty()){
                     // javateaに保存
