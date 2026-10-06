@@ -407,8 +407,8 @@ public class TimetableActivity extends AppCompatActivity {
                 Integer period = lecture.getPeriod();
                 if (semester.equals(curSemester) || semester.equals("通年")) {
                     for (int i = 0; i < frame; i++) {
-                        currentTimetable.get(day).get(period + i).setText(name);
-                        currentTimetableLecture.get(day).put(period + i,lecture);
+                        currentTimetable.get(day).get(Math.min(period + i, 7)).setText(name);
+                        currentTimetableLecture.get(day).put(Math.min(period + i, 7),lecture);
                     }
                 }
             }
