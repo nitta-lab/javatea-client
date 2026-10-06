@@ -18,6 +18,8 @@ import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.UserViewModel;
 
+//BAG:ログアウトボタンを押しても時間割画面へ画面遷移をしてしまう(値を消す処理は正常)
+
 public class MyPageActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
@@ -26,33 +28,13 @@ public class MyPageActivity extends AppCompatActivity {
     private static final String TAG = "MyPageActivity"; //デバッグ用
 
     // UserViewModelからのデータを入れるフィールド
-    private TextView nikName;
-    private TextView universityText;
-    private TextView facultyText;
-    private TextView departmentText;
+    TextView nikName;
+    TextView universityText;
+    TextView facultyText;
+    TextView departmentText;
 
-    private TextView gradeText;
+    TextView gradeText;
 
-    private void setUpObservers(){
-
-        //User情報を取得し、情報を更新
-        userViewModel.getUser().observe(this, user -> {
-
-            if(user != null){
-                Log.d(TAG, "ユーザ情報取得成功");
-            } else {
-                Log.d(TAG, "ユーザ情報取得失敗");
-                return ;
-            }
-
-            nikName.setText(getString(R.string.nikName_format,user.getName()));
-            universityText.setText(getString(R.string.university_format, user.getUniversity()));
-            facultyText.setText(getString(R.string.faculty_format,user.getFaculty()));
-            departmentText.setText(getString(R.string.department_format,user.getDepartment()));
-            gradeText.setText(getString(R.string.grade_format, user.getGrade()));
-
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +54,10 @@ public class MyPageActivity extends AppCompatActivity {
         // ViewModelの初期化
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
+        //JavaTeaの初期化
         javaTea = (Javatea)getApplication();
         javaTea.setView("MyPageActivity");
 
-        setUpObservers();
 
         //画面テキストとの対応を設定
         nikName = findViewById(R.id.nickname_text);
@@ -83,6 +65,13 @@ public class MyPageActivity extends AppCompatActivity {
         facultyText = findViewById(R.id.faculty_text);
         departmentText = findViewById(R.id.department_text);
         gradeText = findViewById(R.id.grade_text);
+
+        nikName.setText(getString(R.string.nikName_format, javaTea.getName()));
+        universityText.setText(getString(R.string.university_format, javaTea.getUniversity()));
+        facultyText.setText(getString(R.string.faculty_format,javaTea.getFaculty()));
+        departmentText.setText(getString(R.string.department_format,javaTea.getDepartment()));
+        gradeText.setText(getString(R.string.grade_format, javaTea.getGrade()));
+
 
 
         //ログアウトボタン
@@ -99,5 +88,7 @@ public class MyPageActivity extends AppCompatActivity {
             }
 
         });
+
+        Log.d(TAG, "MyPageに遷移成功");
     }
 }

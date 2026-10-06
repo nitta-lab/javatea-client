@@ -9,5 +9,5 @@
     <string name="university_format">%s</string>
     <string name="faculty_format">%s</string>
     <string name="department_format">%s</string>
-    <string name="grade_format">%d年</string>
+    <string name="grade_format">%s年</string>
 </resources>
