@@ -1,5 +1,8 @@
 package com.example.javatea_client.resources;
+import com.example.javatea_client.models.Question;
 import com.example.javatea_client.models.User;
+
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -101,6 +104,20 @@ public interface UserResource {
     //ユーザのニックネームを取得
     @GET("users/{uid}/name")
     Call<String> getName(
+            @Path("uid") String uid,
+            @Query("token") String token
+    );
+
+    //ユーザが質問した質問一覧を取得
+    @GET("users/{uid}/questions")
+    Call<Set<Question>> getQuestions(
+            @Path("uid") String uid,
+            @Query("token") String token
+    );
+
+    //ユーザがベストアンサーに選ばれた質問一覧を取得
+    @GET("users/{uid}/best-answer")
+    Call<Set<Question>> getBestAnswers(
             @Path("uid") String uid,
             @Query("token") String token
     );

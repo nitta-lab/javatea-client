@@ -1,5 +1,8 @@
 package com.example.javatea_client.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
 
     private String uid;
@@ -10,6 +13,8 @@ public class User {
     private String department;
     private int grade;
     private String token;
+    private Set<Question> questions = new HashSet<Question>();
+    private Set<Question> bestAnswers = new HashSet<Question>();;
 
 
     //uidの取得
@@ -89,4 +94,12 @@ public class User {
     public String getToken() {
         return this.token;
     }
+
+    public Set<Question> getQuestions(){ return this.questions; }
+
+    public void setQuestions(Set<Question> questions){ this.questions = questions; }
+
+    public Set<Question> getBestAnswers(){ return this.bestAnswers; }
+
+    public void setBestAnswers(Set<Question> bestAnswers){ this.bestAnswers = bestAnswers; }
 }
