@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- 背景の円 -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M50,50m-50,0a50,50 0 1,0 100,0a50,50 0 1,0 -100,0" />
+    <!-- 頭 -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:pathData="M38,40a12,12 0 1,0 24,0a12,12 0 1,0 -24,0" />
+    <!-- 肩・体 -->
+    <path
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M27,74v-3c0,-6.6 10.7,-12 23,-12s23,5.4 23,12v3" />
+</vector>

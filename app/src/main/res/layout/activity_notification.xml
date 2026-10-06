@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F3F8">
+
+    <!-- 通知一覧という画面タイトル -->
+    <TextView
+        android:id="@+id/tvNotificationScreenTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="通知一覧"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- 2つのタブを横に並べる -->
+    <LinearLayout
+        android:id="@+id/notificationTabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvNotificationScreenTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 現在選択中のタブ -->
+        <TextView
+            android:id="@+id/tvAnswerNotificationTab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#D8D2E3"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="あなたへの回答"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+        <!-- 選択されていないタブ -->
+        <TextView
+            android:id="@+id/tvBestAnswerNotificationTab"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#B8B3BE"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="ベストアンサー通知"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <!-- 通知を縦に並べる場所 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notificationList"
+        android:layout_width="319dp"
+        android:layout_height="491dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!-- 遷移画面のテンプレート -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <!--
+            100dpが高さ
+            match_parentは画面全体と同じという意味
+            layout_constraintBottom_toBottomOf:下端にくっつける
+        -->
+        <!--時間割ボタン-->
+        <ImageButton
+            android:id="@+id/timetable_button"
+            android:src="@drawable/outline_calendar_month_24"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="時間割"/>
+        <!-- 幅は自分で決めない
+             widthは0にする
+             weightは1にする(これで5等分)
+         -->
+        <!--Q&Aボタン-->
+        <ImageButton
+            android:id="@+id/qa_button"
+            android:src="@drawable/outline_aq_24"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="Q&amp;A"/>
+        <!--検索ボタン-->
+        <ImageButton
+            android:id="@+id/search_button"
+            android:src="@drawable/baseline_search_24"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="検索"/>
+        <!--通知ボタン-->
+        <ImageButton
+            android:id="@+id/notification_button"
+            android:src="@drawable/baseline_email_24"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="通知"/>
+        <!--マイページボタン-->
+        <ImageButton
+            android:id="@+id/myPage_button"
+            android:src="@drawable/outline_article_person_24"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="マイページ"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
