@@ -234,7 +234,7 @@ public class QuestionSelectFragment extends Fragment {
 
         if ("全般".equals(lectureId)) {
             // 全般の質問一覧(階層に関係なく全体で共通)
-            categoryViewModel.generalQuestions();
+            categoryViewModel.generalQuestions(javatea.getUserId(), javatea.getToken());
             return;
         }
 

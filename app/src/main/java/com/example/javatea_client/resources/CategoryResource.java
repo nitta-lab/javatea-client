@@ -24,7 +24,8 @@ public interface CategoryResource {
     */
     @GET("categories/general/questions")
     Call<Set<Question>> getGeneralQuestions(
-
+            @Query("uid") String uid,
+            @Query("token") String token
     );
 
     /**
@@ -34,6 +35,13 @@ public interface CategoryResource {
     @PUT("categories/general/questions/{qid}")
     Call<Void> addGeneralQuestion(
         @Path("qid") String qid
+    );
+
+    @GET("categories/general/keyWords/questions")
+    Call<Set<Question>> getGeneralKeyWordsQuestions(
+            @Query("uid") String uid,
+            @Query("token") String token,
+            @Query("keyWords") List<String> keyWords
     );
 
     /**
@@ -269,28 +277,36 @@ public interface CategoryResource {
     /**
      * 検索に使うもの
      */
-    @GET("categories/universities/{univ-id}/all-questions")
-    Call<Set<Question>> getAllUniversityQuestions(
+    @GET("categories/universities/{univ-id}/questions")
+    Call<Set<Question>> getUniversityQuestions(
             @Path("univ-id") String univId,
             @Query("uid") String uid,
             @Query("token") String token
     );
 
-    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/all-questions")
-    Call<Set<Question>> getAllFacultyQuestions(
+    @GET("categories/universities/{univ-id}/keyWords/questions")
+    Call<Set<Question>> getUniversityKeyWordsQuestions(
             @Path("univ-id") String univId,
-            @Path("faculty-name") String facultyName,
             @Query("uid") String uid,
-            @Query("token") String token
+            @Query("token") String token,
+            @Query("keyWords") List<String> keyWords
     );
 
-    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/all-questions")
-    Call<Set<Question>> getAllDepartmentQuestions(
-            @Path("univ-id") String univId,
-            @Path("faculty-name") String facultyName,
-            @Path("department-name") String departmentName,
-            @Query("uid") String uid,
-            @Query("token") String token
-    );
+//    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/all-questions")
+//    Call<Set<Question>> getAllFacultyQuestions(
+//            @Path("univ-id") String univId,
+//            @Path("faculty-name") String facultyName,
+//            @Query("uid") String uid,
+//            @Query("token") String token
+//    );
+//
+//    @GET("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/all-questions")
+//    Call<Set<Question>> getAllDepartmentQuestions(
+//            @Path("univ-id") String univId,
+//            @Path("faculty-name") String facultyName,
+//            @Path("department-name") String departmentName,
+//            @Query("uid") String uid,
+//            @Query("token") String token
+//    );
 
 }
