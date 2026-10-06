@@ -42,6 +42,8 @@ public class LectureListActivity extends AppCompatActivity {
     private String qid = "";
     private String aid = "";
 
+    private ArrayList<String> tags = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -305,5 +307,20 @@ public class LectureListActivity extends AppCompatActivity {
                         .commit();
                 break;
         }
+    }
+    //Tagを保存する
+    public void setTag(ArrayList<String> tags){
+        this.tags = tags;
+    }
+    //Tagを取得する
+    public ArrayList<String> getTag(){
+        return tags;
+    }
+
+    public String getTvCategory() {
+        String tvTextString = tvCategory.getText().toString();
+        String workSpaceTvText = tvTextString.substring(5);
+        workSpaceTvText = "作成場所（" + workSpaceTvText + "）";
+        return workSpaceTvText;
     }
 }
