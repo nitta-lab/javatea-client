@@ -83,7 +83,7 @@ public class AddAnswerFragment extends Fragment {
 
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new AddQuestionFragment())
+                        .replace(R.id.fragment_container, new ViewQuestionFragment())
                         .commit(); //画面推移
             }
         });
