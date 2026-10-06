@@ -27,26 +27,27 @@ public class Navigation {
             }
         });
 
-        ImageButton searchButton = (ImageButton) activity.findViewById(R.id.search_button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                activity.startActivity(intent);
-            }
-        });
 
-        ImageButton notificationButton = (ImageButton) activity.findViewById(R.id.notification_button);
-        notificationButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                activity.startActivity(intent);
-            }
-        });
+//        ImageButton searchButton = (ImageButton) activity.findViewById(R.id.search_button);
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                activity.startActivity(intent);
+//            }
+//        });
+//
+//        ImageButton notificationButton = (ImageButton) activity.findViewById(R.id.notification_button);
+//        notificationButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                activity.startActivity(intent);
+//            }
+//        });
 
         ImageButton myPageButton = (ImageButton) activity.findViewById(R.id.myPage_button);
         myPageButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(activity, MyPageActivity.class);
                 activity.startActivity(intent);
             }
         });

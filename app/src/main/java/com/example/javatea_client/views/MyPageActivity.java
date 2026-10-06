@@ -21,7 +21,7 @@ import com.example.javatea_client.viewModels.UserViewModel;
 public class MyPageActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
-    Javatea javatea = (Javatea)getApplication();
+    Javatea javaTea;
 
     private static final String TAG = "MyPageActivity"; //デバッグ用
 
@@ -45,11 +45,11 @@ public class MyPageActivity extends AppCompatActivity {
                 return ;
             }
 
-            nikName.setText(user.getName());
-            universityText.setText(user.getUniversity());
-            facultyText.setText(user.getFaculty());
-            departmentText.setText(user.getDepartment());
-            gradeText.setText(user.getGrade());
+            nikName.setText(getString(R.string.nikName_format,user.getName()));
+            universityText.setText(getString(R.string.university_format, user.getUniversity()));
+            facultyText.setText(getString(R.string.faculty_format,user.getFaculty()));
+            departmentText.setText(getString(R.string.department_format,user.getDepartment()));
+            gradeText.setText(getString(R.string.grade_format, user.getGrade()));
 
         });
     }
@@ -72,7 +72,8 @@ public class MyPageActivity extends AppCompatActivity {
         // ViewModelの初期化
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-        //javatea.setView("MyPageActivity");
+        javaTea = (Javatea)getApplication();
+        javaTea.setView("MyPageActivity");
 
         setUpObservers();
 
@@ -89,12 +90,12 @@ public class MyPageActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
 
-                javatea.setPassword("");
-                javatea.setToken("");
+                javaTea.setPassword("");
+                javaTea.setToken("");
 
                 //画面遷移
                 Intent intent = new Intent(MyPageActivity.this, LoginActivity.class);
-                //startActivity(intent);
+                startActivity(intent);
             }
 
         });
