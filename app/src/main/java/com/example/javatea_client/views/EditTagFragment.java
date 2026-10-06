@@ -46,18 +46,51 @@ public class EditTagFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String tagName = addTagText.getText().toString();
+
+                //空欄なら追加しない
+                if (tagName.isEmpty()){
+                    return;
+                }
+
+                //重複していたら追加しない
+                if (tagList.contains(tagName)){
+                    return;
+                }
+
                 tagList.add(tagName);
 
+                //タグ1行分のLinerLayoutを作る
+                LinearLayout tagRow = new LinearLayout(requireContext());
+                tagRow.setOrientation(LinearLayout.HORIZONTAL);
+
+                //タグ名を表示する
                 TextView tagText = new TextView(requireContext());
                 tagText.setText(tagName);
                 tagText.setTextSize(16);
 
-                allTagRow.addView(tagText);
+                //タグ名の部分を横いっぱいに広げる
+                LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+                tagRow.addView(tagText,textParams);
 
-                //xボタンも追加するように
+                //xボタン
+                Button deleteButton = new Button(requireContext());
+                deleteButton.setText("x");
+                tagRow.addView(deleteButton);
+
+                //作った1行をallTagRowに追加
+                allTagRow.addView(tagRow);
+
+                //xボタンを押したら削除する
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tagList.remove(tagName);
+                        allTagRow.removeView(tagRow);
+                    }
+                });
+
             }
         });
-        //xボタンを押したら削除する
 
         //確定ボタン→activityにタグ情報を送る→画面遷移
 
