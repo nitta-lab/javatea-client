@@ -6,6 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.CategoryViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,45 +46,53 @@ public class AddQuestionFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //カテゴリーのパス
-        LectureListActivity activity = (LectureListActivity) requireActivity();
-        List category = activity.getCategoryPath();
+
+        //作成場所のパス
+//        LectureListActivity activity = (LectureListActivity) requireActivity();
+//        String workSpaceTvText = activity.getTvCategory();
+//        TextView CreatePlaceText = view.findViewById(R.id.CreatePlaceText);
+//        CreatePlaceText.setText(workSpaceTvText);
 
         //閲覧者制限
         Spinner ViewerSpinner = view.findViewById(R.id.ViewerSpinner);
-        String[] viewerlist = {"選択してください","誰でも","同じ学校","同じ学部"};
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item,viewerlist);
+        String[] viewerlist = {"選択してください", "誰でも", "同じ学校", "同じ学部"};
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, viewerlist);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_item);
         ViewerSpinner.setAdapter(adapter1);
 
         //回答者制限
         Spinner AnswerSpinner = view.findViewById(R.id.AnswerSpinner);
-        String[] answewlist = {"選択してください","誰でも","同じ学校","同じ学部"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item,answewlist);
+        String[] answewlist = {"選択してください", "誰でも", "同じ学校", "同じ学部"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, answewlist);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
         AnswerSpinner.setAdapter(adapter2);
 
         //タグ編集(TagFragment)画面遷移
-        EditText tagtextfragment = view.findViewById(R.id.TagText);
-//        tagtextfragment.setOnClickListener(v ->{
-//            EditTagFragment editTagFragment = new EditTagFragment();
-//
-//            getParentFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.QuestionLinearLayout,editTagFragment)
-//                    .addToBackStack(null);
-//                    .commit();
-//                }
-//                );
+        TextView tagtextfragment = view.findViewById(R.id.TagText);
+        tagtextfragment.setOnClickListener(v -> {
+                    EditTagFragment editTagFragment = new EditTagFragment();
 
-        EditText titletextfragment = view.findViewById(R.id.TitleText);
-        EditText questiontextfragment = view.findViewById(R.id.QuestionText);
+                    getParentFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.QuestionLinearLayout, editTagFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+        );
 
         //タグデータ受け取り
-        //getParentFragmentManager().setFragmentResultListener();
+//        getParentFragmentManager().setFragmentResultListener(
+//                "tagresult",getViewLifecycleOwner(),
+//                (requestKey, result) ->
+//                        ArrayList<String> selectedtags = bundle.getStringArrayList("selectedtags");
+//        );
+
+        //Title,Questionを取得
+        EditText titletextfragment = view.findViewById(R.id.TitleText);
+        EditText questiontextfragment = view.findViewById(R.id.QuestionText);
 
         //公開するボタン
         Button nextButton = view.findViewById(R.id.NextButton);
@@ -108,6 +122,12 @@ public class AddQuestionFragment extends Fragment {
             if(AnswerSpinner.getSelectedItemPosition() == 0){
                 Toast.makeText(getContext(),"解答者制限を選択してください",Toast.LENGTH_SHORT).show();
             }
+
+            //タグ入力チェック
+//            String tagtext = tagtextfragment.getText().toString();
+//            if(tagtext.isEmpty()){
+//                tagtext = null;
+//            }
         });
     }
 }

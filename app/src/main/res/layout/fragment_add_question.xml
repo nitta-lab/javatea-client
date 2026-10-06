@@ -8,7 +8,7 @@
     tools:context=".views.AddQuestionFragment">
 
 
-    <TextView
+    <EditText
         android:id="@+id/TitleText"
         android:layout_width="340dp"
         android:layout_height="56dp"
@@ -53,13 +53,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <EditText
                 android:id="@+id/QuestionText"
                 android:layout_width="336dp"
                 android:layout_height="230dp"
                 android:background="#EDE7F6"
                 android:gravity="top|left"
-                android:paddingTop="8dp"
+                android:paddingTop="10dp"
                 android:text="　Question："
                 android:textSize="16sp" />
 
@@ -69,8 +69,7 @@
                 android:layout_height="130dp"
                 android:layout_marginTop="16dp"
                 android:background="#EDE7F6"
-                android:paddingTop="8dp"
-                android:text="　作成場所：" />
+                android:paddingTop="8dp" />
 
             <LinearLayout
                 android:id="@+id/ViewerLinearLayout"
