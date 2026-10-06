@@ -9,6 +9,7 @@ public class Question {
     private List<String> tags;
     private String viewPermission;
     private String resPermission;
+    private String bestAnswerAid = "";
     private String qid;
 
     public String getTitle() {
@@ -65,4 +66,8 @@ public class Question {
     public void setQid(String qid) {
         this.qid = qid;
     }
+
+    public String getBestAnswerAid() { return this.bestAnswerAid; }
+
+    public void setBestAnswerAid(String bestAnswerAid) { this.bestAnswerAid = bestAnswerAid; }
 }

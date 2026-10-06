@@ -123,4 +123,24 @@ public class QuestionViewModel extends ViewModel {
             }
         });
     }
+
+    public void setBestAnswer(String qid, String aid) {
+        questionResource.setBestAnswer(qid, aid).enqueue(new Callback<Question>() {
+            @Override
+            public void onResponse(Call<Question> call, Response<Question> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    question.setValue(response.body());
+                    Log.d(TAG, "ベストアンサー選択成功");
+                } else {
+                    String errorCode = "サーバーエラーが発生しました　コード：" + response.code();
+                    Log.w(TAG, errorCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Question> call, Throwable throwable) {
+
+            }
+        });
+    }
 }
