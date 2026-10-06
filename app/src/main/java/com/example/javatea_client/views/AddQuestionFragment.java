@@ -20,14 +20,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.CategoryViewModel;
+import com.example.javatea_client.viewModels.LectureViewModel;
+import com.example.javatea_client.viewModels.QuestionViewModel;
+import com.example.javatea_client.viewModels.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AddQuestionFragment extends Fragment {
+
+    private QuestionViewModel questionViewModel;
+
+    private LectureViewModel lectureViewModel;
+
+    private Javatea javatea;
+
 
 
     public AddQuestionFragment() {
@@ -51,10 +62,18 @@ public class AddQuestionFragment extends Fragment {
 
 
         //作成場所のパス
-//        LectureListActivity activity = (LectureListActivity) requireActivity();
-//        String workSpaceTvText = activity.getTvCategory();
-//        TextView CreatePlaceText = view.findViewById(R.id.CreatePlaceText);
-//        CreatePlaceText.setText(workSpaceTvText);
+        LectureListActivity activity = (LectureListActivity) requireActivity();
+        String workSpaceTvText = activity.getTvCategory();
+        TextView CreatePlaceText = view.findViewById(R.id.CreatePlaceText);
+        CreatePlaceText.setText(workSpaceTvText);
+
+        ArrayList<String> tags = activity.getTag();
+
+        String tagText = String.join(", ",tags);
+
+
+        TextView tagTextFragment = view.findViewById(R.id.TagText);
+        tagTextFragment.setText(tagText);
 
         //閲覧者制限
         Spinner ViewerSpinner = view.findViewById(R.id.ViewerSpinner);
@@ -71,8 +90,7 @@ public class AddQuestionFragment extends Fragment {
         AnswerSpinner.setAdapter(adapter2);
 
         //タグ編集(TagFragment)画面遷移
-        TextView tagtextfragment = view.findViewById(R.id.TagText);
-        tagtextfragment.setOnClickListener(v -> {
+        tagTextFragment.setOnClickListener(v -> {
                     EditTagFragment editTagFragment = new EditTagFragment();
 
                     getParentFragmentManager()
@@ -83,16 +101,13 @@ public class AddQuestionFragment extends Fragment {
                 }
         );
 
-        //タグデータ受け取り
-//        getParentFragmentManager().setFragmentResultListener(
-//                "tagresult",getViewLifecycleOwner(),
-//                (requestKey, result) ->
-//                        ArrayList<String> selectedtags = bundle.getStringArrayList("selectedtags");
-//        );
 
         //Title,Questionを取得
         EditText titletextfragment = view.findViewById(R.id.TitleText);
         EditText questiontextfragment = view.findViewById(R.id.QuestionText);
+
+        String uid = javatea.getUserId();
+        String token = javatea.getToken();
 
         //公開するボタン
         Button nextButton = view.findViewById(R.id.NextButton);
@@ -122,6 +137,20 @@ public class AddQuestionFragment extends Fragment {
             if(AnswerSpinner.getSelectedItemPosition() == 0){
                 Toast.makeText(getContext(),"解答者制限を選択してください",Toast.LENGTH_SHORT).show();
             }
+
+            String viewPermission = (String)ViewerSpinner.getSelectedItem();
+            String resPermission = (String)AnswerSpinner.getSelectedItem();
+            String lectureId = activity.getLectureId();
+
+            //
+            questionViewModel.createQuestion(titleText,questionText,uid,tags,viewPermission,resPermission,lectureId,token);
+
+            QuestionSelectFragment questionSelectFragment = new QuestionSelectFragment();
+            getParentFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.QuestionLinearLayout, questionSelectFragment)
+                    .addToBackStack(null)
+                    .commit();
 
             //タグ入力チェック
 //            String tagtext = tagtextfragment.getText().toString();
