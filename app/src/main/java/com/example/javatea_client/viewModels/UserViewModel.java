@@ -6,10 +6,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.javatea_client.models.Question;
 import com.example.javatea_client.models.User;
 import com.example.javatea_client.resources.UserResource;
 
 import java.io.IOException;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +29,8 @@ public class UserViewModel extends ViewModel {
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
     private static final MutableLiveData<String> error = new MutableLiveData<>();
     private static MutableLiveData<Boolean> isUidDuplication = new MutableLiveData<>();
+    private static MutableLiveData<Set<Question>> questions = new MutableLiveData<>();
+    private static MutableLiveData<Set<Question>> bestAnswers = new MutableLiveData<>();
 
     public UserViewModel() {
         this.retrofit = new Retrofit.Builder()
@@ -54,6 +58,10 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> isUidDuplication() {return isUidDuplication; }
+
+    public LiveData<Set<Question>> getQuestions() { return questions; }
+
+    public LiveData<Set<Question>> getBestAnswers() { return bestAnswers; }
 
     //ユーザー作成
     public void createUser(String id, String name, String password) {
@@ -320,6 +328,46 @@ public class UserViewModel extends ViewModel {
             public void onFailure(Call<User> call, Throwable t) {
                 loading.setValue(false);
                 error.setValue("アカウント取得の通信エラー: " + t.getMessage());
+            }
+        });
+    }
+
+    //ユーザの質問したQuestion一覧を取得
+    public void getUserQuestions(String uid, String token) {
+        userResource.getQuestions(uid, token).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(Call<Set<Question>> call, Response<Set<Question>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    questions.setValue(response.body());
+                } else {
+                    String errorCode = "サーバーエラーが発生しました　コード：" + response.code();
+                    Log.w("UserViewModel", errorCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Set<Question>> call, Throwable throwable) {
+                Log.e("userViewModel", "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    //ユーザがベストアンサーに選ばれたQuestion一覧を取得
+    public void getUserBestAnswers(String uid, String token) {
+        userResource.getBestAnswers(uid, token).enqueue(new Callback<Set<Question>>() {
+            @Override
+            public void onResponse(Call<Set<Question>> call, Response<Set<Question>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    bestAnswers.setValue(response.body());
+                } else {
+                    String errorCode = "サーバーエラーが発生しました　コード：" + response.code();
+                    Log.w("UserViewModel", errorCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Set<Question>> call, Throwable throwable) {
+                Log.e("userViewModel", "ネットワークエラーが発生しました", throwable);
             }
         });
     }
