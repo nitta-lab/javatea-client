@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:background="@color/notification_item_background"
+    android:background="#FFFFFF"
     android:padding="12dp">
 
     <!-- 質問タイトル -->
@@ -15,10 +15,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
-        android:background="@color/notification_title_background"
+        android:background="#E8E5EC"
         android:padding="10dp"
         android:text="Q：オーバーライドとは？"
-        android:textColor="@color/black"
+        android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,7 +33,7 @@
         android:minWidth="32dp"
         android:gravity="center"
         android:text="3"
-        android:textColor="@color/notification_answer_count"
+        android:textColor="#D9534F"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
