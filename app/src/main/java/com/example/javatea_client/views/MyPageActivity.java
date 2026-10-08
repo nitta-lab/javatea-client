@@ -48,7 +48,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         //JavaTeaの初期化
         javaTea = (Javatea)getApplication();
-        javaTea.setView("MyPageActivity");
+
 
 
         //画面テキストとの対応を設定
