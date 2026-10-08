@@ -93,8 +93,17 @@ public class EditTagFragment extends Fragment {
         });
 
         //確定ボタン→activityにタグ情報を送る→画面遷移
-
-
+        Button confirmButton = view.findViewById(R.id.confirmButton);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.setTag(tagList);
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new ViewAnswerFragment())
+                        .commit();
+            }
+        });
     }
 
     @Override
