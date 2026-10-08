@@ -36,12 +36,6 @@ public class AddQuestionFragment extends Fragment {
 
     private QuestionViewModel questionViewModel;
 
-    private LectureViewModel lectureViewModel;
-
-    Javatea javatea;
-
-
-
     public AddQuestionFragment() {
         // Required empty public constructor
     }
@@ -49,7 +43,6 @@ public class AddQuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        javatea = (Javatea) requireActivity().getApplication();
     }
 
     @Override
@@ -62,6 +55,7 @@ public class AddQuestionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         questionViewModel = new ViewModelProvider(requireActivity()).get(QuestionViewModel.class);
+        Javatea javatea = (Javatea) requireActivity().getApplication();
 
         //作成場所のパス
         LectureListActivity activity = (LectureListActivity) requireActivity();
