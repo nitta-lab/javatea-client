@@ -49,11 +49,13 @@ public class EditTagFragment extends Fragment {
 
                 //空欄なら追加しない
                 if (tagName.isEmpty()){
+                    addTagText.setText("");
                     return;
                 }
 
                 //重複していたら追加しない
                 if (tagList.contains(tagName)){
+                    addTagText.setText("");
                     return;
                 }
 
@@ -79,6 +81,7 @@ public class EditTagFragment extends Fragment {
 
                 //作った1行をallTagRowに追加
                 allTagRow.addView(tagRow);
+                addTagText.setText("");
 
                 //xボタンを押したら削除する
                 deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +103,7 @@ public class EditTagFragment extends Fragment {
                 activity.setTag(tagList);
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container, new ViewAnswerFragment())
+                        .replace(R.id.fragment_container, new AddQuestionFragment())
                         .commit();
             }
         });

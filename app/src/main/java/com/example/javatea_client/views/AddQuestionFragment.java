@@ -92,13 +92,10 @@ public class AddQuestionFragment extends Fragment {
 
         //タグ編集(TagFragment)画面遷移
         tagTextFragment.setOnClickListener(v -> {
-                    EditTagFragment editTagFragment = new EditTagFragment();
-
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.QuestionLinearLayout, editTagFragment)
-                            .addToBackStack(null)
-                            .commit();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new EditTagFragment())
+                    .commit();
                 }
         );
 
