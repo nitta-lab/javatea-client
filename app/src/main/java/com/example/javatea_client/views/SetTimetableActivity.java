@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -49,6 +50,10 @@ public class SetTimetableActivity extends AppCompatActivity {
     List<Lecture> lecturesList = new ArrayList<>(); //授業情報のリスト
     RecyclerView recyclerView; //RecyclerViewのフィールドを宣言
 
+    private LectureAdapter lectureAdapter;
+
+    private ActivityResultLauncher<Intent> addLectureLauncher;
+
     //Timetableから受け取るフィールドを受け取る変数を宣言
     private String day;
     private int period;
@@ -63,19 +68,23 @@ public class SetTimetableActivity extends AppCompatActivity {
         categoryViewModel.getSearchLectureResults().observe(this, filteredLectures -> {
             if(filteredLectures != null) {
                 Log.d(TAG, "個人用の授業一覧を受信：" + filteredLectures.size());
-                //リストの更新
-                lecturesList.clear(); //過去のリストの内容を削除
-                lecturesList.addAll(filteredLectures);
-                recyclerView.getAdapter().notifyDataSetChanged();
-            }
 
-            for(Lecture lecture : filteredLectures) {
-                Log.d(TAG, "授業名：" + lecture.getName());
+                //リストの更新
+                int oldSize = lecturesList.size();
+                lecturesList.clear(); //過去のリストの内容を削除
+                lectureAdapter.notifyItemRangeRemoved(0, oldSize);
+                lecturesList.addAll(filteredLectures);
+                lectureAdapter.notifyItemRangeInserted(0, filteredLectures.size());
+
+
+                for (Lecture lecture : filteredLectures) {
+                    Log.d(TAG, "授業名：" + lecture.getName());
+                }
             }
         });
 
         // リストの科目を選択した後(timetable更新)を検知して画面遷移
-        timetableViewModel.getTimetable().observe(this, new Observer<TreeMap<Integer, HashSet<Lecture>>>() {
+        timetableViewModel.getTimetable().observe(this, new Observer<>() {
             @Override
             public void onChanged(TreeMap<Integer, HashSet<Lecture>> timetable) {
                 if (timetable != null) {
@@ -119,7 +128,7 @@ public class SetTimetableActivity extends AppCompatActivity {
 
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
-        ModeBar.setup(this, "マイページ"); //ModeBarを設定
+        ModeBar.setup(this, "時間割登録"); //ModeBarを設定
 
         //ViewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);
@@ -135,20 +144,31 @@ public class SetTimetableActivity extends AppCompatActivity {
         departmentName = javaTea.getDepartment();
         grade = javaTea.getGrade();
         intGrade = Integer.parseInt(grade);
-//        university = "univ-id1";
-//        faculty = "知能情報学部";
-//        department = "知能情報学科";
-
-        setupObservers(); //Observe実行
-        //画面遷移時に検索開始
-        categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period, intGrade);
-        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+univId+", faculty:"+facultyName+", department:"+departmentName);
 
         //リストの生成
         recyclerView = findViewById(R.id.lecture_name_list); //RecyclerViewにidを紐づけ(lecture_name_listはxmlファイル内)
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new LectureAdapter(lecturesList, timetableViewModel, userId, token, year)); //Adapterにこの画面の情報と科目の情報を渡す
+        lectureAdapter = new LectureAdapter(lecturesList, timetableViewModel, userId, token, year);
+        recyclerView.setAdapter(lectureAdapter); //Adapterにこの画面の情報と科目の情報を渡す
         Log.d(TAG, "検索結果: "+lecturesList);
+
+        setupObservers(); //Observe実行
+
+        //画面遷移時に検索開始
+        categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period, intGrade);
+        Log.d(TAG, "userId:"+userId+", token:"+token+", university:"+univId+", faculty:"+facultyName+", department:"+departmentName);
+
+        addLectureLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Log.d(TAG, "科目追加成功、再検索をします");
+                        categoryViewModel.callSearchLectures(
+                                univId, facultyName, departmentName, semester, day, period, intGrade);
+                    } else if (result.getResultCode() == RESULT_CANCELED) {
+                        Log.d(TAG, "科目追加キャンセル");
+                    }
+                });
 
         //各ウィジェット動作処理
         //閉じるボタン
@@ -169,18 +189,15 @@ public class SetTimetableActivity extends AppCompatActivity {
                 intent.putExtra("period",period);
                 intent.putExtra("semester", semester);
 
-                startActivityForResult(intent, 200); //AddLectureActivityから返ってきたことを示すフラグ(startActivityForResultは現在は非推奨)
+                addLectureLauncher.launch(intent);
+
             }
         });
 
         //"削除"ボタン
         Button cancelButton = findViewById(R.id.cancel_lecture_button);
         // lectureIdがnullなら押せなくする
-        if(lectureId != null) {
-            cancelButton.setEnabled(true);
-        } else {
-            cancelButton.setEnabled(false);
-        }
+        cancelButton.setEnabled(lectureId != null);
         cancelButton.setOnClickListener(new View.OnClickListener() { //クリック待機
             public void onClick(View v) { //クリックされたとき
                 if(lectureId != null) { //すでに授業が入っていた時
@@ -198,23 +215,5 @@ public class SetTimetableActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    //AddLectureActivityから帰ってきた後に再検索
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 200) {
-            if(resultCode == RESULT_OK) {
-                Log.d(TAG, "科目追加成功、再検索をします");
-
-                // ViewModelに検索の通信する
-                categoryViewModel.callSearchLectures(univId, facultyName, departmentName, semester, day, period, intGrade);
-
-            } else if(resultCode == RESULT_CANCELED) {
-                Log.d(TAG, "科目追加キャンセル");
-            }
-        }
     }
 }
