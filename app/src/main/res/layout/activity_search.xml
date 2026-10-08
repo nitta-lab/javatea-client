@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".views.SearchActivity">
+
+    <include layout="@layout/activity_mode_bar"/>
+
+
+    <TextView
+        android:id="@+id/FilterLabel"
+
+        android:layout_width="87dp"
+        android:layout_height="35dp"
+
+        android:layout_marginStart="76dp"
+
+        android:layout_marginTop="88dp"
+        android:gravity="center"
+
+        android:text="絞り込む"
+        android:textSize="13sp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/CategoryCard"
+
+        android:layout_width="261dp"
+        android:layout_height="197dp"
+
+        android:layout_marginTop="130dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#E6E0E8"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!-- ================================= -->
+            <!-- カテゴリ表示 -->
+            <!-- ================================= -->
+
+            <TextView
+                android:id="@+id/CategoryLabel"
+
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+
+                android:gravity="center"
+
+                android:text="カテゴリ"
+                android:textSize="14sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="5dp" />
+
+
+            <!-- ================================= -->
+            <!-- 全般 -->
+            <!-- ================================= -->
+
+            <Button
+                android:id="@+id/CategoryButton1"
+
+                android:layout_width="251dp"
+                android:layout_height="48dp"
+
+                android:padding="0dp"
+
+                android:text="全般"
+                android:textSize="14sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/CategoryLabel"
+
+                android:layout_marginTop="0dp" />
+
+
+            <!-- ================================= -->
+            <!-- 甲南大学 -->
+            <!-- ================================= -->
+
+            <Button
+                android:id="@+id/CategoryButton2"
+
+                android:layout_width="251dp"
+                android:layout_height="48dp"
+
+                android:padding="0dp"
+
+                android:text="甲南大学"
+                android:textSize="14sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/CategoryButton1" />
+
+
+            <!-- ================================= -->
+            <!-- その他の大学 -->
+            <!-- ================================= -->
+
+            <Button
+                android:id="@+id/CategoryButton3"
+
+                android:layout_width="251dp"
+                android:layout_height="48dp"
+
+                android:padding="0dp"
+
+                android:text="その他の大学"
+                android:textSize="14sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/CategoryButton2" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <!-- ========================================= -->
+    <!-- タグ入力 -->
+    <!-- ========================================= -->
+
+    <TextView
+        android:id="@+id/TagLabel"
+
+        android:layout_width="260dp"
+        android:layout_height="48dp"
+
+        android:layout_marginTop="56dp"
+
+
+        android:gravity="left|center_vertical"
+
+        android:text="     タグ名"
+        android:textSize="14sp"
+        android:background="#E6E0E8"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/CategoryCard" />
+
+
+    <!-- ========================================= -->
+    <!-- タグ入力欄 -->
+    <!-- ========================================= -->
+
+
+    <!-- ========================================= -->
+    <!-- タグアイコン -->
+    <!-- ========================================= -->
+
+
+    <!-- ========================================= -->
+    <!-- タグ追加 -->
+    <!-- ========================================= -->
+
+    <EditText
+        android:id="@+id/TagEditText"
+
+        android:layout_width="184dp"
+        android:layout_height="48dp"
+
+        android:layout_marginTop="56dp"
+
+
+        android:hint="ここに入力してください"
+        android:inputType="text"
+
+        android:paddingStart="10dp"
+        android:background="#CCCCCC"
+
+        android:paddingEnd="10dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.669"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CategoryCard" />
+
+
+    <Button
+        android:id="@+id/AddTagButton"
+
+        android:layout_width="76dp"
+        android:layout_height="48dp"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="45dp"
+
+        android:text="追加"
+        android:textSize="13sp"
+        android:backgroundTint="#6750A4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TagEditText" />
+
+
+    <!-- ========================================= -->
+    <!-- 追加済みタグ -->
+    <!-- ========================================= -->
+
+
+    <!-- ========================================= -->
+    <!-- 最下部：検索 -->
+    <!-- ========================================= -->
+
+    <TextView
+        android:id="@+id/AddedTagText"
+
+        android:layout_width="260dp"
+        android:layout_height="100dp"
+
+        android:layout_marginTop="84dp"
+
+
+
+        android:gravity="top|start"
+
+        android:padding="10dp"
+        android:text="追加済みのタグ："
+        android:background="#E6E0E8"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TagLabel" />
+
+    <Button
+        android:id="@+id/SearchButton"
+
+        android:layout_width="76dp"
+        android:layout_height="48dp"
+
+        android:layout_marginTop="8dp"
+
+        android:layout_marginEnd="45dp"
+        android:backgroundTint="#6750A4"
+        android:text="検索"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AddedTagText" />
+
+    <include
+        android:id="@+id/navigation"
+        layout="@layout/navigation"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
