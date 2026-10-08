@@ -19,6 +19,9 @@
             android:name=".views.SearchActivity"
             android:exported="false" />
         <activity
+            android:name=".views.MyPageActivity"
+            android:exported="false"/>
+        <activity
             android:name=".views.LectureListActivity"
             android:exported="false" />
         <activity
