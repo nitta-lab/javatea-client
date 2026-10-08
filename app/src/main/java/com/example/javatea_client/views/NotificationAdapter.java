@@ -13,15 +13,19 @@ import com.example.javatea_client.R;
 import com.example.javatea_client.models.Question;
 
 import java.util.List;
-
+import java.util.Map;
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
     // 通知として表示するQuestion一覧
     private final List<Question> questionList;
+    private final boolean isBestAnswerNotification;
+    private final Map<String, String> userNames;
 
     // ActivityからQuestion一覧を受け取る
-    public NotificationAdapter(List<Question> questionList) {
+    public NotificationAdapter(List<Question> questionList, boolean isBestAnswerNotification, Map<String, String> userNames) {
         this.questionList = questionList;
+        this.isBestAnswerNotification = isBestAnswerNotification;
+        this.userNames = userNames;
     }
 
     // Questionの件数を返す
@@ -58,7 +62,20 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         Question item = questionList.get(position);
 
         // 質問タイトルを表示
-        holder.notificationTitle.setText("Q：" + item.getTitle());
+        if (isBestAnswerNotification) {
+            String name = userNames.get(item.getUid());
+
+            if (name == null) {
+                name = "質問者";
+            }
+
+            holder.notificationTitle.setText(name + "からベストアンサーに選ばれました！\n（Q：" + item.getTitle() + "）");
+            holder.answerCount.setVisibility(View.GONE);
+
+        } else {
+            holder.notificationTitle.setText("Q：" + item.getTitle());
+            holder.answerCount.setVisibility(View.VISIBLE);
+        }
 
         // 質問タイトルを押したとき
         holder.notificationTitle.setOnClickListener(v -> {

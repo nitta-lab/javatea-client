@@ -1,7 +1,7 @@
 package com.example.javatea_client.views;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +13,10 @@ import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.models.Answer;
 import com.example.javatea_client.viewModels.AnswerViewModel;
+import com.example.javatea_client.viewModels.QuestionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.content.Intent;
 
 public class AnswerListActivity extends AppCompatActivity {
 
@@ -31,6 +31,7 @@ public class AnswerListActivity extends AppCompatActivity {
 
     // ViewModel
     private AnswerViewModel answerViewModel;
+    private QuestionViewModel questionViewModel;
 
     // 画面の部品
     private TextView tvQuestionTitle;
@@ -41,8 +42,6 @@ public class AnswerListActivity extends AppCompatActivity {
 
     // RecyclerViewで使用するAdapter
     private AnswerAdapter answerAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,7 @@ public class AnswerListActivity extends AppCompatActivity {
 
         // ViewModelを作る
         answerViewModel = new ViewModelProvider(this).get(AnswerViewModel.class);
+        questionViewModel = new ViewModelProvider(this).get(QuestionViewModel.class);
 
         // XMLと接続
         tvQuestionTitle = findViewById(R.id.tvQuestionTitle);
@@ -76,38 +76,12 @@ public class AnswerListActivity extends AppCompatActivity {
         // RecyclerViewを縦方向の一覧にする
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 既存のAnswerAdapterを作る
-        answerAdapter = new AnswerAdapter(
-                answerList,
-                bestAnswerAid,
-                answer -> {
-
-                    Intent intent = new Intent(
-                            AnswerListActivity.this,
-                            AnswerDetailActivity.class
-                    );
-
-                    // どの質問か
-                    intent.putExtra("qid", qid);
-
-                    // どの回答か
-                    intent.putExtra("aid", answer.getAid());
-
-                    // 回答者名
-                    intent.putExtra("answerName", answer.getName());
-
-                    // 回答本文
-                    intent.putExtra("answerBody", answer.getBody());
-
-                    startActivity(intent);
-                }
-        );
-
-        // RecyclerViewにAdapterを設定
-        recyclerView.setAdapter(answerAdapter);
+        // Adapterを作る
+        setAnswerAdapter();
 
         // 回答一覧を監視
         answerViewModel.getAnswers().observe(this, answers -> {
+
             if (answers != null) {
 
                 // 古い回答一覧を消す
@@ -121,7 +95,63 @@ public class AnswerListActivity extends AppCompatActivity {
             }
         });
 
+        // Questionを監視
+        questionViewModel.getCurrentQuestion().observe(this, question -> {
+
+            if (question != null) {
+
+                // 最新のベストアンサーIDを取得
+                bestAnswerAid = question.getBestAnswerAid();
+
+                // 最新のbestAnswerAidを使ってAdapterを作り直す
+                setAnswerAdapter();
+            }
+        });
+
         // この質問の回答一覧を取得
         answerViewModel.loadAnswers(qid, uid, token);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // 回答詳細画面から戻ってきたときに
+        // 最新のQuestionを取得する
+        if (qid != null && uid != null && token != null && questionViewModel != null) {
+            questionViewModel.getQuestion(qid, uid, token);
+        }
+    }
+
+    // AnswerAdapterを作る処理
+    private void setAnswerAdapter() {
+
+        answerAdapter = new AnswerAdapter(
+                answerList,
+                bestAnswerAid,
+                answer -> {
+
+                    Intent intent = new Intent(
+                            AnswerListActivity.this,
+                            AnswerDetailActivity.class
+                    );
+
+                    // 質問ID
+                    intent.putExtra("qid", qid);
+
+                    // 回答ID
+                    intent.putExtra("aid", answer.getAid());
+
+                    // 回答者名
+                    intent.putExtra("answerName", answer.getName());
+
+                    // 回答本文
+                    intent.putExtra("answerBody", answer.getBody());
+
+                    startActivity(intent);
+                }
+        );
+
+        recyclerView.setAdapter(answerAdapter);
     }
 }

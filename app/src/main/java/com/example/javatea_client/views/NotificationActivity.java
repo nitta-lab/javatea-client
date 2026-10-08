@@ -1,6 +1,8 @@
+
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +16,11 @@ import com.example.javatea_client.models.Question;
 import com.example.javatea_client.viewModels.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -33,6 +39,12 @@ public class NotificationActivity extends AppCompatActivity {
     private List<Question> questionsList = new ArrayList<>();
     private RecyclerView recyclerView;
     private List<Question> bestAnswersList = new ArrayList<>();
+
+    // 質問者のIDと名前を保存
+    private final Map<String, String> userNames = new HashMap<>();
+
+    // 同じユーザーの名前を重複して取得しないため
+    private final Set<String> loadingUserNames = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +71,25 @@ public class NotificationActivity extends AppCompatActivity {
         // 通知一覧の生成
         recyclerView = findViewById(R.id.notificationList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new NotificationAdapter(questionsList));
 
-        // 「あなたへの回答」をpぶざーぶ
+        // 通常の回答通知を表示
+        recyclerView.setAdapter(new NotificationAdapter(questionsList, false, userNames));
+
+        // 「あなたへの回答」をオブザーブ
         userViewModel.getQuestions().observe(this, questions -> {
             if (questions != null) {
                 questionsList.clear();
-                questionsList.addAll(questions);
+
+                for (Question question : questions) {
+
+                    // ベストアンサーが未設定の質問だけ追加
+                    if (question.getBestAnswerAid() == null ||
+                            question.getBestAnswerAid().isEmpty()) {
+
+                        questionsList.add(question);
+                    }
+                }
+
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
         });
@@ -75,6 +99,16 @@ public class NotificationActivity extends AppCompatActivity {
             if (bestAnswers != null) {
                 bestAnswersList.clear();
                 bestAnswersList.addAll(bestAnswers);
+
+                // 追加：質問者の名前を取得
+                for (Question question : bestAnswersList) {
+                    loadUserName(question.getUid());
+                }
+
+                // 追加：通知一覧を更新
+                if (recyclerView.getAdapter() != null) {
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
             }
         });
 
@@ -90,7 +124,7 @@ public class NotificationActivity extends AppCompatActivity {
             tvBestAnswerNotificationTab.setBackgroundColor(0xFFB8B3BE);
 
             // あなたへの回答の一覧を表示
-            recyclerView.setAdapter(new NotificationAdapter(questionsList));
+            recyclerView.setAdapter(new NotificationAdapter(questionsList, false, userNames));
         });
 
         // 「ベストアンサー通知」を押したとき
@@ -99,7 +133,43 @@ public class NotificationActivity extends AppCompatActivity {
             tvAnswerNotificationTab.setBackgroundColor(0xFFB8B3BE);
 
             // ベストアンサー通知の一覧を表示
-            recyclerView.setAdapter(new NotificationAdapter(bestAnswersList));
+            recyclerView.setAdapter(new NotificationAdapter(bestAnswersList, true, userNames));
         });
+    }
+
+    // 質問者の名前を取得するメソッド
+    private void loadUserName(String targetUid) {
+
+        if (targetUid == null || targetUid.isEmpty()) return;
+
+        if (userNames.containsKey(targetUid) || loadingUserNames.contains(targetUid)) return;
+
+        loadingUserNames.add(targetUid);
+
+        new Thread(() -> {
+
+            String name = null;
+
+            try {
+                name = userViewModel.getName(targetUid, token);
+            } catch (RuntimeException e) {
+                Log.e("NotificationActivity", "名前取得エラー", e);
+            }
+
+            String result = name;
+
+            runOnUiThread(() -> {
+                loadingUserNames.remove(targetUid);
+
+                if (result != null) {
+                    userNames.put(targetUid, result);
+
+                    if (recyclerView.getAdapter() != null) {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                    }
+                }
+            });
+
+        }).start();
     }
 }
