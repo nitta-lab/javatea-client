@@ -23,6 +23,7 @@ import com.google.android.material.textfield.*;
 public class LoginActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
+    private boolean isLoggingIn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,11 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         userViewModel.getUser().observe(this, user ->  {
+
+            if (!isLoggingIn) {
+                return;
+            }
+
             if (user != null) {
                 String univ = user.getUniversity();
                 String fac = user.getFaculty();
@@ -94,6 +100,16 @@ public class LoginActivity extends AppCompatActivity {
                     switch (app.getView()) {
                         case "TimeTable":
                             intent = new Intent(LoginActivity.this, TimetableActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        case "LectureList":
+                            intent = new Intent(LoginActivity.this, LectureListActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
+                        case "MyPageActivity":
+                            intent = new Intent(LoginActivity.this, MyPageActivity.class);
                             startActivity(intent);
                             finish();
                             break;
@@ -122,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(view -> {
             String userId = userIdEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString();
+            isLoggingIn = true;
 
             errorText.setError(null);
             errorText.setVisibility(View.GONE);

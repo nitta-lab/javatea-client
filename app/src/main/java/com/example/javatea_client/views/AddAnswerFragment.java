@@ -145,8 +145,9 @@ public class AddAnswerFragment extends Fragment {
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String body = previewTextView.getText().toString();
                 loadingOverlay.setVisibility(View.VISIBLE); //多重送信防止レイアウトの表示
-                answerViewModel.createAnswer(qid, userId, previewTextView.toString(), token, name); //回答を作成
+                answerViewModel.createAnswer(qid, userId, body, token, name); //回答を作成
             }
         });
     }
