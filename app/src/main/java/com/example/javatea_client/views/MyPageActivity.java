@@ -27,14 +27,6 @@ public class MyPageActivity extends AppCompatActivity {
 
     private static final String TAG = "MyPageActivity"; //デバッグ用
 
-    // UserViewModelからのデータを入れるフィールド
-    TextView nikName;
-    TextView universityText;
-    TextView facultyText;
-    TextView departmentText;
-
-    TextView gradeText;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +41,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
-        ModeBar.setup(this, "時間割設定"); //ModeBarを設定
+        ModeBar.setup(this, "マイページ"); //ModeBarを設定
 
         // ViewModelの初期化
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -60,17 +52,17 @@ public class MyPageActivity extends AppCompatActivity {
 
 
         //画面テキストとの対応を設定
-        nikName = findViewById(R.id.nickname_text);
-        universityText = findViewById(R.id.university_text);
-        facultyText = findViewById(R.id.faculty_text);
-        departmentText = findViewById(R.id.department_text);
-        gradeText = findViewById(R.id.grade_text);
+        TextView nikName = findViewById(R.id.nickname_text);
+        TextView universityText = findViewById(R.id.university_text);
+        TextView facultyText = findViewById(R.id.faculty_text);
+        TextView departmentText = findViewById(R.id.department_text);
+        TextView gradeText = findViewById(R.id.grade_text);
 
-        nikName.setText(getString(R.string.nikName_format, javaTea.getName()));
-        universityText.setText(getString(R.string.university_format, javaTea.getUniversity()));
-        facultyText.setText(getString(R.string.faculty_format,javaTea.getFaculty()));
-        departmentText.setText(getString(R.string.department_format,javaTea.getDepartment()));
-        gradeText.setText(getString(R.string.grade_format, javaTea.getGrade()));
+        nikName.setText(javaTea.getName());
+        universityText.setText(javaTea.getUniversity());
+        facultyText.setText(javaTea.getFaculty());
+        departmentText.setText(javaTea.getDepartment());
+        gradeText.setText(javaTea.getGrade());
 
 
 
@@ -84,6 +76,7 @@ public class MyPageActivity extends AppCompatActivity {
 
                 //画面遷移
                 Intent intent = new Intent(MyPageActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
 
