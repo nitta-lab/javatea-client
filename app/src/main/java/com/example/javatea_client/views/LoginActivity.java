@@ -102,6 +102,11 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                             break;
+                        case "MyPageActivity":
+                            intent = new Intent(LoginActivity.this, MyPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                            break;
                         default:
                             intent = new Intent(LoginActivity.this, TimetableActivity.class);
                             startActivity(intent);
