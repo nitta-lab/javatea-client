@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -60,7 +61,7 @@ public class AddQuestionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        questionViewModel = new ViewModelProvider(requireActivity()).get(QuestionViewModel.class);
 
         //作成場所のパス
         LectureListActivity activity = (LectureListActivity) requireActivity();
@@ -143,11 +144,9 @@ public class AddQuestionFragment extends Fragment {
             //
             questionViewModel.createQuestion(titleText,questionText,uid,tags,viewPermission,resPermission,lectureId,token);
 
-            QuestionSelectFragment questionSelectFragment = new QuestionSelectFragment();
-            getParentFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.QuestionLinearLayout, questionSelectFragment)
-                    .addToBackStack(null)
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
                     .commit();
 
             //タグ入力チェック
