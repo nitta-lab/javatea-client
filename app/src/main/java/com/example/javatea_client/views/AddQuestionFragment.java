@@ -37,7 +37,7 @@ public class AddQuestionFragment extends Fragment {
 
     private LectureViewModel lectureViewModel;
 
-    private Javatea javatea;
+    Javatea javatea;
 
 
 
@@ -48,6 +48,7 @@ public class AddQuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        javatea = (Javatea) requireActivity().getApplication();
     }
 
     @Override
@@ -110,7 +111,7 @@ public class AddQuestionFragment extends Fragment {
         String token = javatea.getToken();
 
         //公開するボタン
-        Button nextButton = view.findViewById(R.id.NextButton);
+        TextView nextButton = view.findViewById(R.id.NextButton);
         nextButton.setOnClickListener(v -> {
 
             //タイトル入力
