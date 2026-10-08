@@ -49,12 +49,21 @@ public class EditTagFragment extends Fragment {
 
                 //空欄なら追加しない
                 if (tagName.isEmpty()){
+                    addTagText.setError("タグ名を入力してください");
                     addTagText.setText("");
                     return;
                 }
 
-                //重複していたら追加しない
+                //重複している場合は追加しない
                 if (tagList.contains(tagName)){
+                    addTagText.setError("同じタグ名を2つ以上追加することはできません");
+                    addTagText.setText("");
+                    return;
+                }
+
+                //3つ以上タグがある場合は追加しない
+                if (tagList.size() == 3){
+                    addTagText.setError("タグ名は3つまでしか追加できません");
                     addTagText.setText("");
                     return;
                 }
