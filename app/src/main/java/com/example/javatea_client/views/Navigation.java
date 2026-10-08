@@ -43,6 +43,7 @@ public class Navigation {
 //            }
 //        });
 //
+         //
         ImageButton notificationButton = (ImageButton) activity.findViewById(R.id.notification_button);
         notificationButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
