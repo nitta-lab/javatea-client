@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 public class Javatea extends Application {
     private String token;
     private String userId;
+    private String name;
     private String password;
     private String view;
     private String univId;
@@ -31,6 +32,13 @@ public class Javatea extends Application {
 
     public void setUserId(String userId) {
         this.userId = userId;
+        saveUserData();
+    }
+
+    public String getName() {return name;}
+
+    public void setName(String name) {
+        this.name = name;
         saveUserData();
     }
 
@@ -88,6 +96,7 @@ public class Javatea extends Application {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("token", token);
         editor.putString("userId", userId);
+        editor.putString("name", name);
         editor.putString("password", password);
         editor.putString("view", view);
         editor.putString("univId", univId);
@@ -102,6 +111,7 @@ public class Javatea extends Application {
         SharedPreferences prefs = getSharedPreferences("user_data", MODE_PRIVATE);
         token = prefs.getString("token", "");
         userId = prefs.getString("userId", "");
+        name = prefs.getString("name", "");
         password = prefs.getString("password", "");
         view = prefs.getString("view", "");
         univId = prefs.getString("univId", "");

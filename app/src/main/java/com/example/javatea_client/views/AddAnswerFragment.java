@@ -58,12 +58,12 @@ public class AddAnswerFragment extends Fragment {
 
         questionViewModel = new ViewModelProvider(requireActivity()).get(QuestionViewModel.class);
         answerViewModel = new ViewModelProvider(requireActivity()).get(AnswerViewModel.class);
-        View question = view.findViewById(R.id.questionLayout);
-        View answer = view.findViewById(R.id.answerLayout);
-        View preview = view.findViewById(R.id.previewLayout);
-        TextView questionTextView = question.findViewById(R.id.questionBody);
-        EditText answerEditText = answer.findViewById(R.id.answerBody);
-        TextView previewTextView = preview.findViewById(R.id.previewBody);
+        View questionLayout = view.findViewById(R.id.questionLayout);
+        View answerLayout = view.findViewById(R.id.answerLayout);
+        View previewLayout = view.findViewById(R.id.previewLayout);
+        TextView questionTextView = questionLayout.findViewById(R.id.questionBody);
+        EditText answerEditText = answerLayout.findViewById(R.id.answerBody);
+        TextView previewTextView = previewLayout.findViewById(R.id.previewBody);
         Button confirmButton = view.findViewById(R.id.confirmButton);
         Button postButton = view.findViewById(R.id.postButton);
         Button editButton = view.findViewById(R.id.editButton);
@@ -121,10 +121,10 @@ public class AddAnswerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 previewTextView.setText(answerEditText.getText().toString());
-                question.setVisibility(view.INVISIBLE);
-                answer.setVisibility(view.INVISIBLE);
+                questionLayout.setVisibility(view.INVISIBLE);
+                answerLayout.setVisibility(view.INVISIBLE);
                 confirmButton.setVisibility(view.INVISIBLE);
-                preview.setVisibility(view.VISIBLE);
+                previewLayout.setVisibility(view.VISIBLE);
                 editButton.setVisibility(view.VISIBLE);
                 postButton.setVisibility(view.VISIBLE); //確認画面へ推移
             }
@@ -133,10 +133,10 @@ public class AddAnswerFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                question.setVisibility(view.VISIBLE);
-                answer.setVisibility(view.VISIBLE);
+                questionLayout.setVisibility(view.VISIBLE);
+                answerLayout.setVisibility(view.VISIBLE);
                 confirmButton.setVisibility(view.VISIBLE);
-                preview.setVisibility(view.INVISIBLE);
+                previewLayout.setVisibility(view.INVISIBLE);
                 editButton.setVisibility(view.INVISIBLE);
                 postButton.setVisibility(view.INVISIBLE); //編集画面へ推移
             }

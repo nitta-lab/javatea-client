@@ -119,7 +119,7 @@ public class SetTimetableActivity extends AppCompatActivity {
 
         // 他のActivityから画面を取得
         Navigation.setup(this); //Navigationクラスを動かす
-        ModeBar.setup(this, "時間割設定"); //ModeBarを設定
+        ModeBar.setup(this, "マイページ"); //ModeBarを設定
 
         //ViewModelの初期化
         timetableViewModel = new ViewModelProvider(this).get(TimetableViewModel.class);

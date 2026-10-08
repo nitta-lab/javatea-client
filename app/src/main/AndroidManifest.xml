@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Javateaclient">
         <activity
+            android:name=".views.MyPageActivity"
+            android:exported="false"/>
+        <activity
             android:name=".views.LectureListActivity"
             android:exported="false" />
         <activity
