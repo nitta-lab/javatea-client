@@ -43,13 +43,13 @@ public class Navigation {
 //            }
 //        });
 //
-//        ImageButton notificationButton = (ImageButton) activity.findViewById(R.id.notification_button);
-//        notificationButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                activity.startActivity(intent);
-//            }
-//        });
+        ImageButton notificationButton = (ImageButton) activity.findViewById(R.id.notification_button);
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, NotificationActivity.class);
+                activity.startActivity(intent);
+            }
+        });
 
         ImageButton myPageButton = (ImageButton) activity.findViewById(R.id.myPage_button);
         myPageButton.setOnClickListener(new View.OnClickListener() {

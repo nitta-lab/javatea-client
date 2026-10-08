@@ -25,6 +25,15 @@
             android:name=".views.MyPageActivity"
             android:exported="false" />
         <activity
+            android:name=".views.AnswerDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.AnswerListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.LectureListActivity"
             android:exported="false" />
         <activity
@@ -50,6 +59,9 @@
         </activity>
         <activity
             android:name=".views.TimetableActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.NotificationActivity"
             android:exported="false" />
         <activity
             android:name=".views.OtherLecturesActivity"
