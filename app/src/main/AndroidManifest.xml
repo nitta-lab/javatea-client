@@ -39,6 +39,7 @@
         <activity
             android:name=".views.NotificationActivity"
             android:exported="false" />
+        <activity android:name=".views.AnswerDetailActivity"/>
         <activity
             android:name=".views.RegisterActivity"
             android:exported="false" />
