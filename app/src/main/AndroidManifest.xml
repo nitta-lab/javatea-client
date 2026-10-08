@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Javateaclient">
         <activity
+            android:name=".views.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.MyPageActivity"
             android:exported="false"/>
         <activity
