@@ -36,9 +36,45 @@ public class EditTagFragment extends Fragment {
 
         //親Activityから大学IDを取得
         LectureListActivity activity = (LectureListActivity) requireActivity();
-
         EditText addTagText = view.findViewById(R.id.addTagText);
         LinearLayout allTagRow = view.findViewById(R.id.allTagRow);
+
+        //1度追加しているときは、追加したタグ欄に表示しておく。
+        tagList = activity.getTag();
+        if (!tagList.isEmpty()){
+            for (String i : tagList){
+                //タグ1行分のLinerLayoutを作る
+                LinearLayout tagRow = new LinearLayout(requireContext());
+                tagRow.setOrientation(LinearLayout.HORIZONTAL);
+
+                //タグ名を表示する
+                TextView tagText = new TextView(requireContext());
+                tagText.setText(i);
+                tagText.setTextSize(16);
+
+                //タグ名の部分を横いっぱいに広げる
+                LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+                tagRow.addView(tagText,textParams);
+
+                //xボタン
+                Button deleteButton = new Button(requireContext());
+                deleteButton.setText("x");
+                tagRow.addView(deleteButton);
+
+                //作った1行をallTagRowに追加
+                allTagRow.addView(tagRow);
+                addTagText.setText("");
+
+                //xボタンを押したら削除する
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tagList.remove(i);
+                        allTagRow.removeView(tagRow);
+                    }
+                });
+            }
+        }
 
         //追加するボタンを押したときの処理
         Button addButton = view.findViewById(R.id.addButton);
