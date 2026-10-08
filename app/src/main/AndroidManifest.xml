@@ -37,6 +37,9 @@
             android:name=".views.SetTimetableActivity"
             android:exported="false" />
         <activity
+            android:name=".views.NotificationActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.RegisterActivity"
             android:exported="false" />
         <activity
