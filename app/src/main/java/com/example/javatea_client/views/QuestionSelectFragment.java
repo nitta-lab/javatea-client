@@ -264,6 +264,18 @@ public class QuestionSelectFragment extends Fragment {
                 Log.w(TAG, "未知のlectureListType: " + lectureListType);
                 break;
         }
+
+        Button btnButton = view.findViewById(R.id.btnBottom);
+        btnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("DEBUG", "ボタンが押された");
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, new AddQuestionFragment())
+                        .commit();
+            }
+        });
     }
 
     // 質問一覧を描画する(getQuestions()のobserveから呼ばれる)
