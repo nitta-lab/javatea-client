@@ -30,7 +30,7 @@ public class Navigation {
         ImageButton searchButton = (ImageButton) activity.findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(activity, SearchActivity.class);
                 activity.startActivity(intent);
             }
         });
