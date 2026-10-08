@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
@@ -25,11 +25,7 @@ public class SearchActivity extends AppCompatActivity {
     // カテゴリ
     // =========================================
 
-    private final String[] categories = {
-            "全般",
-            "甲南大学",
-            "その他の大学"
-    };
+    private String[] categories;
 
     // 現在選択しているカテゴリ
     private int categoryIndex = 0;
@@ -100,6 +96,7 @@ public class SearchActivity extends AppCompatActivity {
         categoryButton1 = findViewById(R.id.CategoryButton1);
 
         categoryButton2 = findViewById(R.id.CategoryButton2);
+        categoryButton2.setText(javatea.getUniversity());
 
         categoryButton3 = findViewById(R.id.CategoryButton3);
 
@@ -113,6 +110,9 @@ public class SearchActivity extends AppCompatActivity {
         // 初期状態
         // =========================================
 
+        categories = new String[]{"全般",
+                javatea.getUniversity(),
+                "その他の大学"};
         updateCategory();
 
 
