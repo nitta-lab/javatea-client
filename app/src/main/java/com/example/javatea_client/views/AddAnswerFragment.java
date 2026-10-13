@@ -146,8 +146,15 @@ public class AddAnswerFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 String body = previewTextView.getText().toString();
-                loadingOverlay.setVisibility(View.VISIBLE); //多重送信防止レイアウトの表示
-                answerViewModel.createAnswer(qid, userId, body, token, name); //回答を作成
+
+                if (body.isBlank()) {
+                    String errorMessage = "回答本文を入力してください。";
+                    Toast.makeText(requireActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    loadingOverlay.setVisibility(View.VISIBLE); //多重送信防止レイアウトの表示
+                    answerViewModel.createAnswer(qid, userId, body, token, name); //回答を作成
+                }
             }
         });
     }
