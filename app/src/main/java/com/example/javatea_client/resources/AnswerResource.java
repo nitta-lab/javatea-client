@@ -14,7 +14,7 @@ import java.util.*;
 public interface AnswerResource {
 
     //answerを全取得
-    @GET("/{qid}/answers")
+    @GET("questions/{qid}/answers")
     Call<HashMap<String, Answer>> getAnswers(
             @Path("qid") String qid,
             @Query("uid") String uid,
@@ -22,7 +22,7 @@ public interface AnswerResource {
     );
 
     //answerを作成
-    @POST("/{qid}/answers")
+    @POST("questions/{qid}/answers")
     Call<Answer> createAnswer(
             @Path("qid") String qid,
             @Field("uid") String uid,
@@ -32,7 +32,7 @@ public interface AnswerResource {
     );
 
     //answerを一つ取得
-    @GET("/{qid}/answers/{aid}")
+    @GET("questions/{qid}/answers/{aid}")
     Call<Answer> getAnswer(
             @Path("qid") String qid,
             @Path("aid") String aid,

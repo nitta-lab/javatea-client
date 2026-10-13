@@ -5,11 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,24 +19,13 @@ import android.widget.Toast;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
-import com.example.javatea_client.viewModels.CategoryViewModel;
-import com.example.javatea_client.viewModels.LectureViewModel;
 import com.example.javatea_client.viewModels.QuestionViewModel;
-import com.example.javatea_client.viewModels.UserViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 public class AddQuestionFragment extends Fragment {
 
     private QuestionViewModel questionViewModel;
-
-    private LectureViewModel lectureViewModel;
-
-    Javatea javatea;
-
-
 
     public AddQuestionFragment() {
         // Required empty public constructor
@@ -48,7 +34,6 @@ public class AddQuestionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        javatea = (Javatea) requireActivity().getApplication();
     }
 
     @Override
@@ -60,7 +45,8 @@ public class AddQuestionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        questionViewModel = new ViewModelProvider(requireActivity()).get(QuestionViewModel.class);
+        Javatea javatea = (Javatea) requireActivity().getApplication();
 
         //作成場所のパス
         LectureListActivity activity = (LectureListActivity) requireActivity();
@@ -85,8 +71,8 @@ public class AddQuestionFragment extends Fragment {
 
         //回答者制限
         Spinner AnswerSpinner = view.findViewById(R.id.AnswerSpinner);
-        String[] answewlist = {"選択してください", "誰でも", "同じ学校", "同じ学部"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, answewlist);
+        String[] answerList = {"選択してください", "誰でも", "同じ学校", "同じ学部"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, answerList);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
         AnswerSpinner.setAdapter(adapter2);
 
@@ -101,8 +87,8 @@ public class AddQuestionFragment extends Fragment {
 
 
         //Title,Questionを取得
-        EditText titletextfragment = view.findViewById(R.id.TitleText);
-        EditText questiontextfragment = view.findViewById(R.id.QuestionText);
+        EditText titleTextFragment = view.findViewById(R.id.TitleText);
+        EditText questionTextFragment = view.findViewById(R.id.QuestionText);
 
         String uid = javatea.getUserId();
         String token = javatea.getToken();
@@ -112,14 +98,14 @@ public class AddQuestionFragment extends Fragment {
         nextButton.setOnClickListener(v -> {
 
             //タイトル入力
-            String titleText = titletextfragment.getText().toString();
+            String titleText = titleTextFragment.getText().toString();
             if (titleText.isEmpty()) {
                 Toast.makeText(getContext(),"タイトルを入力して下さい", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             //Question入力
-            String questionText = questiontextfragment.getText().toString();
+            String questionText = questionTextFragment.getText().toString();
             if(questionText.isEmpty()) {
                 Toast.makeText(getContext(),"質問を入力してください",Toast.LENGTH_SHORT).show();
                 return;
@@ -140,14 +126,12 @@ public class AddQuestionFragment extends Fragment {
             String resPermission = (String)AnswerSpinner.getSelectedItem();
             String lectureId = activity.getLectureId();
 
-            //
             questionViewModel.createQuestion(titleText,questionText,uid,tags,viewPermission,resPermission,lectureId,token);
+            activity.setTag(new ArrayList<>());
 
-            QuestionSelectFragment questionSelectFragment = new QuestionSelectFragment();
-            getParentFragmentManager()
+            requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.QuestionLinearLayout, questionSelectFragment)
-                    .addToBackStack(null)
+                    .replace(R.id.fragment_container, new QuestionSelectFragment())
                     .commit();
 
             //タグ入力チェック
@@ -159,3 +143,7 @@ public class AddQuestionFragment extends Fragment {
     }
 }
 
+//タグを入れると他の情報が消えてしまうバグ
+//公開するボタンを押して、戻ってもQuestionが追加されていない
+//タグ：が消えている...？(始めの状態からない)
+//タイトルが消えるときがある(多分Scrollを一番外にしていないから)
