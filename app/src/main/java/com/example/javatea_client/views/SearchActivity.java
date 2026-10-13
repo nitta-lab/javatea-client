@@ -1,25 +1,29 @@
+
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
     private static final String TAG = "SearchActivity";
-
 
     // =========================================
     // カテゴリ
@@ -30,13 +34,11 @@ public class SearchActivity extends AppCompatActivity {
     // 現在選択しているカテゴリ
     private int categoryIndex = 0;
 
-
     // =========================================
     // 追加済みタグ
     // =========================================
 
     private final List<String> addedTags = new ArrayList<>();
-
 
     // =========================================
     // View
@@ -46,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private EditText tagEditText;
 
-    private TextView addedTagText;
+    private LinearLayout addedTagText;
 
     private Button categoryButton1;
     private Button categoryButton2;
@@ -56,13 +58,13 @@ public class SearchActivity extends AppCompatActivity {
 
     private Button searchButton;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
         setContentView(R.layout.activity_search);
-
 
         // =========================================
         // アプリケーション情報
@@ -72,7 +74,6 @@ public class SearchActivity extends AppCompatActivity {
 
         javatea.setView("Search");
 
-
         // =========================================
         // Navigation / ModeBar
         // =========================================
@@ -80,7 +81,6 @@ public class SearchActivity extends AppCompatActivity {
         Navigation.setup(this);
 
         ModeBar.setup(this, "検索する");
-
 
         // =========================================
         // View取得
@@ -92,7 +92,6 @@ public class SearchActivity extends AppCompatActivity {
 
         addedTagText = findViewById(R.id.AddedTagText);
 
-
         categoryButton1 = findViewById(R.id.CategoryButton1);
 
         categoryButton2 = findViewById(R.id.CategoryButton2);
@@ -100,21 +99,22 @@ public class SearchActivity extends AppCompatActivity {
 
         categoryButton3 = findViewById(R.id.CategoryButton3);
 
-
         addTagButton = findViewById(R.id.AddTagButton);
 
         searchButton = findViewById(R.id.SearchButton);
-
 
         // =========================================
         // 初期状態
         // =========================================
 
-        categories = new String[]{"全般",
+        categories = new String[]{
+                "全般",
                 javatea.getUniversity(),
-                "その他の大学"};
-        updateCategory();
+                "その他の大学"
+        };
 
+        updateCategory();
+        updateAddedTags();
 
         // =========================================
         // 全般
@@ -130,7 +130,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-
         // =========================================
         // 甲南大学
         // =========================================
@@ -144,7 +143,6 @@ public class SearchActivity extends AppCompatActivity {
                 updateCategory();
             }
         });
-
 
         // =========================================
         // その他の大学
@@ -160,7 +158,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-
         // =========================================
         // タグ追加
         // =========================================
@@ -172,7 +169,6 @@ public class SearchActivity extends AppCompatActivity {
                 addTag();
             }
         });
-
 
         // =========================================
         // 検索
@@ -187,7 +183,6 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-
     /**
      * カテゴリ表示を更新
      */
@@ -195,19 +190,16 @@ public class SearchActivity extends AppCompatActivity {
 
         String category = categories[categoryIndex];
 
-
         // 「カテゴリ：（全般）」のように表示
         categoryLabel.setText(
                 "カテゴリ：（" + category + "）"
         );
-
 
         Log.d(
                 TAG,
                 "現在のカテゴリ：" + category
         );
     }
-
 
     /**
      * タグを追加
@@ -223,7 +215,6 @@ public class SearchActivity extends AppCompatActivity {
                 .toString()
                 .trim();
 
-
         // =========================================
         // 空文字チェック
         // =========================================
@@ -236,7 +227,6 @@ public class SearchActivity extends AppCompatActivity {
 
             return;
         }
-
 
         // =========================================
         // 重複チェック
@@ -253,13 +243,11 @@ public class SearchActivity extends AppCompatActivity {
             return;
         }
 
-
         // =========================================
         // タグを追加
         // =========================================
 
         addedTags.add(tag);
-
 
         // =========================================
         // 画面更新
@@ -267,13 +255,11 @@ public class SearchActivity extends AppCompatActivity {
 
         updateAddedTags();
 
-
         // =========================================
         // 入力欄を空にする
         // =========================================
 
         tagEditText.setText("");
-
 
         Toast.makeText(
                 SearchActivity.this,
@@ -282,44 +268,114 @@ public class SearchActivity extends AppCompatActivity {
         ).show();
     }
 
-
     /**
      * 追加済みタグを表示
      */
     private void updateAddedTags() {
 
+        // =========================================
+        // 表示をクリア
+        // =========================================
+
+        addedTagText.removeAllViews();
+
+        // =========================================
+        // 見出しを表示
+        // =========================================
+
+        TextView titleText = new TextView(this);
+
+        titleText.setText("追加済みのタグ：");
+        titleText.setTextSize(14);
+        titleText.setGravity(Gravity.CENTER_VERTICAL);
+
+        addedTagText.addView(titleText);
+
+        // =========================================
+        // タグがない場合
+        // =========================================
+
         if (addedTags.isEmpty()) {
-
-            addedTagText.setText("追加済みのタグ：");
-
             return;
         }
 
-
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("追加済みのタグ：\n");
-
+        // =========================================
+        // タグごとに表示
+        // =========================================
 
         for (int i = 0; i < addedTags.size(); i++) {
 
-            builder.append("・");
+            // タグと削除ボタンを横並びにする
+            LinearLayout tagRow = new LinearLayout(this);
 
-            builder.append(addedTags.get(i));
+            tagRow.setOrientation(LinearLayout.HORIZONTAL);
+            tagRow.setGravity(Gravity.CENTER_VERTICAL);
 
+            // =========================================
+            // タグ名
+            // =========================================
 
-            if (i < addedTags.size() - 1) {
+            TextView tagText = new TextView(this);
 
-                builder.append("\n");
-            }
+            tagText.setText("・" + addedTags.get(i));
+            tagText.setTextSize(14);
+            tagText.setGravity(Gravity.CENTER_VERTICAL);
+
+            LinearLayout.LayoutParams tagParams =
+                    new LinearLayout.LayoutParams(
+                            0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            1.0f
+                    );
+
+            tagRow.addView(tagText, tagParams);
+
+            // =========================================
+            // 削除ボタン
+            // =========================================
+
+            Button deleteButton = new Button(this);
+
+            deleteButton.setText("×");
+            deleteButton.setTextSize(20);
+
+            deleteButton.setMinWidth(0);
+            deleteButton.setMinHeight(0);
+            deleteButton.setMinimumHeight(0);
+            deleteButton.setMinimumWidth(0);
+
+            deleteButton.setPadding(0, 0, 0, 0);
+
+            // 削除対象のタグを取得
+            String tag = addedTags.get(i);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    // 選択したタグだけを削除
+                    addedTags.remove(tag);
+
+                    // タグ表示を更新
+                    updateAddedTags();
+
+                    Toast.makeText(
+                            SearchActivity.this,
+                            "タグを削除しました",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+            });
+
+            tagRow.addView(deleteButton);
+
+            // =========================================
+            // タグの行を追加
+            // =========================================
+
+            addedTagText.addView(tagRow);
         }
-
-
-        addedTagText.setText(
-                builder.toString()
-        );
     }
-
 
     /**
      * 検索
@@ -331,7 +387,6 @@ public class SearchActivity extends AppCompatActivity {
         // =========================================
 
         String category = categories[categoryIndex];
-
 
         // =========================================
         // タグがない場合
@@ -348,7 +403,6 @@ public class SearchActivity extends AppCompatActivity {
             return;
         }
 
-
         // =========================================
         // ログ
         // =========================================
@@ -363,7 +417,6 @@ public class SearchActivity extends AppCompatActivity {
                 "カテゴリ：" + category
         );
 
-
         for (String tag : addedTags) {
 
             Log.d(
@@ -371,7 +424,6 @@ public class SearchActivity extends AppCompatActivity {
                     "タグ：" + tag
             );
         }
-
 
         // =========================================
         // TODO
@@ -389,7 +441,6 @@ public class SearchActivity extends AppCompatActivity {
          *     addedTags
          * );
          */
-
 
         Toast.makeText(
                 SearchActivity.this,
