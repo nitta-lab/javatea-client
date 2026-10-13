@@ -116,7 +116,7 @@ public interface UserResource {
     );
 
     //ユーザがベストアンサーに選ばれた質問一覧を取得
-    @GET("users/{uid}/best-answer")
+    @GET("users/{uid}/best-answers")
     Call<Set<Question>> getBestAnswers(
             @Path("uid") String uid,
             @Query("token") String token
