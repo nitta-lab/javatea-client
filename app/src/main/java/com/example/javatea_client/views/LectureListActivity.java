@@ -55,6 +55,14 @@ public class LectureListActivity extends AppCompatActivity {
 
         tvCategory = findViewById(R.id.tvCategory);
 
+        // 戻るボタンを無効化
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+            }
+        });
+
+
         updateCategoryText();
         //前回開いていた画面を開くようにする
         Javatea javatea = (Javatea) this.getApplication();
@@ -88,29 +96,6 @@ public class LectureListActivity extends AppCompatActivity {
                     .commit();
             return;
         }
-
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-
-                if (!categoryPath.isEmpty()) {
-                    // カテゴリを1つ戻す
-                    removeLastCategory();
-
-                    // Fragmentが戻れるならFragmentを戻す
-                    if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-                        getSupportFragmentManager().popBackStack();
-                    } else {
-                        // FragmentがなければActivityを終了
-                        finish();
-                    }
-
-                } else {
-                    // カテゴリが空なら通常通り終了
-                    finish();
-                }
-            }
-        });
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new GeneralFragment())
