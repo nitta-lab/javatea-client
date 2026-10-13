@@ -119,12 +119,10 @@ public class NotificationActivity extends AppCompatActivity {
 
                 for (Question question : questions) {
 
+                        questionsList.add(question);
                     // ベストアンサーが未設定の質問だけ追加
                     if (question.getBestAnswerAid() == null ||
                             question.getBestAnswerAid().isEmpty()) {
-
-                        questionsList.add(question);
-
                         // この質問の回答数を取得
                         loadAnswerCount(question.getQid());
                     }
