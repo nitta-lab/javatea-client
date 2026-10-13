@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,11 +86,6 @@ public class AddQuestionFragment extends Fragment {
                 }
         );
 
-
-        //Title,Questionを取得
-        EditText titleTextFragment = view.findViewById(R.id.TitleText);
-        EditText questionTextFragment = view.findViewById(R.id.QuestionText);
-
         String uid = javatea.getUserId();
         String token = javatea.getToken();
 
@@ -97,16 +93,21 @@ public class AddQuestionFragment extends Fragment {
         TextView nextButton = view.findViewById(R.id.NextButton);
         nextButton.setOnClickListener(v -> {
 
+            //Title,Questionを取得
+            EditText titleTextFragment = view.findViewById(R.id.TitleText);
+            EditText questionTextFragment = view.findViewById(R.id.QuestionText);
+
             //タイトル入力
             String titleText = titleTextFragment.getText().toString();
-            if (titleText.isEmpty()) {
+            activity.setQuestionTitle(titleText);
+            if(titleText.equals("　タイトル：")) {
                 Toast.makeText(getContext(),"タイトルを入力して下さい", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             //Question入力
             String questionText = questionTextFragment.getText().toString();
-            if(questionText.isEmpty()) {
+            if(questionText.equals("　Question：")) {
                 Toast.makeText(getContext(),"質問を入力してください",Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -120,6 +121,7 @@ public class AddQuestionFragment extends Fragment {
             //解答者制限選択チェック
             if(AnswerSpinner.getSelectedItemPosition() == 0){
                 Toast.makeText(getContext(),"解答者制限を選択してください",Toast.LENGTH_SHORT).show();
+                return;
             }
 
             String viewPermission = (String)ViewerSpinner.getSelectedItem();
@@ -143,7 +145,5 @@ public class AddQuestionFragment extends Fragment {
     }
 }
 
-//タグを入れると他の情報が消えてしまうバグ
-//公開するボタンを押して、戻ってもQuestionが追加されていない
-//タグ：が消えている...？(始めの状態からない)
-//タイトルが消えるときがある(多分Scrollを一番外にしていないから)
+//タグを入れると入力した情報が消える
+//公開するボタン押した後に質問が追加されている状態にする
