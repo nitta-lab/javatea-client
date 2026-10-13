@@ -70,8 +70,11 @@ public class NotificationActivity extends AppCompatActivity {
 
         // ユーザー情報を取得
         Javatea javaTea = (Javatea) getApplication();
+
+        javaTea.setView("Notification");
         uid = javaTea.getUserId();
         token = javaTea.getToken();
+
 
         // ViewModelを作る
         userViewModel = new ViewModelProvider(this)
@@ -116,12 +119,10 @@ public class NotificationActivity extends AppCompatActivity {
 
                 for (Question question : questions) {
 
+                        questionsList.add(question);
                     // ベストアンサーが未設定の質問だけ追加
                     if (question.getBestAnswerAid() == null ||
                             question.getBestAnswerAid().isEmpty()) {
-
-                        questionsList.add(question);
-
                         // この質問の回答数を取得
                         loadAnswerCount(question.getQid());
                     }

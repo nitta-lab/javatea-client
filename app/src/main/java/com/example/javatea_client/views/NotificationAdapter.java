@@ -75,6 +75,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             }
 
             holder.notificationTitle.setText(name + "からベストアンサーに選ばれました！\n（Q：" + item.getTitle() + "）");
+            holder.notificationTitle.setEnabled(false);
             holder.answerCount.setVisibility(View.GONE);
 
         } else {
