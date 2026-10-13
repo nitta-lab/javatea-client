@@ -147,9 +147,7 @@ public class EditTagFragment extends Fragment {
             public void onClick(View v) {
                 activity.setTag(tagList);
                 requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, new AddQuestionFragment())
-                        .commit();
+                        .popBackStack();
             }
         });
     }
