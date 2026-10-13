@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 public interface QuestionResource {
     //質問を新しく作成する
     @FormUrlEncoded
-    @POST("/questions")
+    @POST("questions")
     Call<String> createQuestion(
             @Field("title") String title,
             @Field("body") String body,
@@ -29,7 +29,7 @@ public interface QuestionResource {
     );
 
     //質問情報の取得
-    @GET("/questions/{qid}")
+    @GET("questions/{qid}")
     Call<Question> getQuestion(
             @Path("qid") String qid,
             @Query("uid") String requesterUid,
@@ -37,7 +37,7 @@ public interface QuestionResource {
     );
 
     //質問タイトルを取得する
-    @GET("/questions/{qid}/title")
+    @GET("questions/{qid}/title")
     Call<String> getTitle(
             @Path("qid") String qid,
             @Query("uid") String requesterUid,
@@ -45,7 +45,7 @@ public interface QuestionResource {
     );
 
     //ユーザーIDを取得する
-    @GET("/questions/{qid}/uid")
+    @GET("questions/{qid}/uid")
     Call<String> getUid(
             @Path("qid") String qid,
             @Query("uid") String requesterUid,
@@ -54,7 +54,7 @@ public interface QuestionResource {
 
     //ベストアンサーを記録する
     @FormUrlEncoded
-    @PUT("/questions/{qid}/best-answer")
+    @PUT("questions/{qid}/best-answer")
     Call<Question> setBestAnswer(
             @Path("qid") String qid,
             @Field("aid") String aid

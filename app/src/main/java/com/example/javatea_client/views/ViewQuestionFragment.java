@@ -1,7 +1,10 @@
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,6 +34,19 @@ public class ViewQuestionFragment extends Fragment {
     private QuestionViewModel questionViewModel;
     private AnswerViewModel answerViewModel;
 
+    public ViewQuestionFragment() {
+        // 必須
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        return inflater.inflate(R.layout.fragment_view_quwstion,
+                container,
+                false);
+    }
 
     //getter追加
 
