@@ -221,10 +221,9 @@ public class NotificationActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            Log.w(
-                                    "NotificationActivity",
+                            Log.w("NotificationActivity",
                                     "回答数取得失敗: " + response.code()
-                            );
+                                            + " パス: " + call.request().url().encodedPath());
                         }
                     }
 
