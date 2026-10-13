@@ -20,12 +20,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     private final List<Question> questionList;
     private final boolean isBestAnswerNotification;
     private final Map<String, String> userNames;
+    private final Map<String, Integer> answerCounts;
 
     // ActivityからQuestion一覧を受け取る
-    public NotificationAdapter(List<Question> questionList, boolean isBestAnswerNotification, Map<String, String> userNames) {
+    public NotificationAdapter(List<Question> questionList,
+                               boolean isBestAnswerNotification,
+                               Map<String, String> userNames,
+                               Map<String, Integer> answerCounts) {
         this.questionList = questionList;
         this.isBestAnswerNotification = isBestAnswerNotification;
         this.userNames = userNames;
+        this.answerCounts = answerCounts;
     }
 
     // Questionの件数を返す
@@ -75,6 +80,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         } else {
             holder.notificationTitle.setText("Q：" + item.getTitle());
             holder.answerCount.setVisibility(View.VISIBLE);
+
+            Integer count = answerCounts.get(item.getQid());
+
+            if (count != null) {
+                holder.answerCount.setText(String.valueOf(count));
+            } else {
+                holder.answerCount.setText("-");
+            }
         }
 
         // 質問タイトルを押したとき
