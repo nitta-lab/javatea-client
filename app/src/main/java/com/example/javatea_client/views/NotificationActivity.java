@@ -70,8 +70,11 @@ public class NotificationActivity extends AppCompatActivity {
 
         // ユーザー情報を取得
         Javatea javaTea = (Javatea) getApplication();
+
+        javaTea.setView("Notification");
         uid = javaTea.getUserId();
         token = javaTea.getToken();
+
 
         // ViewModelを作る
         userViewModel = new ViewModelProvider(this)
