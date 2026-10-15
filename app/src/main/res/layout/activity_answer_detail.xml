@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="#F5F3F8">
 
     <!-- 画面タイトル -->
@@ -21,6 +22,7 @@
         android:text="回答詳細"
         android:textColor="#000000"
         android:textSize="20sp"
+        android:background="@drawable/mode_bar_rounded"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
