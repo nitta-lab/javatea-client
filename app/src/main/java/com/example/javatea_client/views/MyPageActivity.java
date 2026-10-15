@@ -19,7 +19,7 @@ import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.UserViewModel;
 
-//BAG:ログアウトボタンを押しても時間割画面へ画面遷移をしてしまう(値を消す処理は正常)
+//BAG:
 
 public class MyPageActivity extends AppCompatActivity {
 
