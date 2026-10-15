@@ -2,6 +2,7 @@ package com.example.javatea_client.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -72,20 +73,20 @@ public class SearchResultActivity extends AppCompatActivity {
         if (rvSearchResultList != null) {
             rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
 
-            // 追加(以下9行)
+//            // 追加(以下9行)
             List<Question> dummyList = new ArrayList<>();
-            Question q1 = new Question();
-            q1.setTitle("Javaの配列とArrayListの違いについて");
-            q1.setQid("qid11");
-            dummyList.add(q1);
-            Question q2 = new Question();
-            q2.setTitle("Java");
-            dummyList.add(q2);
-            Question q3 = new Question();
-            q3.setTitle("JavaTea");
-            dummyList.add(q3);
+//            Question q1 = new Question();
+//            q1.setTitle("Javaの配列とArrayListの違いについて");
+//            q1.setQid("qid11");
+//            dummyList.add(q1);
+//            Question q2 = new Question();
+//            q2.setTitle("Java");
+//            dummyList.add(q2);
+//            Question q3 = new Question();
+//            q3.setTitle("JavaTea");
+//            dummyList.add(q3);
 
-            questionAdapter = new QuestionAdapter(dummyList, question -> {
+            questionAdapter = new QuestionAdapter(questionList, question -> {
                 // タップされた質問のデータ（question）からIDやタイトルを取り出す
                 String qid = question.getQid(); // 質問IDを取得するメソッド（モデルに合わせて変更してください）
 
@@ -142,7 +143,7 @@ public class SearchResultActivity extends AppCompatActivity {
         questionViewModel.getCurrentQuestion().observe(this, question -> {
             if (question != null && tvStatus != null) {
                 // 必要に応じてテキストの更新
-                // tvStatus.setText(question.getTitle());
+                 tvStatus.setText(question.getTitle());
             }
         });
 
