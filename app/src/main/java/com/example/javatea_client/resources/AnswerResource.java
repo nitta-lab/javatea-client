@@ -22,6 +22,7 @@ public interface AnswerResource {
     );
 
     //answerを作成
+    @FormUrlEncoded
     @POST("questions/{qid}/answers")
     Call<Answer> createAnswer(
             @Path("qid") String qid,

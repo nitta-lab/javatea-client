@@ -26,6 +26,11 @@ public class AnswerViewModel extends ViewModel {
     private final MutableLiveData<Answer> answer = new MutableLiveData<>();
 
     private final MutableLiveData<String> error = new MutableLiveData<>();
+
+    private final MutableLiveData<Boolean> loading = new MutableLiveData<>(false);
+
+    private final MutableLiveData<Boolean> createSuccess = new MutableLiveData<>(false);
+
     public AnswerViewModel(){
         this.retrofit = new Retrofit.Builder()
                 .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server/")
@@ -33,6 +38,18 @@ public class AnswerViewModel extends ViewModel {
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
         this.answerResource = retrofit.create(AnswerResource.class);
+    }
+
+    public LiveData<Boolean> isLoading() {
+        return loading;
+    }
+
+    public LiveData<Boolean> getCreateSuccess() {
+        return createSuccess;
+    }
+
+    public void resetCreateSuccess() {
+        createSuccess.setValue(false);
     }
 
     public LiveData<HashMap<String,Answer>> getAnswers(){
@@ -46,10 +63,12 @@ public class AnswerViewModel extends ViewModel {
     public LiveData<String> getError(){return error;}
 
     public void loadAnswers(String qid,String uid,String token){
+        loading.setValue(true);
         answerResource.getAnswers(qid,uid,token)
                 .enqueue(new Callback<HashMap<String, Answer>>() {
                     @Override
                     public void onResponse(Call<HashMap<String, Answer>> call, Response<HashMap<String, Answer>> response) {
+                        loading.setValue(false);
                         if(response.isSuccessful()&&response.body() != null){
                             answers.setValue(response.body());
                         }else{
@@ -65,19 +84,25 @@ public class AnswerViewModel extends ViewModel {
 
                     @Override
                     public void onFailure(Call<HashMap<String, Answer>> call, Throwable throwable) {
+                        loading.setValue(false);
                         error.setValue("エラー: " + throwable.getMessage());
                     }
                 });
     }
 
     public void createAnswer(String qid,String uid,String body,String token,String name){
+        loading.setValue(true);
+        createSuccess.setValue(false);
         answerResource.createAnswer(qid,uid,body,token,name)
                 .enqueue(new Callback<Answer>() {
                     @Override
                     public void onResponse(Call<Answer> call, Response<Answer> response) {
+                        loading.setValue(false);
                         if(response.isSuccessful()&&response.body() != null){
                             answer.setValue(response.body());
+                            createSuccess.setValue(true);
                         }else{
+                            createSuccess.setValue(false);
                             if(response.code() == 404){
                                 error.setValue("ユーザが存在しません");
                             }else if(response.code() == 401){
@@ -90,16 +115,20 @@ public class AnswerViewModel extends ViewModel {
 
                     @Override
                     public void onFailure(Call<Answer> call, Throwable throwable) {
+                        loading.setValue(false);
+                        createSuccess.setValue(false);
                         error.setValue("エラー: " + throwable.getMessage());
                     }
                 });
     }
 
     public void loadAnswer(String qid,String aid,String uid,String token){
+        loading.setValue(true);
         answerResource.getAnswer(qid,aid,uid,token)
                 .enqueue(new Callback<Answer>() {
                     @Override
                     public void onResponse(Call<Answer> call, Response<Answer> response) {
+                        loading.setValue(false);
                         if(response.isSuccessful()&&response.body() != null){
                             answer.setValue(response.body());
                         }else{
@@ -115,6 +144,7 @@ public class AnswerViewModel extends ViewModel {
 
                     @Override
                     public void onFailure(Call<Answer> call, Throwable throwable) {
+                        loading.setValue(false);
                         error.setValue("エラー: " + throwable.getMessage());
                     }
                 });
