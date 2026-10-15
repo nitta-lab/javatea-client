@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F3F8"
+    android:fitsSystemWindows="true"
     tools:context=".views.AnswerListActivity">
 
     <!-- 画面タイトル -->
@@ -23,6 +24,7 @@
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:background="@drawable/mode_bar_rounded"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
