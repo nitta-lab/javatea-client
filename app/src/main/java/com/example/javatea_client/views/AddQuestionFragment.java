@@ -82,6 +82,7 @@ public class AddQuestionFragment extends Fragment {
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new EditTagFragment())
+                    .addToBackStack(null)//情報を渡す
                     .commit();
                 }
         );
@@ -135,12 +136,6 @@ public class AddQuestionFragment extends Fragment {
                     .beginTransaction()
                     .replace(R.id.fragment_container, new QuestionSelectFragment())
                     .commit();
-
-            //タグ入力チェック
-//            String tagtext = tagtextfragment.getText().toString();
-//            if(tagtext.isEmpty()){
-//                tagtext = null;
-//            }
         });
     }
 }
