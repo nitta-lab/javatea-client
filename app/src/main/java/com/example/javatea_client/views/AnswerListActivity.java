@@ -17,6 +17,7 @@ import com.example.javatea_client.viewModels.QuestionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.util.Log;
 
 public class AnswerListActivity extends AppCompatActivity {
 
@@ -80,9 +81,13 @@ public class AnswerListActivity extends AppCompatActivity {
         setAnswerAdapter();
 
         // 回答一覧を監視
+        // 回答一覧を監視
         answerViewModel.getAnswers().observe(this, answers -> {
 
             if (answers != null) {
+
+                // ★ここに追加！
+                Log.d("AnswerList", "取得した回答数: " + answers.size());
 
                 // 古い回答一覧を消す
                 answerList.clear();
@@ -109,6 +114,8 @@ public class AnswerListActivity extends AppCompatActivity {
         });
 
         // この質問の回答一覧を取得
+        Log.d("AnswerList", "取得するqid: " + qid);
+        answerViewModel.loadAnswers(qid, uid, token);
         answerViewModel.loadAnswers(qid, uid, token);
     }
 
