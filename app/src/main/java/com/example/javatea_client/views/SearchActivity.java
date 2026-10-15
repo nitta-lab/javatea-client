@@ -1,7 +1,9 @@
 
 package com.example.javatea_client.views;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -38,7 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     // 追加済みタグ
     // =========================================
 
-    private final List<String> addedTags = new ArrayList<>();
+    private final ArrayList<String> addedTags = new ArrayList<>();
 
     // =========================================
     // View
@@ -58,6 +60,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private Button searchButton;
 
+    private Javatea javatea;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +74,7 @@ public class SearchActivity extends AppCompatActivity {
         // アプリケーション情報
         // =========================================
 
-        Javatea javatea = (Javatea) getApplication();
+        javatea = (Javatea) getApplication();
 
         javatea.setView("Search");
 
@@ -447,5 +451,14 @@ public class SearchActivity extends AppCompatActivity {
                 "「" + category + "」で検索します",
                 Toast.LENGTH_SHORT
         ).show();
+        Intent intent = new Intent(this, SearchResultActivity.class);
+        if (categoryIndex == 0) {
+            intent.putExtra("EXTRA_SEARCH_TYPE", "GENERAL");
+        } else {
+            intent.putExtra("EXTRA_SEARCH_TYPE", "UNIVERSITY");
+            intent.putExtra("EXTRA_UNIV_ID", javatea.getUnivId());
+        }
+        intent.putExtra("EXTRA_KEYWORDS", addedTags);
+        startActivity(intent);
     }
 }
