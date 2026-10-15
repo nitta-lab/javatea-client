@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,9 @@ import com.example.javatea_client.viewModels.AnswerViewModel;
 import com.example.javatea_client.viewModels.QuestionViewModel;
 import com.example.javatea_client.viewModels.UserViewModel;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class AddAnswerFragment extends Fragment {
 
     private QuestionViewModel questionViewModel;
@@ -35,6 +40,8 @@ public class AddAnswerFragment extends Fragment {
     private String name;
     private Question displayQuestion;
     private static final String TAG = "AddAnswerFragment";
+    private ExecutorService executor;
+    private Handler mainHandler;
 
     public AddAnswerFragment() {
         // Required empty public constructor
@@ -55,15 +62,18 @@ public class AddAnswerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("FragmentDebug", "AddAnswerFragmentのonViewCreatedが呼ばれました");
 
         questionViewModel = new ViewModelProvider(requireActivity()).get(QuestionViewModel.class);
         answerViewModel = new ViewModelProvider(requireActivity()).get(AnswerViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         View questionLayout = view.findViewById(R.id.questionLayout);
         View answerLayout = view.findViewById(R.id.answerLayout);
         View previewLayout = view.findViewById(R.id.previewLayout);
         TextView questionTextView = questionLayout.findViewById(R.id.questionBody);
         EditText answerEditText = answerLayout.findViewById(R.id.answerBody);
         TextView previewTextView = previewLayout.findViewById(R.id.previewBody);
+        Button backButton = view.findViewById(R.id.backButton);
         Button confirmButton = view.findViewById(R.id.confirmButton);
         Button postButton = view.findViewById(R.id.postButton);
         Button editButton = view.findViewById(R.id.editButton);
@@ -74,31 +84,69 @@ public class AddAnswerFragment extends Fragment {
         Javatea app = (Javatea) requireActivity().getApplication();
         userId = app.getUserId();
         token = app.getToken();
-        name = userViewModel.getName(userId, token);
+        executor = Executors.newSingleThreadExecutor();
+        mainHandler = new Handler(Looper.getMainLooper());
 
-        answerViewModel.getAnswer().observe(getViewLifecycleOwner(), new Observer<Answer>() {
-            @Override
-            public void onChanged(Answer answer) {
-                loadingOverlay.setVisibility(View.GONE); //多重送信防止用レイアウトを非表示
+        executor.execute(() -> {
+            try {
+                String fetchedName = userViewModel.getName(userId, token);
 
-                requireActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, new ViewQuestionFragment())
-                        .commit(); //画面推移
+                mainHandler.post(() -> {
+                    if (!isAdded()) return;
+
+                    name = fetchedName;
+
+                    if (fetchedName == null || fetchedName.isBlank()) {
+                        Toast.makeText(
+                                requireContext(),
+                                "ユーザ名を取得できませんでした。",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                mainHandler.post(() -> {
+                    if (!isAdded()) return;
+
+                    Toast.makeText(
+                            requireContext(),
+                            "ユーザ名の取得中にエラーが発生しました。",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    Log.e("AddAnswerFragment", "getName failed", e);
+                });
             }
         });
 
         answerViewModel.getError().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                loadingOverlay.setVisibility(View.GONE); //多重送信防止用レイアウトを非表示
-
                 Log.d("error",s);
                 Toast.makeText(requireActivity(), s, Toast.LENGTH_SHORT).show(); //エラーメッセージ
             }
         });
 
+        answerViewModel.isLoading().observe(getViewLifecycleOwner(), loading -> { //読み込み中であれば多重送信を防止
+            if (loading) {
+                loadingOverlay.setVisibility(View.VISIBLE);
+            }
+            else {
+                loadingOverlay.setVisibility(View.GONE);
+            }
+        });
 
+        answerViewModel.getCreateSuccess().observe(getViewLifecycleOwner(), success -> { //質問の作成が成功した場合画面遷移
+            if (Boolean.TRUE.equals(success)) {
+                answerViewModel.resetCreateSuccess();
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container,
+                                new ViewQuestionFragment())
+                        .commit();
+            }
+        });
 
         if (!qid.isEmpty()){
             questionViewModel.getQuestion(qid, userId, token); //qidが空でなければquestionを呼び出し
@@ -114,6 +162,17 @@ public class AddAnswerFragment extends Fragment {
                 else {
                     questionTextView.setText(question.getBody()); //質問本文を取得
                 }
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container,
+                                new ViewQuestionFragment())
+                        .commit();
             }
         });
 

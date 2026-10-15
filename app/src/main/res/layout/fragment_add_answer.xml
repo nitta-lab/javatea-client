@@ -82,6 +82,7 @@
             android:layout_width="341dp"
             android:layout_height="295dp"
             android:background="#FFE6E0E9"
+            android:fillViewport="true"
             app:layout_constraintEnd_toEndOf="@id/answerHeader"
             app:layout_constraintStart_toStartOf="@id/answerHeader"
             app:layout_constraintTop_toBottomOf="@id/answerHeader"
@@ -96,6 +97,7 @@
                 android:paddingRight="5dp"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:gravity="top|start"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteY="75dp" />
         </ScrollView>
@@ -129,6 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FFE6E0E9"
+                android:paddingTop="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:textColor="#000000"
@@ -161,6 +164,25 @@
             android:text="以下の内容でよろしいですか？"
             android:textColor="#000000" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFE8E8"
+        android:paddingVertical="9dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:text="戻る"
+        android:textColor="#000000"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/answerLayout"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/answerLayout"
+        app:layout_constraintVertical_bias="0.165"
+        app:rippleColor="@color/black" />
 
     <Button
         android:id="@+id/confirmButton"
