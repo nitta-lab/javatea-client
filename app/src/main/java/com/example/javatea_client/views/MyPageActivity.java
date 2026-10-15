@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
+import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.UserViewModel;
 
 //BAG:ログアウトボタンを押しても時間割画面へ画面遷移をしてしまう(値を消す処理は正常)
@@ -23,9 +24,50 @@ import com.example.javatea_client.viewModels.UserViewModel;
 public class MyPageActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
+    CategoryViewModel categoryViewModel;
     Javatea javaTea;
 
+    String univId = "";
+    TextView nikName;
+    TextView universityText;
+    TextView facultyText;
+    TextView departmentText;
+    TextView gradeText;
+
+
     private static final String TAG = "MyPageActivity"; //デバッグ用
+
+    private void setUpObservers(){
+
+        userViewModel.getUser().observe(this, user -> {
+            if (user != null) {
+                nikName.setText(user.getName());
+                facultyText.setText(user.getFaculty());
+                departmentText.setText(user.getDepartment());
+                gradeText.setText(Integer.toString(user.getGrade()));
+                Log.d(TAG, "ユーザ情報をset");
+            }
+        });
+
+        userViewModel.getUniversity().observe(this, univId -> {
+            if (univId != null) {
+                this.univId = univId;
+                Log.d(TAG, "ユーザの大学Idを取得");
+
+                categoryViewModel.getUnivInfo(univId);
+
+            }
+        });
+
+        categoryViewModel.getCurrentUniversity().observe(this, universityName -> {
+            if (universityName != null) {
+                universityText.setText(universityName.getName());
+                Log.d(TAG, "ユーザの大学名を取得");
+
+            }
+        });
+
+    }
 
 
     @Override
@@ -45,25 +87,27 @@ public class MyPageActivity extends AppCompatActivity {
 
         // ViewModelの初期化
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         //JavaTeaの初期化
         javaTea = (Javatea)getApplication();
 
+        String javateaUid = javaTea.getUserId();
+        String javateaToken = javaTea.getToken();
 
 
         //画面テキストとの対応を設定
-        TextView nikName = findViewById(R.id.nickname_text);
-        TextView universityText = findViewById(R.id.university_text);
-        TextView facultyText = findViewById(R.id.faculty_text);
-        TextView departmentText = findViewById(R.id.department_text);
-        TextView gradeText = findViewById(R.id.grade_text);
+        nikName = findViewById(R.id.nickname_text);
+        universityText = findViewById(R.id.university_text);
+        facultyText = findViewById(R.id.faculty_text);
+        departmentText = findViewById(R.id.department_text);
+        gradeText = findViewById(R.id.grade_text);
 
-        nikName.setText(javaTea.getName());
         universityText.setText(javaTea.getUniversity());
-        facultyText.setText(javaTea.getFaculty());
-        departmentText.setText(javaTea.getDepartment());
-        gradeText.setText(javaTea.getGrade());
 
+        setUpObservers();
+        userViewModel.getUser(javateaUid);
+        userViewModel.getUniversityId(javateaUid, javateaToken);
 
 
         //ログアウトボタン
