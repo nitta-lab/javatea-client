@@ -100,15 +100,14 @@ public class AddQuestionFragment extends Fragment {
 
             //タイトル入力
             String titleText = titleTextFragment.getText().toString();
-            activity.setQuestionTitle(titleText);
-            if(titleText.equals("　タイトル：")) {
+            if(titleText.isEmpty()) {
                 Toast.makeText(getContext(),"タイトルを入力して下さい", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             //Question入力
             String questionText = questionTextFragment.getText().toString();
-            if(questionText.equals("　Question：")) {
+            if(questionText.isEmpty()) {
                 Toast.makeText(getContext(),"質問を入力してください",Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -119,9 +118,9 @@ public class AddQuestionFragment extends Fragment {
                 return;
             }
 
-            //解答者制限選択チェック
+            //回答者制限選択チェック
             if(AnswerSpinner.getSelectedItemPosition() == 0){
-                Toast.makeText(getContext(),"解答者制限を選択してください",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"回答者制限を選択してください",Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -140,5 +139,6 @@ public class AddQuestionFragment extends Fragment {
     }
 }
 
-//タグを入れると入力した情報が消える
+//タイトルとQuestionが消える
 //公開するボタン押した後に質問が追加されている状態にする
+//情報が消える〇
