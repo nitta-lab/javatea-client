@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
+import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.QuestionViewModel;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 public class AddQuestionFragment extends Fragment {
 
     private QuestionViewModel questionViewModel;
+    private CategoryViewModel categoryViewModel;
 
     public AddQuestionFragment() {
         // Required empty public constructor
@@ -47,6 +50,8 @@ public class AddQuestionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         questionViewModel = new ViewModelProvider(requireActivity()).get(QuestionViewModel.class);
+        categoryViewModel = new ViewModelProvider(requireActivity()).get(CategoryViewModel.class);
+
         Javatea javatea = (Javatea) requireActivity().getApplication();
 
         //作成場所のパス
@@ -128,17 +133,45 @@ public class AddQuestionFragment extends Fragment {
             String resPermission = (String)AnswerSpinner.getSelectedItem();
             String lectureId = activity.getLectureId();
 
+            questionViewModel.getQuestionId().observe(getViewLifecycleOwner(), new Observer<String>() {
+                @Override
+                public void onChanged(String qid) {
+                    activity.setTag(new ArrayList<>());
+                    String univId = activity.getUnivId();
+                    String facultyName = activity.getFacultyName();
+                    String departmentName = activity.getDepartmentName();
+                    if (lectureId.equals("全般")){
+                        //全般に送る
+                        categoryViewModel.addGeneralQuestion(qid);
+                    }
+                    else if (lectureId.equals("学校生活")){
+                        //学校生活に送る
+                        categoryViewModel.addUniversityGeneralQuestion(univId,qid);
+                    }
+                    else{
+                        String lectureListType = activity.getLectureListType();
+                        if (lectureListType.equals("general_university")){
+                            //大学まで
+                            categoryViewModel.addUniversityLectureQuestion(univId,lectureId,qid);
+                        }
+                        else if (lectureListType.equals("general_faculty")){
+                            //学部まで
+                            categoryViewModel.addFacultyQuestion(univId,facultyName,lectureId,qid);
+                        }
+                        else{
+                            //学科まで
+                            categoryViewModel.addDepartmentQuestion(univId,facultyName,departmentName,lectureId,qid);
+                        }
+                    }
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, new QuestionSelectFragment())
+                            .commit();
+                }
+            });
             questionViewModel.createQuestion(titleText,questionText,uid,tags,viewPermission,resPermission,lectureId,token);
-            activity.setTag(new ArrayList<>());
 
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new QuestionSelectFragment())
-                    .commit();
         });
     }
 }
-
-//タイトルとQuestionが消える
 //公開するボタン押した後に質問が追加されている状態にする
-//情報が消える〇
