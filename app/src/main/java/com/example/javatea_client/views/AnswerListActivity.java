@@ -148,6 +148,8 @@ public class AnswerListActivity extends AppCompatActivity {
                     // 質問ID
                     intent.putExtra("qid", qid);
 
+                    intent.putExtra("bestAnswer", bestAnswerAid);
+
                     // 回答ID
                     intent.putExtra("aid", answer.getAid());
 

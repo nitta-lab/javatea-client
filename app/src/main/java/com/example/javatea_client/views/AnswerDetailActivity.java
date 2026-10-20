@@ -11,12 +11,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.QuestionViewModel;
-
+import android.view.View;
 public class AnswerDetailActivity extends AppCompatActivity {
 
     // AnswerListActivityから受け取る情報
     private String qid;
     private String aid;
+    private String bestAnswerAid;
     private String answerName;
     private String answerBody;
 
@@ -41,6 +42,7 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // AnswerListActivityから情報を受け取る
         qid = getIntent().getStringExtra("qid");
         aid = getIntent().getStringExtra("aid");
+        bestAnswerAid = getIntent().getStringExtra("bestAnswerAid");
         answerName = getIntent().getStringExtra("answerName");
         answerBody = getIntent().getStringExtra("answerBody");
 
@@ -75,7 +77,14 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // ベストアンサーボタン
         btnBestAnswer.setOnClickListener(v -> {
 
-            // この質問のこの回答をベストアンサーに設定
+            if(bestAnswerAid != "") {
+                // 連続して押せないようにする
+                btnBestAnswer.setEnabled(false);
+                // ボタン削除
+                btnBestAnswer.setVisibility(View.GONE);
+            }
+
+            // ベストアンサー設定をリクエスト
             questionViewModel.setBestAnswer(qid, aid);
         });
     }
