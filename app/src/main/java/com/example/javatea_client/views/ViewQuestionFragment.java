@@ -101,8 +101,12 @@ public class ViewQuestionFragment extends Fragment {
 
         //解答一覧を監視する
         answerViewModel.getAnswers().observe(getViewLifecycleOwner(), answers -> {
-
-                    List<Answer> answersData = new ArrayList<>(answers.values());
+                    List<Answer> answersData;
+                    if (answers == null) {
+                        answersData = new ArrayList<>();
+                    } else {
+                        answersData = new ArrayList<>(answers.values());
+                    }
 
                     AnswerAdapter adapter = new AnswerAdapter(answersData, null, answer -> {
 
@@ -124,6 +128,7 @@ public class ViewQuestionFragment extends Fragment {
                 }
         );
 
+        Log.d("qid", qid);
         //サーバへ取得の依頼
         answerViewModel.loadAnswers(qid, uid, token);
 

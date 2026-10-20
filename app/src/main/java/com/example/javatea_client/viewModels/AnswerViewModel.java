@@ -69,7 +69,7 @@ public class AnswerViewModel extends ViewModel {
                     @Override
                     public void onResponse(Call<HashMap<String, Answer>> call, Response<HashMap<String, Answer>> response) {
                         loading.setValue(false);
-                        if(response.isSuccessful()&&response.body() != null){
+                        if(response.isSuccessful()){
                             answers.setValue(response.body());
                         }else{
                             if(response.code() == 404){
