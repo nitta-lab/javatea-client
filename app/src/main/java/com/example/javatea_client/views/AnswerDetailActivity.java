@@ -1,17 +1,18 @@
+
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.QuestionViewModel;
-import android.view.View;
+
 public class AnswerDetailActivity extends AppCompatActivity {
 
     // AnswerListActivityから受け取る情報
@@ -32,7 +33,6 @@ public class AnswerDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
 
         setContentView(R.layout.activity_answer_detail);
 
@@ -47,7 +47,8 @@ public class AnswerDetailActivity extends AppCompatActivity {
         answerBody = getIntent().getStringExtra("answerBody");
 
         // ViewModelを作る
-        questionViewModel = new ViewModelProvider(this).get(QuestionViewModel.class);
+        questionViewModel = new ViewModelProvider(this)
+                .get(QuestionViewModel.class);
 
         // XMLと接続
         tvAnswerName = findViewById(R.id.tvAnswerName);
@@ -60,7 +61,12 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // 回答本文を表示
         tvAnswerBody.setText(answerBody);
 
-        // Questionの変更を監視
+        // ベストアンサーが選択済みならボタンを消す
+        if (bestAnswerAid != "") {
+            btnBestAnswer.setVisibility(View.GONE);
+        }
+
+        // ベストアンサー設定後の質問情報を監視
         questionViewModel.getCurrentQuestion().observe(this, question -> {
             if (question != null) {
 
@@ -77,12 +83,8 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // ベストアンサーボタン
         btnBestAnswer.setOnClickListener(v -> {
 
-            if(bestAnswerAid != "") {
-                // 連続して押せないようにする
-                btnBestAnswer.setEnabled(false);
-                // ボタン削除
-                btnBestAnswer.setVisibility(View.GONE);
-            }
+            // 連打防止
+            btnBestAnswer.setEnabled(false);
 
             // ベストアンサー設定をリクエスト
             questionViewModel.setBestAnswer(qid, aid);
