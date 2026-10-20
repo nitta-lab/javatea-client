@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
-import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.UserViewModel;
 
 //BAG:
@@ -24,48 +23,37 @@ import com.example.javatea_client.viewModels.UserViewModel;
 public class MyPageActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
-    CategoryViewModel categoryViewModel;
     Javatea javaTea;
 
-    String univId = "";
     TextView nikName;
     TextView universityText;
     TextView facultyText;
     TextView departmentText;
     TextView gradeText;
 
+    TextView countAnswerText;
+
+    TextView countBestAnswerText;
+
 
     private static final String TAG = "MyPageActivity"; //デバッグ用
 
     private void setUpObservers(){
 
-        userViewModel.getUser().observe(this, user -> {
-            if (user != null) {
-                nikName.setText(user.getName());
-                facultyText.setText(user.getFaculty());
-                departmentText.setText(user.getDepartment());
-                gradeText.setText(Integer.toString(user.getGrade()));
-                Log.d(TAG, "ユーザ情報をset");
+        userViewModel.getCountAnswer().observe(this, countAnswer -> {
+            if (countAnswer != null) {
+                countAnswerText.setText(countAnswer);
+                Log.d(TAG, "回答数の取得成功");
             }
         });
 
-        userViewModel.getUniversity().observe(this, univId -> {
-            if (univId != null) {
-                this.univId = univId;
-                Log.d(TAG, "ユーザの大学Idを取得");
-
-                categoryViewModel.getUnivInfo(univId);
-
+        userViewModel.getBestAnswers().observe(this, bestAnswers -> {
+            if (bestAnswers != null) {
+                countBestAnswerText.setText(Integer.toString(bestAnswers.size()));
+                Log.d(TAG, "ベストアンサー数の取得成功");
             }
         });
 
-        categoryViewModel.getCurrentUniversity().observe(this, universityName -> {
-            if (universityName != null) {
-                universityText.setText(universityName.getName());
-                Log.d(TAG, "ユーザの大学名を取得");
-
-            }
-        });
 
     }
 
@@ -87,7 +75,6 @@ public class MyPageActivity extends AppCompatActivity {
 
         // ViewModelの初期化
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         //JavaTeaの初期化
         javaTea = (Javatea)getApplication();
@@ -102,12 +89,18 @@ public class MyPageActivity extends AppCompatActivity {
         facultyText = findViewById(R.id.faculty_text);
         departmentText = findViewById(R.id.department_text);
         gradeText = findViewById(R.id.grade_text);
+        countAnswerText = findViewById(R.id.answer_count_text);
+        countBestAnswerText = findViewById(R.id.best_answer_count_text);
 
+        nikName.setText(javaTea.getName());
         universityText.setText(javaTea.getUniversity());
+        facultyText.setText(javaTea.getFaculty());
+        departmentText.setText(javaTea.getDepartment());
+        gradeText.setText(javaTea.getGrade());
 
         setUpObservers();
-        userViewModel.getUser(javateaUid);
-        userViewModel.getUniversityId(javateaUid, javateaToken);
+        userViewModel.getUserBestAnswers(javateaUid, javateaToken);
+        userViewModel.getCountAnswer(javateaUid, javateaToken);
 
 
         //ログアウトボタン
