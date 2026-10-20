@@ -88,7 +88,7 @@
             android:layout_rowWeight="1"
             android:layout_gravity="fill"
             android:gravity="center"
-            android:text="0" />
+            android:text="24" />
 
         <TextView
             android:id="@+id/best_answer_count_label"
@@ -112,7 +112,7 @@
             android:layout_columnWeight="2"
             android:layout_gravity="fill"
             android:gravity="center"
-            android:text="0" />
+            android:text="11" />
 
     </GridLayout>
 
