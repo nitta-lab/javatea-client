@@ -24,7 +24,7 @@ public class QuestionViewModel extends ViewModel {
     private Retrofit retrofit;
     private final QuestionResource questionResource; //サーバー呼び出す用のリソース
     private static final String TAG = "QuestionViewModel";
-    private String questionId;
+    private final MutableLiveData<String> questionId = new MutableLiveData<>();
     private final MutableLiveData<Question> question = new MutableLiveData<>();
     private final MutableLiveData<String> title = new MutableLiveData<>();
     private final MutableLiveData<String> uid = new MutableLiveData<>();
@@ -37,7 +37,12 @@ public class QuestionViewModel extends ViewModel {
         this.questionResource = retrofit.create(QuestionResource.class);
     }
 
-    public LiveData<Question> getCurrentQuestion(){ return question; }
+    public LiveData<Question> getCurrentQuestion(){
+        return question;
+    }
+    public LiveData<String> getQuestionId(){
+        return questionId;
+    }
 
     //質問の作成
     public void createQuestion(String title, String body, String uid, List<String> tags, String viewPermission, String resPermission, String lectureId, String token){
@@ -45,9 +50,9 @@ public class QuestionViewModel extends ViewModel {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null){
-                    questionId = response.body();
+                    questionId.setValue(response.body());
                     Log.d(TAG, "質問の作成成功　questionId：" + questionId);
-                    getQuestion(questionId, uid, token);
+                    getQuestion(response.body(), uid, token);
                 } else {
                     String errorCode = "サーバーエラーが発生しました　コード：" + response.code();
                     Log.w(TAG, errorCode);
