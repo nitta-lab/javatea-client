@@ -18,14 +18,42 @@ import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
 import com.example.javatea_client.viewModels.UserViewModel;
 
-//BAG:ログアウトボタンを押しても時間割画面へ画面遷移をしてしまう(値を消す処理は正常)
+//BAG:
 
 public class MyPageActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
     Javatea javaTea;
 
+    TextView nikName;
+    TextView universityText;
+    TextView facultyText;
+    TextView departmentText;
+    TextView gradeText;
+    TextView countAnswerText;
+    TextView countBestAnswerText;
+
+
     private static final String TAG = "MyPageActivity"; //デバッグ用
+
+    private void setUpObservers(){
+
+        userViewModel.getCountAnswer().observe(this, countAnswer -> {
+            if (countAnswer != null) {
+                countAnswerText.setText(Integer.toString(countAnswer));
+                Log.d(TAG, "回答数の取得成功");
+            }
+        });
+
+        userViewModel.getBestAnswers().observe(this, bestAnswers -> {
+            if (bestAnswers != null) {
+                countBestAnswerText.setText(Integer.toString(bestAnswers.size()));
+                Log.d(TAG, "ベストアンサー数の取得成功");
+            }
+        });
+
+
+    }
 
 
     @Override
@@ -49,14 +77,18 @@ public class MyPageActivity extends AppCompatActivity {
         //JavaTeaの初期化
         javaTea = (Javatea)getApplication();
 
+        String javateaUid = javaTea.getUserId();
+        String javateaToken = javaTea.getToken();
 
 
         //画面テキストとの対応を設定
-        TextView nikName = findViewById(R.id.nickname_text);
-        TextView universityText = findViewById(R.id.university_text);
-        TextView facultyText = findViewById(R.id.faculty_text);
-        TextView departmentText = findViewById(R.id.department_text);
-        TextView gradeText = findViewById(R.id.grade_text);
+        nikName = findViewById(R.id.nickname_text);
+        universityText = findViewById(R.id.university_text);
+        facultyText = findViewById(R.id.faculty_text);
+        departmentText = findViewById(R.id.department_text);
+        gradeText = findViewById(R.id.grade_text);
+        countAnswerText = findViewById(R.id.answer_count_text);
+        countBestAnswerText = findViewById(R.id.best_answer_count_text);
 
         nikName.setText(javaTea.getName());
         universityText.setText(javaTea.getUniversity());
@@ -64,6 +96,9 @@ public class MyPageActivity extends AppCompatActivity {
         departmentText.setText(javaTea.getDepartment());
         gradeText.setText(javaTea.getGrade());
 
+        setUpObservers();
+        userViewModel.getUserBestAnswers(javateaUid, javateaToken);
+        userViewModel.getCountAnswer(javateaUid, javateaToken);
 
 
         //ログアウトボタン
