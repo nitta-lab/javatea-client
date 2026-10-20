@@ -93,14 +93,15 @@ public class SearchResultActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchResultActivity.this, LectureListActivity.class);
 
                 // 必要に応じてデータを次の画面に渡す
-                intent.putExtra("RESULT", qid);
+                intent.putExtra("navigation_target", "ViewQuestion");
+                intent.putExtra("qid", qid);
 
                 // 画面を起動
                 startActivity(intent);
             });
 
 
-            rvSearchResultList.setAdapter(new AnswerAdapter(new ArrayList<>(), null, null));
+            rvSearchResultList.setAdapter(questionAdapter);
         }
 
         // 追加
@@ -109,14 +110,14 @@ public class SearchResultActivity extends AppCompatActivity {
 //        }
 
         // 2. RecyclerView と Adapter の設定
-        rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
-        questionAdapter = new QuestionAdapter(questionList, question -> {
-            // 質問項目がタップされた時の画面遷移処理（例: 質問詳細画面へ）
-             Intent intent = new Intent(SearchResultActivity.this, LectureListActivity.class);
-             intent.putExtra("qid", question.getQid());
-             startActivity(intent);
-        });
-        rvSearchResultList.setAdapter(questionAdapter);
+//        rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
+//        questionAdapter = new QuestionAdapter(questionList, question -> {
+//            // 質問項目がタップされた時の画面遷移処理（例: 質問詳細画面へ）
+//             Intent intent = new Intent(SearchResultActivity.this, LectureListActivity.class);
+//             intent.putExtra("qid", question.getQid());
+//             startActivity(intent);
+//        });
+//        rvSearchResultList.setAdapter(questionAdapter);
 
         // 3. 「検索ホームへ」ボタンのクリック処理
         if (btnSearchHome != null) {
