@@ -17,12 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.R;
 import com.example.javatea_client.Javatea;
+import com.example.javatea_client.viewModels.CategoryViewModel;
 import com.example.javatea_client.viewModels.UserViewModel;
 import com.google.android.material.textfield.*;
 
 public class LoginActivity extends AppCompatActivity {
 
     UserViewModel userViewModel;
+    CategoryViewModel categoryViewModel;
     private boolean isLoggingIn = false;
 
     @Override
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         TextInputEditText userIdEditText = findViewById(R.id.userid_edit);
         TextInputEditText passwordEditText = findViewById(R.id.password_edit);
@@ -74,6 +77,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        categoryViewModel.getCurrentUniversity().observe(this, univName -> {
+            if (univName != null) {
+                app.setUniversity(univName.getName());
+            }
+        });
+
         userViewModel.getUser().observe(this, user ->  {
 
             if (!isLoggingIn) {
@@ -81,7 +90,8 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             if (user != null) {
-                String univ = user.getUniversity();
+                String univId = user.getUniversity();
+
                 String fac = user.getFaculty();
                 String dep = user.getDepartment();
                 Integer grade = user.getGrade();
@@ -90,8 +100,14 @@ public class LoginActivity extends AppCompatActivity {
                 app.setToken(user.getToken());
                 app.setUserId(userIdEditText.getText().toString().trim());
                 app.setPassword(passwordEditText.getText().toString());
+                app.setName(user.getName());
+                app.setUnivId(univId);
+                app.setFaculty(fac);
+                app.setDepartment(dep);
+                app.setGrade(String.valueOf(grade));
+                categoryViewModel.getUnivInfo(univId);
 
-                if (univ == null || fac == null || dep == null || grade == 0 || univ.isEmpty() || fac.isEmpty() || dep.isEmpty()) {
+                if (univId == null || fac == null || dep == null || grade == 0 || univId.isEmpty() || fac.isEmpty() || dep.isEmpty()) {
                     intent = new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(intent);
                     finish();
