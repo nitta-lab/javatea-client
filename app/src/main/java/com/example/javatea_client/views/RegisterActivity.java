@@ -357,10 +357,8 @@ public class RegisterActivity extends AppCompatActivity {
             javatea.setUniversity(selectedUniversityName);
             userViewModel.setFaculty(uid,selectedFacultyName,token);
             javatea.setFaculty(selectedFacultyName);
-            if (!selectedDepartmentName.equals("学科なし")){
-                userViewModel.setDepartment(uid,selectedDepartmentName,token);
-                javatea.setDepartment(selectedDepartmentName);
-            }
+            userViewModel.setDepartment(uid,selectedDepartmentName,token);
+            javatea.setDepartment(selectedDepartmentName);
             userViewModel.setGrade(uid,Integer.parseInt(selectedGrade),token);
             javatea.setGrade(selectedGrade);
 
