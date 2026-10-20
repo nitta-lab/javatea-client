@@ -817,7 +817,7 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.addGeneralQuestion(qid).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful() && response.body() != null) {
+                if(response.isSuccessful()) {
                     Log.d(TAG, "全般の質問追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -835,7 +835,7 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.addUniversityGeneralQuestion(univId, qid).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful() && response.body() != null) {
+                if(response.isSuccessful()) {
                     Log.d(TAG, "学校生活の質問追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -853,7 +853,7 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.addUniversityLectureQuestion(univId, lectureId, qid).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful() && response.body() != null) {
+                if(response.isSuccessful()) {
                     Log.d(TAG, "大学全般の質問追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -871,7 +871,7 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.addFacultyQuestion(univId, facultyName, lectureId, qid).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful() && response.body() != null) {
+                if(response.isSuccessful()) {
                     Log.d(TAG, "学部全般の質問追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
@@ -889,7 +889,7 @@ public class CategoryViewModel extends ViewModel {
         categoryResource.addDepartmentQuestion(univId, facultyName, departmentName, lectureId, qid).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                if(response.isSuccessful() && response.body() != null) {
+                if(response.isSuccessful()) {
                     Log.d(TAG, "学科特有の質問追加成功");
                 } else {
                     Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
