@@ -106,7 +106,7 @@ public interface CategoryResource {
      * 大学全般に関する質問の追加
      */
     @PUT("categories/universities/{univ-id}/general/questions/{qid}")
-    Call<Void> addUniversityGeneralQuestions(
+    Call<Void> addUniversityGeneralQuestion(
             @Path("univ-id") String univId,
             @Path("qid") String qid
     );
@@ -143,7 +143,7 @@ public interface CategoryResource {
      * 大学特有の授業の質問を追加
      */
     @PUT("categories/universities/{univ-id}/lectures/{lecture-id}/questions/{qid}")
-    Call<Void> addUniversityLectureQuestions(
+    Call<Void> addUniversityLectureQuestion(
             @Path("univ-id") String univId,
             @Path("lecture-id") String lectureId,
             @Path("qid") String qid
@@ -266,7 +266,7 @@ public interface CategoryResource {
      * 学科科目の質問の追加
      */
     @PUT("categories/universities/{univ-id}/faculties/{faculty-name}/departments/{department-name}/lectures/{lecture-id}/questions/{qid}")
-    Call<Void> addDepartmentQuestions(
+    Call<Void> addDepartmentQuestion(
             @Path("univ-id") String univId,
             @Path("faculty-name") String facultyName,
             @Path("department-name") String departmentName,
