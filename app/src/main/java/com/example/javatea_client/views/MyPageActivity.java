@@ -30,9 +30,7 @@ public class MyPageActivity extends AppCompatActivity {
     TextView facultyText;
     TextView departmentText;
     TextView gradeText;
-
     TextView countAnswerText;
-
     TextView countBestAnswerText;
 
 
@@ -42,7 +40,7 @@ public class MyPageActivity extends AppCompatActivity {
 
         userViewModel.getCountAnswer().observe(this, countAnswer -> {
             if (countAnswer != null) {
-                countAnswerText.setText(countAnswer);
+                countAnswerText.setText(Integer.toString(countAnswer));
                 Log.d(TAG, "回答数の取得成功");
             }
         });
