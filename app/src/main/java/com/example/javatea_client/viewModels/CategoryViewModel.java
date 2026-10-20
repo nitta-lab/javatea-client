@@ -813,4 +813,94 @@ public class CategoryViewModel extends ViewModel {
     }
 
 
+    public  void addGeneralQuestion(String qid) {
+        categoryResource.addGeneralQuestion(qid).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "全般の質問追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void addUniversityGeneralQuestion(String univId, String qid) {
+        categoryResource.addUniversityGeneralQuestion(univId, qid).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "学校生活の質問追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void addUniversityLectureQuestion(String univId, String lectureId, String qid) {
+        categoryResource.addUniversityLectureQuestion(univId, lectureId, qid).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "大学全般の質問追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void addFacultyQuestion(String univId, String facultyName, String lectureId, String qid) {
+        categoryResource.addFacultyQuestion(univId, facultyName, lectureId, qid).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "学部全般の質問追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void addDepartmentQuestion(String univId, String facultyName, String departmentName, String lectureId, String qid) {
+        categoryResource.addDepartmentQuestion(univId, facultyName, departmentName, lectureId, qid).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    Log.d(TAG, "学科特有の質問追加成功");
+                } else {
+                    Log.w(TAG, "サーバーエラーが発生しました　　コード：" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+                Log.e(TAG, "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
 }
