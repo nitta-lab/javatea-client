@@ -137,7 +137,6 @@ public class AddQuestionFragment extends Fragment {
                 @Override
                 public void onChanged(String qid) {
                     activity.setTag(new ArrayList<>());
-                    //categoryResouceのメソッドと同じ名前を使う
                     String univId = activity.getUnivId();
                     String facultyName = activity.getFacultyName();
                     String departmentName = activity.getDepartmentName();
@@ -175,7 +174,4 @@ public class AddQuestionFragment extends Fragment {
         });
     }
 }
-
-//タイトルとQuestionが消える
 //公開するボタン押した後に質問が追加されている状態にする
-//情報が消える〇
