@@ -14,6 +14,7 @@
 
     <!-- Question本文：ここだけスクロール -->
 
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
@@ -32,21 +33,20 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.182" />
+        app:layout_constraintVertical_bias="0.011" />
 
     <LinearLayout
         android:id="@+id/questionBox"
-        android:layout_width="377dp"
-        android:layout_height="150dp"
+        android:layout_width="375dp"
+        android:layout_height="223dp"
         android:background="#E5E5EA"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.377">
+        app:layout_constraintVertical_bias="0.214">
 
         <!-- ここは固定。サーバーから入れない -->
         <TextView
@@ -81,21 +81,20 @@
 
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/answer_list"
         android:layout_width="377dp"
-        android:layout_height="155dp"
+        android:layout_height="220dp"
         android:layout_marginTop="16dp"
         android:background="#E5E5EA"
         android:padding="10dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.687"
+        app:layout_constraintVertical_bias="0.751"
         tools:listitem="@layout/item_answer" />
 
     <Button
@@ -112,7 +111,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.854" />
+        app:layout_constraintVertical_bias="0.946" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

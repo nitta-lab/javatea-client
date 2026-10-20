@@ -72,20 +72,20 @@ public class SearchResultActivity extends AppCompatActivity {
         if (rvSearchResultList != null) {
             rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
 
-            // 追加(以下9行)
+//            // 追加(以下9行)
             List<Question> dummyList = new ArrayList<>();
-            Question q1 = new Question();
-            q1.setTitle("Javaの配列とArrayListの違いについて");
-            q1.setQid("qid11");
-            dummyList.add(q1);
-            Question q2 = new Question();
-            q2.setTitle("Java");
-            dummyList.add(q2);
-            Question q3 = new Question();
-            q3.setTitle("JavaTea");
-            dummyList.add(q3);
+//            Question q1 = new Question();
+//            q1.setTitle("Javaの配列とArrayListの違いについて");
+//            q1.setQid("qid11");
+//            dummyList.add(q1);
+//            Question q2 = new Question();
+//            q2.setTitle("Java");
+//            dummyList.add(q2);
+//            Question q3 = new Question();
+//            q3.setTitle("JavaTea");
+//            dummyList.add(q3);
 
-            questionAdapter = new QuestionAdapter(dummyList, question -> {
+            questionAdapter = new QuestionAdapter(questionList, question -> {
                 // タップされた質問のデータ（question）からIDやタイトルを取り出す
                 String qid = question.getQid(); // 質問IDを取得するメソッド（モデルに合わせて変更してください）
 
@@ -93,30 +93,31 @@ public class SearchResultActivity extends AppCompatActivity {
                 Intent intent = new Intent(SearchResultActivity.this, LectureListActivity.class);
 
                 // 必要に応じてデータを次の画面に渡す
-                intent.putExtra("RESULT", qid);
+                intent.putExtra("navigation_target", "ViewQuestion");
+                intent.putExtra("qid", qid);
 
                 // 画面を起動
                 startActivity(intent);
             });
 
 
-            rvSearchResultList.setAdapter(new AnswerAdapter(new ArrayList<>(), null, null));
+            rvSearchResultList.setAdapter(questionAdapter);
         }
 
         // 追加
-        if (tvStatus != null) {
-            tvStatus.setText("検索結果: 1件（テスト）");
-        }
+//        if (tvStatus != null) {
+//            tvStatus.setText("検索結果");
+//        }
 
         // 2. RecyclerView と Adapter の設定
 //        rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
 //        questionAdapter = new QuestionAdapter(questionList, question -> {
 //            // 質問項目がタップされた時の画面遷移処理（例: 質問詳細画面へ）
-////             Intent intent = new Intent(this, QuestionDetailActivity.class);
-////             intent.putExtra("qid", question.getQid());
-////             startActivity(intent);
+//             Intent intent = new Intent(SearchResultActivity.this, LectureListActivity.class);
+//             intent.putExtra("qid", question.getQid());
+//             startActivity(intent);
 //        });
-        rvSearchResultList.setAdapter(questionAdapter);
+//        rvSearchResultList.setAdapter(questionAdapter);
 
         // 3. 「検索ホームへ」ボタンのクリック処理
         if (btnSearchHome != null) {
@@ -142,7 +143,7 @@ public class SearchResultActivity extends AppCompatActivity {
         questionViewModel.getCurrentQuestion().observe(this, question -> {
             if (question != null && tvStatus != null) {
                 // 必要に応じてテキストの更新
-                // tvStatus.setText(question.getTitle());
+                 tvStatus.setText(question.getTitle());
             }
         });
 

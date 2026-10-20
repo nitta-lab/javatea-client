@@ -55,13 +55,15 @@ public class LectureListActivity extends AppCompatActivity {
 
         tvCategory = findViewById(R.id.tvCategory);
 
-        // 戻るボタンを無効化
+        // ==========================================
+        // 1. システムの戻るボタンを無効化する
+        // ==========================================
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                // 何も記述しないことで戻るボタンを無効化
             }
         });
-
 
         updateCategoryText();
         //前回開いていた画面を開くようにする
@@ -69,6 +71,13 @@ public class LectureListActivity extends AppCompatActivity {
         javatea.setView("LectureList");
 
         Intent intent = getIntent();
+        String target = intent.getStringExtra("navigation_target");
+        String timetableVal = intent.getStringExtra("timetable");
+        Log.d("LectureListDebug", "navigation_target: " + target);
+        String testQid = intent.getStringExtra("qid");
+        Log.d("LectureListDebug", "qid: " + testQid);
+
+        // 2. timetableからの遷移処理
         String timetable = intent.getStringExtra("timetable");
         if (timetable != null && timetable.equals("timetable")){
             setUnivId(javatea.getUnivId());
@@ -97,10 +106,26 @@ public class LectureListActivity extends AppCompatActivity {
             return;
         }
 
+        // ==========================================================
+        // 3. SearchResultActivity からの遷移で ViewQuestionFragment を開く処理
+        // ==========================================================
+        String navigationTarget = intent.getStringExtra("navigation_target");
+        if (navigationTarget != null && navigationTarget.equals("ViewQuestion")) {
+            qid = intent.getStringExtra("qid");
+            aid = intent.getStringExtra("aid");
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ViewQuestionFragment())
+                    .commit();
+            return;
+        }
+
+        // 4. デフォルトの遷移処理
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new GeneralFragment())
                 .commit();
     }
+
     public String getLectureListType() {
         return lectureListType;
     }

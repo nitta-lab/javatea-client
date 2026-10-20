@@ -1,6 +1,8 @@
 
 package com.example.javatea_client.views;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,12 +15,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.javatea_client.Javatea;
 import com.example.javatea_client.R;
+import com.example.javatea_client.models.University;
+import com.example.javatea_client.viewModels.CategoryViewModel;
+import com.example.javatea_client.viewModels.UserViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
@@ -38,7 +48,7 @@ public class SearchActivity extends AppCompatActivity {
     // 追加済みタグ
     // =========================================
 
-    private final List<String> addedTags = new ArrayList<>();
+    private final ArrayList<String> addedTags = new ArrayList<>();
 
     // =========================================
     // View
@@ -58,6 +68,92 @@ public class SearchActivity extends AppCompatActivity {
 
     private Button searchButton;
 
+    private Javatea javatea;
+
+    private CategoryViewModel categoryViewModel;
+    private UserViewModel userViewModel;
+    private boolean flag = false;
+    private String selectedUniversityId; //今選択されてる大学IDを保存する変数
+    private String selectedUniversityName; //今選択されてる大学を保存する変数
+    private String univId;
+
+    private void showKanaSelectionDialog() {
+        String[] kanaGroups = {"ア行", "カ行", "サ行", "タ行", "ナ行", "ハ行", "マ行", "ヤ行", "ラ行", "ワ行", "ン"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setItems(Arrays.copyOfRange(kanaGroups, 0, kanaGroups.length - 1), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedKana = kanaGroups[which];
+
+                for(int i=0;i<kanaGroups.length-1;i++) {
+                    if (selectedKana.charAt(0) == kanaGroups[i].charAt(0)) {
+                        categoryViewModel.getAllUnivId(kanaGroups[i].substring(0,1), kanaGroups[i + 1].substring(0,1));
+                        Log.d(TAG, kanaGroups[i] + "の大学の取得を開始");
+                        break;
+                    }
+                }
+            }
+        });
+        builder.show();
+    }
+
+    //大学一覧
+    private void showUniversitySelectionDialog(String[] universityArray, Collection<University> currentUniversities){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("大学を選択してください");
+
+        builder.setItems(universityArray, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selectedUniversityInfo = universityArray[which]; //大学名とカナのセット
+
+                int index = selectedUniversityInfo.lastIndexOf("(");
+
+                selectedUniversityName = selectedUniversityInfo.substring(0, index);
+
+                String selectedUniversityKana = selectedUniversityInfo.substring(index + 1, selectedUniversityInfo.length() - 1);
+
+                for (University university : currentUniversities) {
+                    if (university.getName().equals(selectedUniversityName)&&university.getKana().equals(selectedUniversityKana)) {
+                        selectedUniversityId = university.getId();
+                        break;
+                    }
+                }
+                categories[2] = selectedUniversityName;
+                updateCategory();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void setupObservers() {
+        // categoryViewModelの今の大学一覧の状態をobserve
+        categoryViewModel.getCurrentUniversities().observe(this, new Observer<Collection<University>>() {
+            @Override
+            public void onChanged(Collection<University> currentUniversities) {
+                if (currentUniversities == null) {
+                    return;
+                }
+                Log.d(TAG, "全大学情報一覧を受信：" + currentUniversities.size() + "件");
+
+                List<String> universityList = new ArrayList<>();
+
+                for (University university : currentUniversities) {
+                    Log.d(TAG, "大学名：" + university.getName());
+                    universityList.add(university.getName() + "(" + university.getKana() + ")");
+                }
+
+                String[] universityArray = universityList.toArray(new String[0]);
+                showUniversitySelectionDialog(universityArray, currentUniversities);
+            }
+        });
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +166,12 @@ public class SearchActivity extends AppCompatActivity {
         // アプリケーション情報
         // =========================================
 
-        Javatea javatea = (Javatea) getApplication();
+        javatea = (Javatea) getApplication();
 
         javatea.setView("Search");
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        setupObservers();
 
         // =========================================
         // Navigation / ModeBar
@@ -154,7 +253,8 @@ public class SearchActivity extends AppCompatActivity {
 
                 categoryIndex = 2;
 
-                updateCategory();
+                //大学選択
+                showKanaSelectionDialog();
             }
         });
 
@@ -189,7 +289,11 @@ public class SearchActivity extends AppCompatActivity {
     private void updateCategory() {
 
         String category = categories[categoryIndex];
-
+        if(categoryIndex == 1) {
+            univId = javatea.getUnivId();
+        } else if(categoryIndex == 2) {
+            univId = selectedUniversityId;
+        }
         // 「カテゴリ：（全般）」のように表示
         categoryLabel.setText(
                 "カテゴリ：（" + category + "）"
@@ -392,16 +496,16 @@ public class SearchActivity extends AppCompatActivity {
         // タグがない場合
         // =========================================
 
-        if (addedTags.isEmpty()) {
-
-            Toast.makeText(
-                    SearchActivity.this,
-                    "検索するタグを追加してください",
-                    Toast.LENGTH_SHORT
-            ).show();
-
-            return;
-        }
+//        if (addedTags.isEmpty()) {
+//
+//            Toast.makeText(
+//                    SearchActivity.this,
+//                    "検索するタグを追加してください",
+//                    Toast.LENGTH_SHORT
+//            ).show();
+//
+//            return;
+//        }
 
         // =========================================
         // ログ
@@ -447,5 +551,14 @@ public class SearchActivity extends AppCompatActivity {
                 "「" + category + "」で検索します",
                 Toast.LENGTH_SHORT
         ).show();
+        Intent intent = new Intent(this, SearchResultActivity.class);
+        if (categoryIndex == 0) {
+            intent.putExtra("EXTRA_SEARCH_TYPE", "GENERAL");
+        } else {
+            intent.putExtra("EXTRA_SEARCH_TYPE", "UNIVERSITY");
+            intent.putExtra("EXTRA_UNIV_ID", javatea.getUnivId());
+        }
+        intent.putExtra("EXTRA_KEYWORDS", addedTags);
+        startActivity(intent);
     }
 }

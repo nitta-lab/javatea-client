@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F3F8"
+    android:fitsSystemWindows="true"
     tools:context=".views.AnswerListActivity">
 
     <!-- 画面タイトル -->
@@ -23,6 +24,7 @@
         android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:background="@drawable/mode_bar_rounded"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -49,10 +51,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.08" />
 
+    <!-- 遷移画面のテンプレート -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/answerList"
-        android:layout_width="369dp"
-        android:layout_height="492dp"
+        android:layout_width="394dp"
+        android:layout_height="485dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -60,9 +63,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.461" />
+        app:layout_constraintVertical_bias="0.308" />
 
-    <!-- 遷移画面のテンプレート -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"

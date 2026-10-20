@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -119,8 +121,11 @@ public class TimetableActivity extends AppCompatActivity {
         //選ぶことが可能な年度を保存するLinearLayout
         layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        scrollView.addView(layout);
         //layoutをPopupWindowに表示する
-        popup = new PopupWindow(layout, (int) (200 * density), ViewGroup.LayoutParams.WRAP_CONTENT, true/*タップで閉じる*/);
+        popup = new PopupWindow(scrollView, (int) (200 * density), ViewGroup.LayoutParams.WRAP_CONTENT, true/*タップで閉じる*/);
         //PopupWindowを閉じたときの動き
         popup.setOnDismissListener(() -> {
             //Popupを開く前に開いていた情報をそのまま表示する。

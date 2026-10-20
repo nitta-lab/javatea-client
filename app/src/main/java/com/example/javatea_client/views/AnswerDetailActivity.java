@@ -1,6 +1,8 @@
+
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ public class AnswerDetailActivity extends AppCompatActivity {
     // AnswerListActivityから受け取る情報
     private String qid;
     private String aid;
+    private String bestAnswerAid;
     private String answerName;
     private String answerBody;
 
@@ -39,11 +42,13 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // AnswerListActivityから情報を受け取る
         qid = getIntent().getStringExtra("qid");
         aid = getIntent().getStringExtra("aid");
+        bestAnswerAid = getIntent().getStringExtra("bestAnswerAid");
         answerName = getIntent().getStringExtra("answerName");
         answerBody = getIntent().getStringExtra("answerBody");
 
         // ViewModelを作る
-        questionViewModel = new ViewModelProvider(this).get(QuestionViewModel.class);
+        questionViewModel = new ViewModelProvider(this)
+                .get(QuestionViewModel.class);
 
         // XMLと接続
         tvAnswerName = findViewById(R.id.tvAnswerName);
@@ -56,7 +61,12 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // 回答本文を表示
         tvAnswerBody.setText(answerBody);
 
-        // Questionの変更を監視
+        // ベストアンサーが選択済みならボタンを消す
+        if (bestAnswerAid != "") {
+            btnBestAnswer.setVisibility(View.GONE);
+        }
+
+        // ベストアンサー設定後の質問情報を監視
         questionViewModel.getCurrentQuestion().observe(this, question -> {
             if (question != null) {
 
@@ -73,7 +83,10 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // ベストアンサーボタン
         btnBestAnswer.setOnClickListener(v -> {
 
-            // この質問のこの回答をベストアンサーに設定
+            // 連打防止
+            btnBestAnswer.setEnabled(false);
+
+            // ベストアンサー設定をリクエスト
             questionViewModel.setBestAnswer(qid, aid);
         });
     }
