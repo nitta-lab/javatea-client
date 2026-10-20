@@ -70,14 +70,14 @@ public class AddQuestionFragment extends Fragment {
 
         //閲覧者制限
         Spinner ViewerSpinner = view.findViewById(R.id.ViewerSpinner);
-        String[] viewerlist = {"選択してください", "誰でも", "同じ学校", "同じ学部"};
+        String[] viewerlist = {"選択してください", "だれでも", "同じ大学", "同じ学部"};
         ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, viewerlist);
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_item);
         ViewerSpinner.setAdapter(adapter1);
 
         //回答者制限
         Spinner AnswerSpinner = view.findViewById(R.id.AnswerSpinner);
-        String[] answerList = {"選択してください", "誰でも", "同じ学校", "同じ学部"};
+        String[] answerList = {"選択してください", "だれでも", "同じ大学", "同じ学部"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, answerList);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
         AnswerSpinner.setAdapter(adapter2);
