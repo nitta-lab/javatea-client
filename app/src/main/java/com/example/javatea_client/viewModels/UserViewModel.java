@@ -32,6 +32,7 @@ public class UserViewModel extends ViewModel {
     private static MutableLiveData<Set<Question>> questions = new MutableLiveData<>();
     private static MutableLiveData<Set<Question>> bestAnswers = new MutableLiveData<>();
 
+    private static MutableLiveData<Integer> countAnswer = new MutableLiveData<>();
     public UserViewModel() {
         this.retrofit = new Retrofit.Builder()
                 .baseUrl("http://nitta-lab-www.is.konan-u.ac.jp/javatea-server/")
@@ -62,6 +63,8 @@ public class UserViewModel extends ViewModel {
     public LiveData<Set<Question>> getQuestions() { return questions; }
 
     public LiveData<Set<Question>> getBestAnswers() { return bestAnswers; }
+
+    public LiveData<Integer> getCountAnswer() { return countAnswer; }
 
     //ユーザー作成
     public void createUser(String id, String name, String password) {
@@ -367,6 +370,26 @@ public class UserViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<Set<Question>> call, Throwable throwable) {
+                Log.e("userViewModel", "ネットワークエラーが発生しました", throwable);
+            }
+        });
+    }
+
+    public void getCountAnswer(String uid, String token) {
+
+        userResource.getCountAnswer(uid, token).enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    countAnswer.setValue(response.body());
+                } else {
+                    String errorCode = "サーバーエラーが発生しました　コード：" + response.code();
+                    Log.w("UserViewModel", errorCode);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable throwable) {
                 Log.e("userViewModel", "ネットワークエラーが発生しました", throwable);
             }
         });

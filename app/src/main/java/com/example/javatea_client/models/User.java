@@ -14,7 +14,9 @@ public class User {
     private int grade;
     private String token;
     private Set<Question> questions = new HashSet<Question>();
-    private Set<Question> bestAnswers = new HashSet<Question>();;
+    private Set<Question> bestAnswers = new HashSet<Question>();
+
+    private int countAnswer;
 
 
     //uidの取得
@@ -102,4 +104,6 @@ public class User {
     public Set<Question> getBestAnswers(){ return this.bestAnswers; }
 
     public void setBestAnswers(Set<Question> bestAnswers){ this.bestAnswers = bestAnswers; }
+
+    public int getCountAnswer() { return countAnswer; }
 }

@@ -121,4 +121,10 @@ public interface UserResource {
             @Path("uid") String uid,
             @Query("token") String token
     );
+
+    @GET("users/{uid}/countAnswer")
+    Call<Integer> getCountAnswer(
+            @Path("uid") String uid,
+            @Query("token") String token
+    );
 }
