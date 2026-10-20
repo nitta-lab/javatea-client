@@ -496,16 +496,16 @@ public class SearchActivity extends AppCompatActivity {
         // タグがない場合
         // =========================================
 
-        if (addedTags.isEmpty()) {
-
-            Toast.makeText(
-                    SearchActivity.this,
-                    "検索するタグを追加してください",
-                    Toast.LENGTH_SHORT
-            ).show();
-
-            return;
-        }
+//        if (addedTags.isEmpty()) {
+//
+//            Toast.makeText(
+//                    SearchActivity.this,
+//                    "検索するタグを追加してください",
+//                    Toast.LENGTH_SHORT
+//            ).show();
+//
+//            return;
+//        }
 
         // =========================================
         // ログ
