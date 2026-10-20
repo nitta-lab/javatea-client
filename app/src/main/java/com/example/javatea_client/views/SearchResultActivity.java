@@ -2,7 +2,6 @@ package com.example.javatea_client.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -105,18 +104,18 @@ public class SearchResultActivity extends AppCompatActivity {
         }
 
         // 追加
-        if (tvStatus != null) {
-            tvStatus.setText("検索結果: 1件（テスト）");
-        }
+//        if (tvStatus != null) {
+//            tvStatus.setText("検索結果");
+//        }
 
         // 2. RecyclerView と Adapter の設定
-//        rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
-//        questionAdapter = new QuestionAdapter(questionList, question -> {
-//            // 質問項目がタップされた時の画面遷移処理（例: 質問詳細画面へ）
-////             Intent intent = new Intent(this, QuestionDetailActivity.class);
-////             intent.putExtra("qid", question.getQid());
-////             startActivity(intent);
-//        });
+        rvSearchResultList.setLayoutManager(new LinearLayoutManager(this));
+        questionAdapter = new QuestionAdapter(questionList, question -> {
+            // 質問項目がタップされた時の画面遷移処理（例: 質問詳細画面へ）
+             Intent intent = new Intent(SearchResultActivity.this, LectureListActivity.class);
+             intent.putExtra("qid", question.getQid());
+             startActivity(intent);
+        });
         rvSearchResultList.setAdapter(questionAdapter);
 
         // 3. 「検索ホームへ」ボタンのクリック処理
@@ -198,7 +197,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 questionList.addAll(questions);
                 questionAdapter.notifyDataSetChanged();
                 if (tvStatus != null) {
-                    tvStatus.setText("検索結果: " + questions.size() + "件");
+                    tvStatus.setText("通ったよ。検索結果: " + questions.size() + "件");
                 }
             }
         });
