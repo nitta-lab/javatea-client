@@ -198,7 +198,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 questionList.addAll(questions);
                 questionAdapter.notifyDataSetChanged();
                 if (tvStatus != null) {
-                    tvStatus.setText("通ったよ。検索結果: " + questions.size() + "件");
+                    tvStatus.setText("検索結果: " + questions.size() + "件");
                 }
             }
         });
