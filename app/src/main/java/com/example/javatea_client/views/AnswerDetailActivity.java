@@ -62,11 +62,6 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // 回答本文を表示
         tvAnswerBody.setText(answerBody);
 
-        Toast.makeText(
-                this,
-                "bestanswerAid:"+bestAnswerAid,
-                Toast.LENGTH_SHORT
-        ).show();
         // ベストアンサーが選択済みならボタンを消す
         if (!bestAnswerAid.isEmpty()) {
             btnBestAnswer.setVisibility(View.GONE);
