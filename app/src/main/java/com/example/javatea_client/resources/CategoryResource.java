@@ -31,7 +31,6 @@ public interface CategoryResource {
     /**
      * 【全般】質問の追加
      */
-    @FormUrlEncoded
     @PUT("categories/general/questions/{qid}")
     Call<Void> addGeneralQuestion(
         @Path("qid") String qid
