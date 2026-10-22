@@ -41,6 +41,7 @@ public class LectureListActivity extends AppCompatActivity {
     private String lectureId = "";
     private String qid = "";
     private String aid = "";
+    private String lastQid = "";
 
     private ArrayList<String> tags = new ArrayList<>();
 
@@ -325,6 +326,14 @@ public class LectureListActivity extends AppCompatActivity {
     //Tagを取得する
     public ArrayList<String> getTag(){
         return tags;
+    }
+
+    public void setLastQid(String qid) {
+        lastQid = qid;
+    }
+
+    public String getLastQid() {
+        return lastQid;
     }
 
     public String getTvCategory() {
