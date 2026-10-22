@@ -44,7 +44,8 @@
                 android:layout_marginTop="16dp"
                 android:background="#EDE7F6"
                 android:gravity="center_vertical|start"
-                android:hint=" タイトルを入力" />
+                android:hint=" タイトルを入力"
+                android:maxLength="36"/>
 
         </LinearLayout>
 
