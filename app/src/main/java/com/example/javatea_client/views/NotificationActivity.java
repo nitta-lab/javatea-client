@@ -3,6 +3,7 @@ package com.example.javatea_client.views;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -132,9 +133,6 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                 }
 
-                if (questionsList.size() != 0) {
-                    centerText.setEnabled(false);
-                }
 
                 if (recyclerView.getAdapter() != null) {
                     recyclerView.getAdapter().notifyDataSetChanged();
@@ -174,6 +172,12 @@ public class NotificationActivity extends AppCompatActivity {
             tvBestAnswerNotificationTab.setBackgroundColor(0xFFB8B3BE);
             centerText.setText("あなたへの回答はありません。。。");
 
+            if (questionsList.size() != 0) {
+                centerText.setVisibility(View.INVISIBLE);
+            }else {
+                centerText.setVisibility(View.VISIBLE);
+            }
+
             // あなたへの回答の一覧を表示
             recyclerView.setAdapter(
                     new NotificationAdapter(
@@ -191,6 +195,12 @@ public class NotificationActivity extends AppCompatActivity {
             tvBestAnswerNotificationTab.setBackgroundColor(0xFFD8D2E3);
             tvAnswerNotificationTab.setBackgroundColor(0xFFB8B3BE);
             centerText.setText("あなたはまだベストアンサーに選ばれていません。。。");
+
+            if (bestAnswersList.size() != 0) {
+                centerText.setVisibility(View.INVISIBLE);
+            }else {
+                centerText.setVisibility(View.VISIBLE);
+            }
 
             // ベストアンサー通知の一覧を表示
             recyclerView.setAdapter(
