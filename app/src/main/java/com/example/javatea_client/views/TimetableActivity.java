@@ -242,10 +242,15 @@ public class TimetableActivity extends AppCompatActivity {
             } else {
                 isDecidedYear = true;
                 if (intentYear != 0) {//事前にyearが決まっている場合はそれ
+                    Log.d("intentSemester", intentSemester);
                     if (years.contains(intentYear + intentSemester)) {
                         selectedYearTextView.setText(intentYear + intentSemester + " ▼");
                     } else {
-                        selectedYearTextView.setText(years.get(0) + " ▼");
+                        if (years.contains(intentYear + "前期")) {
+                            selectedYearTextView.setText(intentYear + "前期" + " ▼");
+                        } else {
+                            selectedYearTextView.setText(years.get(0) + " ▼");
+                        }
                     }
                 } else if (currentMonth >= 4) {//4月以降であれば現在の年、それ以前なら現在の年-1を追加する
                     if (years.contains(currentYear + FIRST)) {
