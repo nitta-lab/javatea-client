@@ -2,6 +2,7 @@
 package com.example.javatea_client.views;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -61,8 +62,13 @@ public class AnswerDetailActivity extends AppCompatActivity {
         // 回答本文を表示
         tvAnswerBody.setText(answerBody);
 
+        Toast.makeText(
+                this,
+                "bestanswerAid:"+bestAnswerAid,
+                Toast.LENGTH_SHORT
+        ).show();
         // ベストアンサーが選択済みならボタンを消す
-        if (bestAnswerAid != "") {
+        if (!bestAnswerAid.isEmpty()) {
             btnBestAnswer.setVisibility(View.GONE);
         }
 
