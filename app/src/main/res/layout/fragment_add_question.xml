@@ -45,7 +45,10 @@
                 android:background="#EDE7F6"
                 android:gravity="center_vertical|start"
                 android:hint=" タイトルを入力"
-                android:maxLength="36"/>
+                android:maxLength="36"
+                android:scrollbars="vertical"
+                android:overScrollMode="ifContentScrolls"
+                android:nestedScrollingEnabled="true"/>
 
         </LinearLayout>
 
