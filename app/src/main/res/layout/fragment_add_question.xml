@@ -72,14 +72,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="top|left"
+                android:gravity="top|start"
                 android:background="@null"
-                android:padding="0dp"
+                android:padding="4dp"
                 android:hint="質問を入力してください"
                 android:textSize="16sp"
-                android:scrollbars="vertical"
-                android:overScrollMode="ifContentScrolls"
-                android:nestedScrollingEnabled="true"/>
+                android:inputType="textMultiLine|textCapSentences"
+                android:singleLine="false"
+                android:scrollHorizontally="false"
+                android:breakStrategy="simple" />
 
         </LinearLayout>
 
