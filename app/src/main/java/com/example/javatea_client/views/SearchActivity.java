@@ -563,7 +563,7 @@ public class SearchActivity extends AppCompatActivity {
             intent.putExtra("EXTRA_SEARCH_TYPE", "GENERAL");
         } else {
             intent.putExtra("EXTRA_SEARCH_TYPE", "UNIVERSITY");
-            intent.putExtra("EXTRA_UNIV_ID", javatea.getUnivId());
+            intent.putExtra("EXTRA_UNIV_ID", univId);
         }
         intent.putExtra("EXTRA_KEYWORDS", addedTags);
         startActivity(intent);
