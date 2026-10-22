@@ -45,7 +45,10 @@
                 android:background="#EDE7F6"
                 android:gravity="center_vertical|start"
                 android:hint=" タイトルを入力"
-                android:maxLength="36"/>
+                android:maxLength="36"
+                android:scrollbars="vertical"
+                android:overScrollMode="ifContentScrolls"
+                android:nestedScrollingEnabled="true"/>
 
         </LinearLayout>
 
@@ -73,7 +76,10 @@
                 android:background="@null"
                 android:padding="0dp"
                 android:hint="質問を入力してください"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:scrollbars="vertical"
+                android:overScrollMode="ifContentScrolls"
+                android:nestedScrollingEnabled="true"/>
 
         </LinearLayout>
 
