@@ -104,6 +104,7 @@ public class ViewAnswerFragment extends Fragment {
         answererTextView = view.findViewById(R.id.answer_text);
         answerBodyTextView = view.findViewById(R.id.answer_body);
         answererTextView.setMovementMethod(new ScrollingMovementMethod());//スクロールできるようにする。
+        answerBodyTextView.setMovementMethod(new ScrollingMovementMethod());
         if(displayAnswer == null){
             answererTextView.setText("選択されてません");
             answerBodyTextView.setText("選択されてません");

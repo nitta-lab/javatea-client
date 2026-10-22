@@ -33,6 +33,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
     String token;
     int year;
     String semester;
+    String univId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
 
         Javatea javatea = (Javatea) getApplication();
         userId = javatea.getUserId();
+        univId = javatea.getUnivId();
         token = javatea.getToken();
 
         //viewModelの初期化
@@ -93,6 +95,21 @@ public class OtherLecturesActivity extends AppCompatActivity {
                                 intent.putExtra("lectureId",lecture.getLectureId());
                                 startActivity(intent);
                                 return true;
+                            }
+                        });
+                        lectureTextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                {
+                                    Intent intent = new Intent(OtherLecturesActivity.this, LectureListActivity.class);
+                                    intent.putExtra("univId", univId);
+                                    intent.putExtra("facultyName", lecture.getFacultyName());
+                                    intent.putExtra("departmentName", lecture.getDepartmentName());
+                                    intent.putExtra("timetable", "timetable");
+                                    intent.putExtra("Lecture-id",lecture.getLectureId());
+                                    intent.putExtra("LectureName", lecture.getName());
+                                    startActivity(intent);
+                                }
                             }
                         });
                         otherLectures.addView(lectureTextView);
