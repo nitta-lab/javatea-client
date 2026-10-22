@@ -56,6 +56,7 @@ public class AddQuestionFragment extends Fragment {
 
         //作成場所のパス
         LectureListActivity activity = (LectureListActivity) requireActivity();
+        String lastQid = activity.getLastQid();
         String workSpaceTvText = activity.getTvCategory();
         TextView CreatePlaceText = view.findViewById(R.id.CreatePlaceText);
         CreatePlaceText.setText(workSpaceTvText);
@@ -95,14 +96,37 @@ public class AddQuestionFragment extends Fragment {
         String uid = javatea.getUserId();
         String token = javatea.getToken();
 
+        //スクロールの設定
+        //Title,Questionを取得
+        EditText titleTextFragment = view.findViewById(R.id.TitleText);
+        EditText questionTextFragment = view.findViewById(R.id.QuestionText);
+
+        titleTextFragment.setVerticalScrollBarEnabled(true);
+        questionTextFragment.setVerticalScrollBarEnabled(true);
+
+        titleTextFragment.setOnTouchListener((v, event) -> {
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+
+            if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                v.getParent().requestDisallowInterceptTouchEvent(false);
+            }
+
+            return false;
+        });
+
+        questionTextFragment.setOnTouchListener((v, event) -> {
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+
+            if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                v.getParent().requestDisallowInterceptTouchEvent(false);
+            }
+
+            return false;
+        });
+
         //公開するボタン
         TextView nextButton = view.findViewById(R.id.NextButton);
         nextButton.setOnClickListener(v -> {
-
-            //Title,Questionを取得
-            EditText titleTextFragment = view.findViewById(R.id.TitleText);
-            EditText questionTextFragment = view.findViewById(R.id.QuestionText);
-
             //タイトル入力
             String titleText = titleTextFragment.getText().toString();
             if(titleText.isEmpty()) {
@@ -136,6 +160,9 @@ public class AddQuestionFragment extends Fragment {
             questionViewModel.getQuestionId().observe(getViewLifecycleOwner(), new Observer<String>() {
                 @Override
                 public void onChanged(String qid) {
+                    if (qid.equals(lastQid)) {
+                        return;
+                    }
                     activity.setTag(new ArrayList<>());
                     String univId = activity.getUnivId();
                     String facultyName = activity.getFacultyName();
@@ -163,6 +190,7 @@ public class AddQuestionFragment extends Fragment {
                             categoryViewModel.addDepartmentQuestion(univId,facultyName,departmentName,lectureId,qid);
                         }
                     }
+                    activity.setLastQid(qid);
                     requireActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.fragment_container, new QuestionSelectFragment())

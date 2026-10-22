@@ -51,7 +51,7 @@ public class QuestionViewModel extends ViewModel {
             public void onResponse(Call<String> call, Response<String> response) {
                 if (response.isSuccessful() && response.body() != null){
                     questionId.setValue(response.body());
-                    Log.d(TAG, "質問の作成成功　questionId：" + questionId);
+                    Log.d(TAG, "質問の作成成功　questionId：" + response.body());
                     getQuestion(response.body(), uid, token);
                 } else {
                     String errorCode = "サーバーエラーが発生しました　コード：" + response.code();
