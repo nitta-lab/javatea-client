@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -95,6 +96,15 @@ public class MyPageActivity extends AppCompatActivity {
         facultyText.setText(javaTea.getFaculty());
         departmentText.setText(javaTea.getDepartment());
         gradeText.setText(javaTea.getGrade());
+
+
+        //Android標準の戻るボタンの無効化
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // 何も記述しないことで戻るボタンを無効化
+            }
+        });
 
         setUpObservers();
         userViewModel.getUserBestAnswers(javateaUid, javateaToken);
