@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +29,14 @@ import java.util.List;
 
 public class OtherLecturesActivity extends AppCompatActivity {
     TimetableViewModel timetableViewModel;
+    ScrollView otherLectureScroll;
     LinearLayout otherLectures;
     String userId;
     String token;
     int year;
     String semester;
     String univId;
+    boolean isMove = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +120,31 @@ public class OtherLecturesActivity extends AppCompatActivity {
                 }
             }
         });
+        otherLectureScroll = findViewById(R.id.otherLecturesScroll);
+        otherLectureScroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // 指が触れた
+                        isMove = false;
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        // 指を動かした
+                        isMove = false;
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        isMove = true;
+                        // 指を離した、または操作がキャンセルされた
+                        break;
+                }
+
+                return false;
+            }
+        });
         otherLectures = findViewById(R.id.otherLectures);
         TextView other = findViewById(R.id.other);
         other.setOnLongClickListener(new View.OnLongClickListener() {
@@ -139,7 +167,8 @@ public class OtherLecturesActivity extends AppCompatActivity {
     }
     private float startY;
     private static final float SWIPE_THRESHOLD = 300f;
-    @Override public boolean dispatchTouchEvent(MotionEvent ev) {
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
         // if(!isDecidedYear){
         // return super.dispatchTouchEvent(ev);
         // }
@@ -149,7 +178,7 @@ public class OtherLecturesActivity extends AppCompatActivity {
             case MotionEvent.ACTION_UP:
                 float endY = ev.getY();
                 float diffY = endY - startY; // 画面上部から下方向へスワイプ
-                if (diffY >= SWIPE_THRESHOLD) {
+                if (diffY >= SWIPE_THRESHOLD && isMove) {
                     Intent intent = new Intent(this, TimetableActivity.class);
                     intent.putExtra("year",year);
                     intent.putExtra("semester",semester);
