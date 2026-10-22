@@ -68,18 +68,132 @@ public class AddQuestionFragment extends Fragment {
         TextView tagTextFragment = view.findViewById(R.id.TagText);
         tagTextFragment.setText(tagText);
 
-        //閲覧者制限
+//        //閲覧者制限
+//        Spinner ViewerSpinner = view.findViewById(R.id.ViewerSpinner);
+//        String[] viewerlist = {"選択してください", "だれでも", "同じ大学", "同じ学部"};
+//        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, viewerlist);
+//        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_item);
+//        ViewerSpinner.setAdapter(adapter1);
+//
+//        //回答者制限
+//        Spinner AnswerSpinner = view.findViewById(R.id.AnswerSpinner);
+//        String[] answerList = {"選択してください", "だれでも", "同じ大学", "同じ学部"};
+//        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, answerList);
+//        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
+//        AnswerSpinner.setAdapter(adapter2);
+        // 閲覧者制限
         Spinner ViewerSpinner = view.findViewById(R.id.ViewerSpinner);
-        String[] viewerlist = {"選択してください", "だれでも", "同じ大学", "同じ学部"};
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, viewerlist);
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_item);
+
+        String[] viewerlist = {
+                "選択してください",
+                "だれでも",
+                "同じ学校",
+                "同じ学部"
+        };
+
+        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(
+                requireContext(),
+                0,
+                viewerlist
+        ) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView,
+                                @NonNull ViewGroup parent) {
+                return createSpinnerTextView(position, convertView, parent);
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                return createSpinnerTextView(position, convertView, parent);
+            }
+
+            private View createSpinnerTextView(
+                    int position,
+                    View convertView,
+                    ViewGroup parent) {
+
+                TextView textView;
+
+                if (convertView instanceof TextView) {
+                    textView = (TextView) convertView;
+                } else {
+                    textView = new TextView(requireContext());
+                }
+
+                textView.setText(getItem(position));
+                textView.setTextSize(17);
+                // 文字を上下中央に配置
+                textView.setGravity(android.view.Gravity.CENTER_VERTICAL);
+                // 選択肢の高さを最低60dpにする
+                textView.setMinHeight(
+                        (int) (100)
+                );
+                textView.setPadding(12, 16, 12, 16);
+
+                return textView;
+            }
+        };
+
         ViewerSpinner.setAdapter(adapter1);
 
-        //回答者制限
+
+// 回答者制限
         Spinner AnswerSpinner = view.findViewById(R.id.AnswerSpinner);
-        String[] answerList = {"選択してください", "だれでも", "同じ大学", "同じ学部"};
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, answerList);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_item);
+
+        String[] answerList = {
+                "選択してください",
+                "だれでも",
+                "同じ学校",
+                "同じ学部"
+        };
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(
+                requireContext(),
+                0,
+                answerList
+        ) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView,
+                                @NonNull ViewGroup parent) {
+                return createSpinnerTextView(position, convertView, parent);
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        @NonNull ViewGroup parent) {
+                return createSpinnerTextView(position, convertView, parent);
+            }
+
+            private View createSpinnerTextView(
+                    int position,
+                    View convertView,
+                    ViewGroup parent) {
+
+                TextView textView;
+
+                if (convertView instanceof TextView) {
+                    textView = (TextView) convertView;
+                } else {
+                    textView = new TextView(requireContext());
+                }
+
+                textView.setText(getItem(position));
+                textView.setTextSize(17);
+                // 文字を上下中央に配置
+                textView.setGravity(android.view.Gravity.CENTER_VERTICAL);
+                // 選択肢の高さを最低60dpにする
+                textView.setMinHeight(
+                        (int) (100)
+                );
+                textView.setPadding(12, 16, 12, 16);
+
+                return textView;
+            }
+        };
+
         AnswerSpinner.setAdapter(adapter2);
 
         //タグ編集(TagFragment)画面遷移
