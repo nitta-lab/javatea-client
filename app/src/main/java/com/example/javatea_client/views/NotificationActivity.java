@@ -47,6 +47,7 @@ public class NotificationActivity extends AppCompatActivity {
     // タブ
     private TextView tvAnswerNotificationTab;
     private TextView tvBestAnswerNotificationTab;
+    private TextView centerText;
 
     // 通知一覧
     private List<Question> questionsList = new ArrayList<>();
@@ -97,6 +98,7 @@ public class NotificationActivity extends AppCompatActivity {
         // タブを取得
         tvAnswerNotificationTab = findViewById(R.id.tvAnswerNotificationTab);
         tvBestAnswerNotificationTab = findViewById(R.id.tvBestAnswerNotificationTab);
+        centerText = findViewById(R.id.centerText);
 
         // 通知一覧の生成
         recyclerView = findViewById(R.id.notificationList);
@@ -128,6 +130,10 @@ public class NotificationActivity extends AppCompatActivity {
                         // この質問の回答数を取得
                         loadAnswerCount(question.getQid());
                     }
+                }
+
+                if (questionsList.size() != 0) {
+                    centerText.setEnabled(false);
                 }
 
                 if (recyclerView.getAdapter() != null) {
@@ -166,6 +172,7 @@ public class NotificationActivity extends AppCompatActivity {
 
             tvAnswerNotificationTab.setBackgroundColor(0xFFD8D2E3);
             tvBestAnswerNotificationTab.setBackgroundColor(0xFFB8B3BE);
+            centerText.setText("あなたへの回答はありません。。。");
 
             // あなたへの回答の一覧を表示
             recyclerView.setAdapter(
@@ -183,6 +190,7 @@ public class NotificationActivity extends AppCompatActivity {
 
             tvBestAnswerNotificationTab.setBackgroundColor(0xFFD8D2E3);
             tvAnswerNotificationTab.setBackgroundColor(0xFFB8B3BE);
+            centerText.setText("あなたはまだベストアンサーに選ばれていません。。。");
 
             // ベストアンサー通知の一覧を表示
             recyclerView.setAdapter(

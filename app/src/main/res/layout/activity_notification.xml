@@ -71,6 +71,20 @@
 
     <!-- 遷移画面のテンプレート -->
 
+    <TextView
+        android:id="@+id/centerText"
+        android:layout_width="370dp"
+        android:layout_height="32dp"
+        android:text="あなたへの回答はありません。。。"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.203" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notificationList"
         android:layout_width="407dp"
@@ -85,6 +99,7 @@
         app:layout_constraintVertical_bias="0.29" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
@@ -97,11 +112,11 @@
         <!--時間割ボタン-->
         <ImageButton
             android:id="@+id/timetable_button"
-            android:src="@drawable/outline_calendar_month_24"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="時間割"/>
+            android:contentDescription="時間割"
+            android:src="@drawable/outline_calendar_month_24" />
         <!-- 幅は自分で決めない
              widthは0にする
              weightは1にする(これで5等分)
@@ -109,35 +124,35 @@
         <!--Q&Aボタン-->
         <ImageButton
             android:id="@+id/qa_button"
-            android:src="@drawable/outline_aq_24"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="Q&amp;A"/>
+            android:contentDescription="Q&amp;A"
+            android:src="@drawable/outline_aq_24" />
         <!--検索ボタン-->
         <ImageButton
             android:id="@+id/search_button"
-            android:src="@drawable/baseline_search_24"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="検索"/>
+            android:contentDescription="検索"
+            android:src="@drawable/baseline_search_24" />
         <!--通知ボタン-->
         <ImageButton
             android:id="@+id/notification_button"
-            android:src="@drawable/baseline_email_24"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="通知"/>
+            android:contentDescription="通知"
+            android:src="@drawable/baseline_email_24" />
         <!--マイページボタン-->
         <ImageButton
             android:id="@+id/myPage_button"
-            android:src="@drawable/outline_article_person_24"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:contentDescription="マイページ"/>
+            android:contentDescription="マイページ"
+            android:src="@drawable/outline_article_person_24" />
 
     </LinearLayout>
 

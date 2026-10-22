@@ -26,6 +26,8 @@ public class SignUpActivity1 extends AppCompatActivity {
     UserViewModel userViewModel;
     private String userId, password, nickname;
     private boolean isVisiblePassword = false;
+    private boolean isClickedRegisterButton = false;
+    private boolean isClickedNextButton = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class SignUpActivity1 extends AppCompatActivity {
 
         // ユーザを監視して登録後、画面遷移
         userViewModel.getUser().observe(this, user -> {
-            if(user != null) {
+            if(user != null && isClickedRegisterButton) {
                 // javateaに保存
                 javatea.setUserId(userId);
                 javatea.setPassword(password);
@@ -78,6 +80,7 @@ public class SignUpActivity1 extends AppCompatActivity {
                     // javateaに保存
                     javatea.setToken(token);
                     // 画面遷移
+                    isClickedRegisterButton = false;
                     Intent intent = new Intent(SignUpActivity1.this, RegisterActivity.class);
                     startActivity(intent);
                     finish();
@@ -96,6 +99,7 @@ public class SignUpActivity1 extends AppCompatActivity {
 
         // ユーザID重複フラグを監視して、重複していなければ次へ。そうでなければトースト表示
         userViewModel.isUidDuplication().observe(this, isUidDuplication -> {
+            if (!isClickedNextButton) return;
             if(!isUidDuplication) {
                 userIdText.setText(userId);
                 passwordText.setText(password);
@@ -113,6 +117,7 @@ public class SignUpActivity1 extends AppCompatActivity {
                 passwordText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 eyeButton.setAlpha(1f);
                 isVisiblePassword = false;
+                isClickedNextButton = false;
             }else{
                 Toast.makeText(SignUpActivity1.this, "このIDは既に使用されています", Toast.LENGTH_SHORT).show();
             }
@@ -137,6 +142,7 @@ public class SignUpActivity1 extends AppCompatActivity {
 
         // 次へボタンの処理
         nextButton.setOnClickListener(view -> {
+            isClickedNextButton = true;
             userId = userIdEditText.getText().toString().trim();
             password = passwordEditText.getText().toString().trim();
             nickname = nicknameEditText.getText().toString().trim();
@@ -178,7 +184,10 @@ public class SignUpActivity1 extends AppCompatActivity {
         });
 
         // 登録ボタンの処理
-        registerButton.setOnClickListener(view -> userViewModel.createUser(userId, nickname, password));
+        registerButton.setOnClickListener(view -> {
+            isClickedRegisterButton = true;
+            userViewModel.createUser(userId, nickname, password);
+        });
     }
 
     // 数字が含まれているかを返す関数
